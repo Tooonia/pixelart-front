@@ -1,0 +1,10 @@
+<div class="container-fluid">
+    <div fxLayout="row wrap" class="gap">
+        <div *ngFor="let pixelartItem of pixelartItemsList"> 
+        <!--TODO: complete with [ngClass] and mediasize -->
+            <app-pixelart-card
+                [pixelartItem]="pixelartItem"
+            ></app-pixelart-card>
+        </div>   
+    </div>
+</div>
