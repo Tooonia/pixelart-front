@@ -17,7 +17,7 @@ export class ListContainerComponent implements OnInit {
   constructor(
     private pixelartService: PixelartService,
     // private route: ActivatedRoute,
-    private router: Router
+    // private router: Router
 
   ) { }
 

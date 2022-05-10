@@ -4,8 +4,15 @@ import { Observable } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
 
 // Class responsible to call the server side REST API
-// similar to: projekt.service.ts / konsult-metier.service.ts
+// We put all pixelart related services here.
+
+// TODO:similar to: projekt.service.ts = l'API by openapi generator and 
+//  projekt-metier.service.ts = that has projekt.service.ts in its constructor
+            //  (/ konsult-metier.service.ts)
+// TODO Mathieu: I am missing/mixing here Interface and Implementation?
+
 // film.service.ts
+// orders.service.ts (Jeremy)
 @Injectable({
   providedIn: 'root'
 })
@@ -15,6 +22,11 @@ export class PixelartService {
 
   constructor(private http: HttpClient) { }
 
+public refreshCollection(): void {
+
+}
+
+  // TODO: should this be inside constructor? like orders.service.ts (Jeremy)
   // GET all pixelart (catalog)
   public findAll(): Observable<PixelartItem[]> {
     // Url from the Back
@@ -22,5 +34,26 @@ export class PixelartService {
   }
 
   // GET all pixelart by User <<< with authent!
+
+  // GET pixelart by id
+  public getById(id: number): Observable<PixelartItem> {
+    return this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`)
+  }
+
+  // CREATE pixelart <<< requires the canvas!!!
+  // When clicked on "Save pixelart", it allows to add a title, then it is saved in the DB.
+
+  // UPDATE pixelart by id
+  
+
+  // DELETE pixelart by id
+  // TODO: why <any> for Observable here?:
+  public deleteById(id: number): Observable<any> {
+    return this.http.delete(`${this.basePath}/pixelart/${id}`);
+    // return this.http.delete(`${this.basePath}/pixelart/${id}`, {
+    //   responseType: 'json',
+    // });
+    // return this.http.delete<PixelartItem>(`${this.basePath}/pixelart/${id}`).pipe();
+  }
 }
 

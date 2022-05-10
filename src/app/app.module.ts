@@ -6,6 +6,8 @@ import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxNavbarModule } from 'ngx-bootstrap-navbar';
+import { CoreModule } from './core/core.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { NgxNavbarModule } from 'ngx-bootstrap-navbar';
     SharedModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    NgxNavbarModule
+    NgxNavbarModule,
+    CoreModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

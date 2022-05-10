@@ -5,6 +5,8 @@ import { DetailComponent } from './pages/detail/detail.component';
 import { ListContainerComponent } from './components/list-container/list-container.component';
 import { PixelartCardComponent } from './components/pixelart-card/pixelart-card.component';
 import { SharedModule } from '../shared/shared.module';
+import { CoreModule } from '../core/core.module';
+import { PixelartRoutingModule } from './pixelart-routing.module';
 
 
 
@@ -17,7 +19,13 @@ import { SharedModule } from '../shared/shared.module';
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    CoreModule,
+    PixelartRoutingModule
+  ],
+  exports: [
+    ListContainerComponent,
+    PixelartCardComponent
   ]
 })
 export class PixelartModule { }

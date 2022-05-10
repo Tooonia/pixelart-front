@@ -31,5 +31,8 @@ export class HeaderComponent {
         this.router.navigate(['/login']);
     }
 }
+handleClickChangeLanguage(): void {
+  
+}
 
 }

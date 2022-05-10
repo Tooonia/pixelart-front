@@ -3,8 +3,13 @@
         <div *ngFor="let pixelartItem of pixelartItemsList"> 
         <!--TODO: complete with [ngClass] and mediasize -->
             <app-pixelart-card
-                [pixelartItem]="pixelartItem"
-            ></app-pixelart-card>
+                [pixelartItem]="pixelartItem">
+                <!-- Or: (selectMetadata)="selectMetadata.emit($event)" on list-container -->
+                <!-- TODO: prepare reusable button for 'Details' -->
+                
+            </app-pixelart-card>
+            <!-- TODO: obviously the button is not visible when inside app-pixelart-card -->
+            <!-- <button>Details</button> -->
         </div>   
     </div>
 </div>

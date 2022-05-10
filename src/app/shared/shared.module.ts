@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { MaterialModules } from './shared.constant';
+import { CoreModule } from '../core/core.module';
 
 
 
@@ -13,12 +14,14 @@ import { MaterialModules } from './shared.constant';
   ],
   imports: [
     CommonModule,
-    ...MaterialModules
+    ...MaterialModules,
+    CoreModule
   ],
   exports: [
     FooterComponent,
     HeaderComponent,
-    MaterialModules
+    MaterialModules,
+    CoreModule
   ]
 })
 export class SharedModule { }

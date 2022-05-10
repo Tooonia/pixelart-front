@@ -8,6 +8,8 @@
                 <div class="project-name">PixelArt</div>
             </div>
             <ngx-navbar-collapse class="justify-content-end pr-3">
+            <!-- This #collapse is needed for small screens:
+                 <ngx-navbar-collapse class="justify-content-end pr-3" #collapse="ngxNavbarCollapse"> -->
                 <ul class="navbar-nav mt-2 mt-lg-0 mr-2">
                     <li class="nav-item">
                         <a class="nav-link pr-3" href="#" 
@@ -20,29 +22,33 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link pr-3" href="#" routerLink="catalog"
-                        [routerLinkActive]="'active'"
-                        rel="noopener noreferrer">
+                        
+                        rel="noopener noreferrer"> 
+                        <!-- Still inside <a> element: [routerLinkActive]="'active'" -->
                         <span>Catalog</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link pr-3" href="#" routerLink="how-to"
-                        [routerLinkActive]="'active'"
+                        
                         rel="noopener noreferrer">
+                        <!-- Still inside <a> element: [routerLinkActive]="'active'" -->
                         <span>How to?</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link pr-3" href="#" 
                         (click)="handleClickChangeLanguage()"
-                        [routerLinkActive]="'active'"
+                        
                         rel="noopener noreferrer">
+                        <!-- Still inside <a> element: [routerLinkActive]="'active'" -->
                         <img src="../../../assets/icons/language_france.png" alt="Logo language option"></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link pr-3" href="#" 
                         routerLink="login"
                         (click)="handleClickGoMonCompte()"
-                        [routerLinkActive]="'active'"
+                        
                         rel="noopener noreferrer">
+                        <!-- Still inside <a> element: [routerLinkActive]="'active'" -->
                         <div class="notification-connected" *ngIf="isConnectedAsUser"></div>
                         <!-- TODO: Add a sort of nav list when connected user -->
                         <img src="../../../assets/icons/pixel_avatar.png" alt="Logo pixel avatar"></a>
