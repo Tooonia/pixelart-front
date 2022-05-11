@@ -48,7 +48,10 @@ export class DetailComponent implements OnInit {
     this.router.navigate(['/pixelart/catalog'])
   }
 
-  editPixelart() {}
+  // When adding that route, it is needed to be added to pixelart-routing.module.ts too:
+  editPixelart(pixelartItem: PixelartItem): void {
+    this.router.navigate(['/pixelart/edit-pixelart', pixelartItem.id])
+  }
 
   deletePixelart(pixelartItem: PixelartItem): void {
     console.log(pixelartItem.id);

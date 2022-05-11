@@ -1,0 +1,52 @@
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { PixelartItem } from '../../model/pixelart-item';
+
+@Component({
+  selector: 'app-manage-pixelart',
+  templateUrl: './manage-pixelart.component.html',
+  styleUrls: ['./manage-pixelart.component.scss']
+})
+export class ManagePixelartComponent implements OnInit {
+  // TODO: without in Rudi, public for Jeremy
+  public managePixelartForm!: FormGroup;
+  @Input() pixelartItem!: PixelartItem;
+  @Output() savedAction = new EventEmitter<PixelartItem>();
+  // TODO-QUESTION: correct with <any>?
+  @Output() cancelledAction = new EventEmitter<PixelartItem>();
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router
+    ) { }
+
+  // Test validity of form
+  get isValid(): boolean {
+    return this.managePixelartForm.valid;
+  }
+
+  ngOnInit(): void {
+    this.managePixelartForm = this.formBuilder.group( {
+      // title: ['this.pixelartItem.name']
+      // id: [''],
+      name: ['']
+      
+      // id: [this.pixelartItem.id]
+    })
+  }
+
+  public saveAction(): void {
+    console.log("Current form: ", this.managePixelartForm);
+    console.log("Form has been submitted: ", this.managePixelartForm.value);
+
+    this.savedAction.emit(this.managePixelartForm.value);
+  }
+// reuse-declaration.component.ts, clickCancel()
+  public cancelAction(): void {
+    // TODO: with route-history.service.ts, to goBackIfPossibleToGoBack() 
+    // specially when updatePixelArt: we must go back to Details!!!
+    // CREATE can go back to catalog!
+    this.cancelledAction.emit(this.managePixelartForm.value)
+  }
+}

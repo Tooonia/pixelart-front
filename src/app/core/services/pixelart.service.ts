@@ -33,7 +33,7 @@ public refreshCollection(): void {
     return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart`)
   }
 
-  // GET all pixelart by User <<< with authent!
+  // GET all pixelart by connected User <<< with authent!
 
   // GET pixelart by id
   public getById(id: number): Observable<PixelartItem> {
@@ -44,16 +44,19 @@ public refreshCollection(): void {
   // When clicked on "Save pixelart", it allows to add a title, then it is saved in the DB.
 
   // UPDATE pixelart by id
-  
+  public update(pixelartItem: PixelartItem): Observable<PixelartItem> {
+    return this.http.put<PixelartItem>(`${this.basePath}/pixelart/${pixelartItem.id}`, pixelartItem);
+  }
 
   // DELETE pixelart by id
   // TODO: why <any> for Observable here?:
   public deleteById(id: number): Observable<any> {
-    return this.http.delete(`${this.basePath}/pixelart/${id}`);
+    return this.http.delete<any>(`${this.basePath}/pixelart/${id}`);
     // return this.http.delete(`${this.basePath}/pixelart/${id}`, {
     //   responseType: 'json',
     // });
     // return this.http.delete<PixelartItem>(`${this.basePath}/pixelart/${id}`).pipe();
+    // Did not work with .pipe(tap()) <<< could not importe 'tap'?!
   }
 }
 

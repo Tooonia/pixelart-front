@@ -1,0 +1,37 @@
+ <!-- TODO: sign-up.component.html -->
+ <!-- Eventually inside a <div> -->
+<mat-card>
+    <!-- <mat-card-title class="d-flex"> -->
+        <!-- TODO: internationalisation -->
+        <!-- <p>Title</p> -->
+    <!-- </mat-card-title> -->
+
+    <!-- TODO: step1-project.component.ts for blob image change!!!
+    + submission-project.component.html -->
+
+    <mat-card-content>
+        <form 
+            [formGroup]="managePixelartForm"
+            (ngSubmit)="saveAction()">
+            <!-- class="manage-pixelart-container" -->
+            <div class="d-flex"> 
+                <mat-form-field appearance="standard">
+                    <!-- TODO: internationalisation -->
+                    <mat-label>Title</mat-label>
+                    <!-- TODO: text validation, handle special characters!!! For security! -->
+                    <input type="text" matInput placeholder="Title of pixelart"
+                    formControlName="name" autocomplete="off" required>
+                </mat-form-field>
+            </div>
+        </form>
+    </mat-card-content>
+
+    <mat-card-actions class="d-flex">
+        <button (click)="cancelAction()">Cancel</button>
+        <button 
+            type="submit"
+            (click)="saveAction()"
+            [disabled]="!isValid">Save</button>
+    </mat-card-actions>
+</mat-card>
+

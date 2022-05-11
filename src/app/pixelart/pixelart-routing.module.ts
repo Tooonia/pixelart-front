@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { ListComponent } from './pages/list/list.component';
 import { DetailComponent } from './pages/detail/detail.component';
+import { UpdateComponent } from './pages/update/update.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,12 @@ const routes: Routes = [
     path: '',
     redirectTo: 'catalog',
     pathMatch: 'full'
+    // ,
+    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'edit-pixelart/:id',
+    component: UpdateComponent
     // ,
     // canActivate: [AuthGuard]
   }
