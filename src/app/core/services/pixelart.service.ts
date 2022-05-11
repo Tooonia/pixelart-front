@@ -6,7 +6,7 @@ import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
 // Class responsible to call the server side REST API
 // We put all pixelart related services here.
 
-// TODO:similar to: projekt.service.ts = l'API by openapi generator and 
+// TODO:similar to: projekt.service.ts = l'API by openapi generator and
 //  projekt-metier.service.ts = that has projekt.service.ts in its constructor
             //  (/ konsult-metier.service.ts)
 // TODO Mathieu: I am missing/mixing here Interface and Implementation?
@@ -17,7 +17,7 @@ import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
   providedIn: 'root'
 })
 export class PixelartService {
-  
+
   private basePath = 'http://localhost:8085/api';
 
   constructor(private http: HttpClient) { }
@@ -46,6 +46,8 @@ public refreshCollection(): void {
   // UPDATE pixelart by id
   public update(pixelartItem: PixelartItem): Observable<PixelartItem> {
     return this.http.put<PixelartItem>(`${this.basePath}/pixelart/${pixelartItem.id}`, pixelartItem);
+// public update(pixelartItem: PixelartItem, pixelartId: Number): Observable<PixelartItem> {
+    // return this.http.put<PixelartItem>(`${this.basePath}/pixelart`, pixelartItem);
   }
 
   // DELETE pixelart by id

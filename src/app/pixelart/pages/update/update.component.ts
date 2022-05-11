@@ -35,6 +35,8 @@ export class UpdateComponent implements OnInit {
   public onSaveUpdatePixelart(modifiedPixelartItem: PixelartItem): void {
     console.log(modifiedPixelartItem);
     console.log(this.pixelartItemToUpdate.id);
+    // On vient de rajouter l'id dans le payload/dans le body de la requête:
+    modifiedPixelartItem.id = this.pixelartItemToUpdate.id;
     this.pixelartService.update(modifiedPixelartItem).subscribe(() => {
       this.router.navigate(['pixelart/catalog'])
       // this.router.navigate(['pixelart', this.pixelartItemToUpdate.id])
