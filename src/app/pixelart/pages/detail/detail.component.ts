@@ -27,16 +27,23 @@ export class DetailComponent implements OnInit {
   //   this._pixelartItem = pixelartItem;
   // }
   ngOnInit(): void {
-    this.pixelartService.getById(this.route.snapshot.params.id).subscribe(data => {
-       this.pixelartItem = data;
-      //  console.log(this.pixelartItem)
-      });
-     
+    // TODO: this needs to be handeled in a better way!
+    if (typeof this.route.snapshot.params.id === "number") {
+      this.pixelartService.getById(this.route.snapshot.params.id).subscribe(data => {
+      this.pixelartItem = data;
+  });
+  }
+    // if(this.route.snapshot.params.id)
+    // this.pixelartService.getById(this.route.snapshot.params.id).subscribe(data => {
+    //    this.pixelartItem = data;
+    //   //  console.log(this.pixelartItem)
+    //   });
+
   }
 
   // TODO: if I declare pixelartItem "private", then it only works with this following get method, otherwise this error message:
   // Property 'pixelartItem' is private and only accessible within class 'DetailComponent'.
-  // QUESTON: better to use "private" for pixelartItem and this method, 
+  // QUESTON: better to use "private" for pixelartItem and this method,
   // or the usual "pixelartItem.name"?
   //    get pixelartItemName(): String {
   //       console.log(this.pixelartItem.name);
@@ -60,8 +67,8 @@ export class DetailComponent implements OnInit {
       console.log("Delete OK: ", resp);
     });
 // TODO Itt kellene lehet az a tab(), hogy tovabbi dolgokat csinalhassunk sans toucher à l'élément à voir?
-// TODO vagy valahogy egy blokkba tenni ezt a ket subscribe dolgot? 
-// TODO This is supposed to be in the service.ts, with the delete() method, the refreshcollection part! 
+// TODO vagy valahogy egy blokkba tenni ezt a ket subscribe dolgot?
+// TODO This is supposed to be in the service.ts, with the delete() method, the refreshcollection part!
     this.pixelartService.findAll().subscribe((data: PixelartItem[]) => {
       this.pixelartItemsList = data;
     },
