@@ -12,16 +12,22 @@
                  <ngx-navbar-collapse class="justify-content-end pr-3" #collapse="ngxNavbarCollapse"> -->
                 <ul class="navbar-nav mt-2 mt-lg-0 mr-2">
                     <li class="nav-item">
+                        <a class="nav-link pr-3"
+                        routerLinkActive="active"
+                
+                        routerLink="/pixelart/create-pixelart"> 
+                    <!-- HERE: without href:
+                    <li class="nav-item">
                         <a class="nav-link pr-3" href="#" 
                         rel="noopener noreferrer"
                         routerLinkActive="active-item"
-                        routerLink="create-pixelart"> 
+                        routerLink="create-pixelart">  -->
                         <!-- TODO: href / routerLink, duplicated here or OK? 
                         + "Create art" to : {{'header.createart'| translate}}-->
-                        <span>Create art</span></a>
+                        Create art</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pr-3" href="#" routerLink="catalog"
+                        <a class="nav-link pr-3" routerLink="catalog"
                         
                         rel="noopener noreferrer"> 
                         <!-- Still inside <a> element: [routerLinkActive]="'active'" -->

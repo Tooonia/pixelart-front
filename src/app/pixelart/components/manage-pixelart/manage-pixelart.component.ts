@@ -13,7 +13,6 @@ export class ManagePixelartComponent implements OnInit {
   public managePixelartForm!: FormGroup;
   @Input() pixelartItem!: PixelartItem;
   @Output() savedAction = new EventEmitter<PixelartItem>();
-  // TODO-QUESTION: correct with <any>?
   @Output() cancelledAction = new EventEmitter<PixelartItem>();
 
   constructor(
@@ -47,6 +46,7 @@ export class ManagePixelartComponent implements OnInit {
     // TODO: with route-history.service.ts, to goBackIfPossibleToGoBack() 
     // specially when updatePixelArt: we must go back to Details!!!
     // CREATE can go back to catalog!
+    // TODO/QUESTION: correct?: emit(this.managePixelartForm.value)
     this.cancelledAction.emit(this.managePixelartForm.value)
   }
 }

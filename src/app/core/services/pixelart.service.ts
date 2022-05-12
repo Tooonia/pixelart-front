@@ -41,7 +41,10 @@ public refreshCollection(): void {
   }
 
   // CREATE pixelart <<< requires the canvas!!!
-  // When clicked on "Save pixelart", it allows to add a title, then it is saved in the DB.
+  // Orders of futur windows: When clicked on "Save pixelart", it allows to add a title, then it is saved in the DB.
+  public add(pixelartItem: PixelartItem): Observable<PixelartItem> {
+    return this.http.post<PixelartItem>(`${this.basePath}/pixelart`, pixelartItem);
+  }
 
   // UPDATE pixelart by id
   public update(pixelartItem: PixelartItem): Observable<PixelartItem> {
@@ -59,6 +62,7 @@ public refreshCollection(): void {
     // });
     // return this.http.delete<PixelartItem>(`${this.basePath}/pixelart/${id}`).pipe();
     // Did not work with .pipe(tap()) <<< could not importe 'tap'?!
+    // TODO : Doing here the refreshcollection, instead of adding it to the delete button!!!
   }
 }
 

@@ -5,5 +5,10 @@
                 Catalog - temporary title
             </div>
             <app-list-container></app-list-container>
+            <app-manage-pixelart
+            [pixelartItem]="pixelartItemToCreate"
+            (savedAction)="onSaveCreatePixelart($event)"
+            (cancelledAction)="onCancelGoBackToCatalog()">
+            </app-manage-pixelart>
         </div>
 </div>

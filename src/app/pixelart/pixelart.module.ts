@@ -9,6 +9,8 @@ import { CoreModule } from '../core/core.module';
 import { PixelartRoutingModule } from './pixelart-routing.module';
 import { UpdateComponent } from './pages/update/update.component';
 import { ManagePixelartComponent } from './components/manage-pixelart/manage-pixelart.component';
+import { CreateComponent } from './pages/create/create.component';
+import { TestCreationComponent } from './pages/test-creation/test-creation.component';
 
 
 
@@ -19,7 +21,9 @@ import { ManagePixelartComponent } from './components/manage-pixelart/manage-pix
     ListContainerComponent,
     PixelartCardComponent,
     UpdateComponent,
-    ManagePixelartComponent
+    ManagePixelartComponent,
+    CreateComponent,
+    TestCreationComponent
   ],
   imports: [
     CommonModule,
