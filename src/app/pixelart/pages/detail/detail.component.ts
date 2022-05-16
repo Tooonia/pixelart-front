@@ -23,17 +23,8 @@ export class DetailComponent implements OnInit {
     private router: Router
   ) { }
 
-  // set pixelartItem(pixelartItem: PixelartItem) {
-  //   this._pixelartItem = pixelartItem;
-  // }
   ngOnInit(): void {
-    // TODO: Mustapha: this needs to be handeled in a better way! <<< Finally, does not work!
-  //   if (typeof this.route.snapshot.params.id === "number") {
-  //     this.pixelartService.getById(this.route.snapshot.params.id).subscribe(data => {
-  //     this.pixelartItem = data;
-  // });
-  // }
-
+  
     this.pixelartService.getById(this.route.snapshot.params.id).subscribe(data => {
        this.pixelartItem = data;
       //  console.log(this.pixelartItem)
@@ -56,7 +47,7 @@ export class DetailComponent implements OnInit {
     this.router.navigate(['/pixelart/catalog'])
   }
 
-  // When adding that route, it is needed to be added to pixelart-routing.module.ts too:
+  // When adding that route, it is needed to be added of course to pixelart-routing.module.ts too:
   editPixelart(pixelartItem: PixelartItem): void {
     this.router.navigate(['/pixelart/edit-pixelart', pixelartItem.id])
   }

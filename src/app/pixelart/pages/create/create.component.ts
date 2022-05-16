@@ -19,30 +19,10 @@ export class CreateComponent implements OnInit {
   constructor(
     private pixelartService: PixelartService,
     private route: ActivatedRoute,
-    private router: Router,
-    private http: HttpClient
-  ) {
-    // this.route.snapshot.
+    private router: Router
+  ) { }
 
-
-    //  TODO: Butasag, hiszen itt meg nincs semmi id ertek!
-      // const id = Number(params.get('id'));
-      // console.log(id);
-      // this.newPixelartModel.id = id;
-      // this.newPixelartModel.name = '';
-
-
-      // this.pixelartService.getById(id).subscribe((pixelartModel: PixelartModel) => {
-      //   this.newPixelartModel = pixelartModel;
-      // })
-  
-   }
-
-  ngOnInit(): void {
-    // this.http.post<any>('https://reqres.in/api/posts', { title: 'Angular POST Request Example' }).subscribe(data => {
-    //     this.postId = data.id;
-    // })
-  }
+  ngOnInit(): void { }
 
   public closeCreateNewPixelart(): void {
     this.router.navigate(['/pixelart/catalog'])
@@ -63,6 +43,7 @@ export class CreateComponent implements OnInit {
 
 
   // TODO: This is the part without the PixelartModel, but with the interface PixelartItem:
+  
   // public onSaveCreatePixelart(createdPixelartItem: PixelartItem): void {
   //   console.log("Received new pixelartItem: ", createdPixelartItem);
   //   this.pixelartService.add(createdPixelartItem).subscribe(() => {

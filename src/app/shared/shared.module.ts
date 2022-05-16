@@ -24,9 +24,7 @@ import { PixelartModule } from '../pixelart/pixelart.module';
   exports: [
     FooterComponent,
     HeaderComponent,
-    MaterialModules,
-    CoreModule
-    // TODO: Coremodule needed here finally?
+    MaterialModules
   ]
 })
 export class SharedModule { }

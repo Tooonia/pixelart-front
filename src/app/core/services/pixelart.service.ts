@@ -12,7 +12,7 @@ import { PixelartModel } from 'src/app/pixelart/model/pixelart-model';
             //  (/ konsult-metier.service.ts)
 // TODO Mathieu: I am missing/mixing here Interface and Implementation?
 
-// film.service.ts
+// TODO: film.service.ts
 // orders.service.ts (Jeremy)
 @Injectable({
   providedIn: 'root'
@@ -26,8 +26,7 @@ export class PixelartService {
 public refreshCollection(): void {
 
 }
-
-  // TODO: should this be inside constructor? like orders.service.ts (Jeremy)
+ 
   // GET all pixelart (catalog)
   public findAll(): Observable<PixelartItem[]> {
     // Url from the Back
@@ -41,9 +40,8 @@ public refreshCollection(): void {
     return this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`)
   }
 
-  // CREATE pixelart <<< requires the canvas!!!
-  // Orders of futur windows: When clicked on "Save pixelart", it allows to add a title, then it is saved in the DB.
-  public add(pixelartModel: PixelartModel): Observable<PixelartModel> {
+  // CREATE pixelart 
+    public add(pixelartModel: PixelartModel): Observable<PixelartModel> {
     return this.http.post<PixelartModel>(`${this.basePath}/pixelart`, pixelartModel);
   }
   // TODO: This is with the interface:

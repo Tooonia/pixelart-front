@@ -4,7 +4,7 @@ import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { PixelartItem } from '../../model/pixelart-item';
 
 
-// TODO: mat-form-field must contain a MatFormFieldControl!!!
+// Error message: "mat-form-field must contain a MatFormFieldControl"!!!
 // Normally solved with correct import!
 
 @Component({

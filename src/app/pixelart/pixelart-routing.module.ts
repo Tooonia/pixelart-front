@@ -15,15 +15,15 @@ const routes: Routes = [
     // canActivate: [AuthGuard]
   },
   {
-    path: ':id',
-    component: DetailComponent
-    // ,
+    // Paths need to be declared in the right order: https://angular.io/guide/router#route-order
+    // Eg.: when that particular declared later in that list, then not recognized and component not rendered in the browser!
+    path: 'create-pixelart',
+    component: CreateComponent
     // canActivate: [AuthGuard]
   },
   {
-    path: '',
-    redirectTo: 'catalog',
-    pathMatch: 'full'
+    path: ':id',
+    component: DetailComponent
     // ,
     // canActivate: [AuthGuard]
   },
@@ -32,15 +32,11 @@ const routes: Routes = [
     component: UpdateComponent
     // ,
     // canActivate: [AuthGuard]
-  }
-  ,
+  },
   {
-    path: 'create-pixelart',
-    component: CreateComponent
-    // TODO : DOES NOT EVEN WORK WITH THIS REDIRECTION!!!:
-    // path: 'create-pixelart',
-    // redirectTo: 'catalog',
-    // pathMatch: 'full'
+    path: '',
+    redirectTo: 'catalog',
+    pathMatch: 'full'
     // ,
     // canActivate: [AuthGuard]
   }

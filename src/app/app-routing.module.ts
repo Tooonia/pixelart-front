@@ -25,6 +25,7 @@ const routes: Routes = [
     // before the root component is created. The bootstrap is blocked until the initial navigation is complete. 
     // This value is required for server-side rendering to work.
     // initialNavigation: 'enabled'
+    // Jeremy-nel ellenben igy:
     preloadingStrategy: PreloadAllModules
   })],
   exports: [RouterModule]
