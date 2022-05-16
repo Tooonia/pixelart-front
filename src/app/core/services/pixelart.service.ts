@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
+import { PixelartModel } from 'src/app/pixelart/model/pixelart-model';
 
 // Class responsible to call the server side REST API
 // We put all pixelart related services here.
@@ -42,9 +43,13 @@ public refreshCollection(): void {
 
   // CREATE pixelart <<< requires the canvas!!!
   // Orders of futur windows: When clicked on "Save pixelart", it allows to add a title, then it is saved in the DB.
-  public add(pixelartItem: PixelartItem): Observable<PixelartItem> {
-    return this.http.post<PixelartItem>(`${this.basePath}/pixelart`, pixelartItem);
+  public add(pixelartModel: PixelartModel): Observable<PixelartModel> {
+    return this.http.post<PixelartModel>(`${this.basePath}/pixelart`, pixelartModel);
   }
+  // TODO: This is with the interface:
+  // public add(pixelartItem: PixelartItem): Observable<PixelartItem> {
+  //   return this.http.post<PixelartItem>(`${this.basePath}/pixelart`, pixelartItem);
+  // }
 
   // UPDATE pixelart by id
   public update(pixelartItem: PixelartItem): Observable<PixelartItem> {

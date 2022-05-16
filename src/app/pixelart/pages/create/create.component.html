@@ -8,7 +8,7 @@
         <div (click)="closeCreateNewPixelart()">X</div>
         <div>
             <app-manage-pixelart
-            [pixelartItem]="pixelartItemToCreate"
+            [pixelartItem]="newPixelartModel"
             (savedAction)="onSaveCreatePixelart($event)"
             (cancelledAction)="onCancelGoBackToCatalog()">
             </app-manage-pixelart>       

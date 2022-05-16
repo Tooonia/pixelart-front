@@ -39,7 +39,6 @@ export class UpdateComponent implements OnInit {
     // On vient de rajouter l'id dans le payload/dans le body de la requête:
     modifiedPixelartItem.id = this.pixelartItemToUpdate.id;
     this.pixelartService.update(modifiedPixelartItem).subscribe(() => {
-      // this.router.navigate(['pixelart/catalog'])
       this.router.navigate(['pixelart', modifiedPixelartItem.id])
     })
   }

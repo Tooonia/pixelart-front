@@ -7,15 +7,19 @@
                 <img class="header-logo pl-3" src="https://s5.postimg.cc/dile2165z/Flower_Image.png" alt="Flower_Image">
                 <div class="project-name">PixelArt</div>
             </div>
-            <ngx-navbar-collapse class="justify-content-end pr-3">
+            <!-- <ngx-navbar-collapse class="justify-content-end pr-3"> -->
             <!-- This #collapse is needed for small screens:
                  <ngx-navbar-collapse class="justify-content-end pr-3" #collapse="ngxNavbarCollapse"> -->
                 <ul class="navbar-nav mt-2 mt-lg-0 mr-2">
-                    <li class="nav-item">
+                    <li class="nav-item" >
                         <a class="nav-link pr-3"
                         routerLinkActive="active"
-                
-                        routerLink="/pixelart/create-pixelart"> 
+                        
+                        routerLink="pixelart/create-pixelart"> 
+                        <!-- <a class="nav-link pr-3"
+                        routerLinkActive="active"
+                        href="#" 
+                        routerLink="/create-pixelart">  -->
                     <!-- HERE: without href:
                     <li class="nav-item">
                         <a class="nav-link pr-3" href="#" 
@@ -25,17 +29,20 @@
                         <!-- TODO: href / routerLink, duplicated here or OK? 
                         + "Create art" to : {{'header.createart'| translate}}-->
                         Create art</a>
+                        <!-- Create art</a> -->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pr-3" routerLink="catalog"
-                        
-                        rel="noopener noreferrer"> 
+                        <a class="nav-link pr-3" 
+                        routerLinkActive="active"
+                        routerLink="pixelart/catalog"
+                        rel="noreferrer"> 
                         <!-- Still inside <a> element: [routerLinkActive]="'active'" -->
                         <span>Catalog</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pr-3" href="#" routerLink="how-to"
-                        
+                        <a class="nav-link pr-3" 
+                        routerLinkActive="active"
+                        routerLink="how-to"
                         rel="noopener noreferrer">
                         <!-- Still inside <a> element: [routerLinkActive]="'active'" -->
                         <span>How to?</span></a>
@@ -54,13 +61,14 @@
                         (click)="handleClickGoMonCompte()"
                         
                         rel="noopener noreferrer">
+                        <!-- routerLink="pixelart/login" -->
                         <!-- Still inside <a> element: [routerLinkActive]="'active'" -->
                         <div class="notification-connected" *ngIf="isConnectedAsUser"></div>
                         <!-- TODO: Add a sort of nav list when connected user -->
                         <img src="../../../assets/icons/pixel_avatar.png" alt="Logo pixel avatar"></a>
                     </li>
                 </ul>
-            </ngx-navbar-collapse>
+            <!-- </ngx-navbar-collapse> -->
             <!-- That would be the bloc if other way does not work:
              <div class="collapse navbar-collapse justify-content-end pr-3" id="navbarNavAltMarkup">
                 <div class="navbar-nav">

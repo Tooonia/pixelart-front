@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
    {
@@ -24,7 +24,8 @@ const routes: Routes = [
     // When set to enabled or enabledBlocking, the initial navigation starts 
     // before the root component is created. The bootstrap is blocked until the initial navigation is complete. 
     // This value is required for server-side rendering to work.
-    initialNavigation: 'enabled'
+    // initialNavigation: 'enabled'
+    preloadingStrategy: PreloadAllModules
   })],
   exports: [RouterModule]
 })
