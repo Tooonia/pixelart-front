@@ -4,8 +4,10 @@ import { Observable } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
 import { PixelartModel } from 'src/app/pixelart/model/pixelart-model';
 
-// Class responsible to call the server side REST API
-// We put all pixelart related services here.
+/**
+ * Class responsible to call the server side REST API
+ * We put all pixelart related services here.
+ */ 
 
 // TODO:similar to: projekt.service.ts = l'API by openapi generator and
 //  projekt-metier.service.ts = that has projekt.service.ts in its constructor
@@ -27,21 +29,40 @@ public refreshCollection(): void {
 
 }
  
-  // GET all pixelart (catalog)
+/**
+ * GET all pixelart (catalog)
+ * @returns 
+ */
   public findAll(): Observable<PixelartItem[]> {
     // Url from the Back
-    return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart`)
+    return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-catalog`)
   }
 
-  // GET all pixelart by connected User <<< with authent!
-
-  // GET pixelart by id
+/**
+ * GET one pixelart by id
+ * @param id 
+ * @returns 
+ */ 
   public getById(id: number): Observable<PixelartItem> {
     return this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`)
   }
 
-  // CREATE pixelart 
-    public add(pixelartModel: PixelartModel): Observable<PixelartModel> {
+/**
+ * GET all pixelart from one User
+ * @param pixelartModel 
+ * @returns 
+ */
+public getAllPixelArtByUser(id: number): Observable<PixelartItem[]> {
+  return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-by-user/${id}`)
+}
+
+
+/**
+ * CREATE pixelart
+ * @param pixelartModel 
+ * @returns 
+ */ 
+  public add(pixelartModel: PixelartModel): Observable<PixelartModel> {
     return this.http.post<PixelartModel>(`${this.basePath}/pixelart`, pixelartModel);
   }
   // TODO: This is with the interface:

@@ -10,6 +10,7 @@ import { PixelartRoutingModule } from './pixelart-routing.module';
 import { UpdateComponent } from './pages/update/update.component';
 import { ManagePixelartComponent } from './components/manage-pixelart/manage-pixelart.component';
 import { CreateComponent } from './pages/create/create.component';
+import { HomeComponent } from './pages/home/home.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { CreateComponent } from './pages/create/create.component';
     PixelartCardComponent,
     UpdateComponent,
     ManagePixelartComponent,
-    CreateComponent
+    CreateComponent,
+    HomeComponent
   ],
   imports: [
     CommonModule,

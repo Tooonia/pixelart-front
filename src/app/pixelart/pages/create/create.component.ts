@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { PixelartService } from 'src/app/core/services/pixelart.service';
+import { UserService } from 'src/app/core/services/user.service';
 import { PixelartItem } from '../../model/pixelart-item';
 import { PixelartModel } from '../../model/pixelart-model';
 
@@ -15,14 +17,34 @@ export class CreateComponent implements OnInit {
   public pixelartItemToCreate!: PixelartItem;
   public newPixelartModel = new PixelartModel();
   // newPixelartModel = {} as PixelartModel;
+  content?: string;
+
+  isSignedin = false;
+
+	signedinUser: string = '';
 
   constructor(
     private pixelartService: PixelartService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private userService: UserService,
+    private http: HttpClient,
+    private authService: AuthService
+
   ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    this.isSignedin = this.authService.isUserSignedin();
+		this.signedinUser = this.authService.getSignedinUser();
+
+		if(!this.authService.isUserSignedin()) {
+			this.router.navigateByUrl('/signin');
+		}
+
+		if(this.isSignedin) {
+			this.router.navigateByUrl('/pixelart/create-pixelart');
+		}
+  }
 
   public closeCreateNewPixelart(): void {
     this.router.navigate(['/pixelart/catalog'])
@@ -56,5 +78,7 @@ export class CreateComponent implements OnInit {
   //     this.router.navigate(['/pixelart/catalog'])
   //   })
   // }
+
+  
 
 }

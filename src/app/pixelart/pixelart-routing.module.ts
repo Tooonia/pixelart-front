@@ -6,6 +6,9 @@ import { DetailComponent } from './pages/detail/detail.component';
 import { UpdateComponent } from './pages/update/update.component';
 import { CreateComponent } from './pages/create/create.component';
 
+/**
+ * Routes here are preceded by "/pixelart" as in app-routing.module.ts
+ */
 const routes: Routes = [
   {
     // Path Pixelart Cards
