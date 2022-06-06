@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { AuthService } from 'src/app/core/services/auth.service';
 import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { PixelartItem } from '../../model/pixelart-item';
 import { PixelartModel } from '../../model/pixelart-model';
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 
 @Component({
   selector: 'app-create',
@@ -29,15 +29,15 @@ export class CreateComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private http: HttpClient,
-    private authService: AuthService
+    private tokenStorageService: TokenStorageService
 
   ) { }
 
   ngOnInit(): void { 
-    this.isSignedin = this.authService.isUserSignedin();
-		this.signedinUser = this.authService.getSignedinUser();
+    this.isSignedin = this.tokenStorageService.isUserSignedin();
+		this.signedinUser = this.tokenStorageService.getUser();
 
-		if(!this.authService.isUserSignedin()) {
+		if(!this.tokenStorageService.isUserSignedin()) {
 			this.router.navigateByUrl('/signin');
 		}
 

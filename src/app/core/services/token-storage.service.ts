@@ -42,4 +42,9 @@ export class TokenStorageService {
     }
     return {};
   }
+
+  public isUserSignedin() {
+		return sessionStorage.getItem(USER_KEY) !== null;
+		// return sessionStorage.getItem('token') !== null;
+	}
 }
