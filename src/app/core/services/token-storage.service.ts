@@ -15,7 +15,11 @@ export class TokenStorageService {
   }
   public saveToken(token: string): void {
     window.sessionStorage.removeItem(USER_KEY);
-    this.tokenPureInfo = token.substring(12, );
+    window.sessionStorage.setItem(USER_KEY, token);
+    // if (token !== '' && token !== null) {
+    //   this.tokenPureInfo = token.split(':').pop().split('"').pop().split('"')[0];
+    // }
+    
     
   //  My first try:
     // window.sessionStorage.removeItem(USER_KEY);
