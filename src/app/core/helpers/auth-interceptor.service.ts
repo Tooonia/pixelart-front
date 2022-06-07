@@ -51,25 +51,50 @@ export class AuthInterceptorService implements HttpInterceptor {
 
 
 
-// TODO: kipotolni 1st solution exception-nel!!! Es az egesz strukturaja jobb annak!
+// TODO: kipotolni 2nd solution exception-nel!!! Es az egesz strukturaja jobb annak!
 
 // 1st solution
-  constructor(private tokenStorageService: TokenStorageService) {console.log("value of token inside constructor"); }
+  constructor(private tokenStorageService: TokenStorageService) {
+    console.log("value inside constructor"); }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log("value of token inside intercept");
-    let authReq = req;
-    const token = this.tokenStorageService.getToken();
-    
-    if (token) {
-      authReq = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
-  
-    return next.handle(authReq);
-    }
-    else {
-      return next.handle(req);
-    }
+    console.log("value of token inside intercept" + this.tokenStorageService.getToken());
+    if (this.tokenStorageService.isUserSignedin() && this.tokenStorageService.getToken()) {
+      const request = req.clone({
+        headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + this.tokenStorageService.getToken())
+
+          // headers: new HttpHeaders({
+          //   'Authorization': this.tokenStorageService.getToken() as string
+            // TOKEN_HEADER_KEY: this.tokenStorageService.getToken() 
+                          })
+              // req.headers.set(TOKEN_HEADER_KEY, this.tokenStorageService.getToken())
+              // req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + this.tokenStorageService.getToken())
+          
+     
+      return next.handle(request).pipe(
+    catchError(err => {
+      if(err instanceof HttpErrorResponse && err.status === 401) {
+        this.tokenStorageService.signOut();
+      }
+      return throwError(err);
+    }));
   }
+ 
+return next.handle(req);
+}
+
+  //   let authReq = req;
+  //   const token = this.tokenStorageService.getToken();
+    
+  //   if (token) {
+  //     authReq = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
+  
+  //   return next.handle(authReq);
+  //   }
+  //   else {
+  //     return next.handle(req);
+  //   }
+  // }
 
 }
 // export const authInterceptorProviders = [

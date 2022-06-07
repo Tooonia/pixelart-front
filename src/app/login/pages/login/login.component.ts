@@ -10,7 +10,7 @@ import { JwtRequest } from 'src/app/pixelart/model/jwt-request';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 // 4th solution
 // form:FormGroup;
 
@@ -94,29 +94,30 @@ export class LoginComponent {
   alias!: string;
   email!: string;
 
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  isSignedin = false;
+
+  constructor(private authService: AuthService, private router: Router, private tokenStorage: TokenStorageService) { }
 
   ngOnInit(): void {
-    if (this.tokenStorage.getToken()) {
-      this.isLoggedIn = true;
-      // this.roles = this.tokenStorage.getUser().roles;
-      // this.alias = this.tokenStorage.getUser().alias;
-      // this.email = this.tokenStorage.getUser().email; //TODO: these values are "undefined"!!!
-      // console.log("ngOninit value in logincomponent.ts :" + this.tokenStorage.getUser().email);
-    }
+    this.isSignedin = this.authService.isUserSignedin();
+
+		if(this.isSignedin) {
+			this.router.navigateByUrl('/my-profile');
+		}
+    
+    // 1st solution
+    // if (this.tokenStorage.getToken()) {
+    //   this.isLoggedIn = true;   
+    // }
   }
   onSubmit(): void {
     // const { email, password } = this.form; //appeler jwtRequest
-    this.authService.login(this.form).subscribe({
+    this.authService.signin(this.form).subscribe({
+    // this.authService.login(this.form).subscribe({
       next: data => { // appeler jwtResponse
         this.tokenStorage.saveToken(data.jwtToken);
-        // this.tokenStorage.saveUser(data);
         this.isLoginFailed = false;
         this.isLoggedIn = true;
-        // this.roles = this.tokenStorage.getUser().roles;
-        // this.alias = this.tokenStorage.getUser().alias;
-        // this.email = this.tokenStorage.getUser().email;
-        // console.log("Value of onSubmit in logincomponent.ts: " + this.tokenStorage.getUser().email); // not visible in Console
         this.reloadPage();
       },
       error: err => {

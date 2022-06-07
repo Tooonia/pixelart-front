@@ -1,7 +1,23 @@
+<!-- 2nd solution -->
+<div *ngIf="isSignedin">
+	<p>Welcome back, {{ signedinUser }}!</p>
+
+	<div *ngFor="let greet of greeting">
+		{{greet}}
+	</div>
+
+	<p><a style="text-decoration: underline; cursor: pointer;" (click)="signout()">Signout</a></p>
+</div>
+
+
+
+
+
+
 <!-- TODO: atirni, h ez a private access, es hogy a token-t ne adjam ki!!!
 Csak: alias, email, my-pixelart lista -->
 
-<div class="container" *ngIf="currentUser; else loggedOut">
+<!-- <div class="container" *ngIf="currentUser; else loggedOut">
     <header class="jumbotron">
       <h3>
         <strong>{{ currentUser.alias }}</strong> Profile
@@ -25,4 +41,4 @@ Csak: alias, email, my-pixelart lista -->
   </div>
   <ng-template #loggedOut>
     Please login.
-  </ng-template>
+  </ng-template> -->

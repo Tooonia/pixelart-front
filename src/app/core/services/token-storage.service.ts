@@ -37,6 +37,7 @@ export class TokenStorageService {
      * Gets the token of authentication that will be inserted into all the requests to the server
      */
   public getToken(): string | null {
+  // public getToken(): string | null {
     // const token = window.sessionStorage.getItem(TOKEN_KEY);
     
     // token.split(':').pop().split('"').pop().split('"')[0]; 
@@ -45,7 +46,7 @@ export class TokenStorageService {
     // Ez mukodott avval, mikor saveToken()-t is USER_KEY-re valtoztattam.
     // return window.sessionStorage.getItem(USER_KEY);
     // return token;
-    return window.sessionStorage.getItem(TOKEN_KEY);
+    return window.sessionStorage.getItem(TOKEN_KEY) as string;
   }
   // }
   // public saveUser(user: any): void {
