@@ -1,4 +1,4 @@
-export interface Request {
+export interface JwtRequest {
     email: string;
     password: string;
 }

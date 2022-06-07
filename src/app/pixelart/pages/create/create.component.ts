@@ -34,16 +34,16 @@ export class CreateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void { 
-    this.isSignedin = this.tokenStorageService.isUserSignedin();
-		this.signedinUser = this.tokenStorageService.getUser();
+    // this.isSignedin = this.tokenStorageService.isUserSignedin();
+		// this.signedinUser = this.tokenStorageService.getUser();
 
-		if(!this.tokenStorageService.isUserSignedin()) {
-			this.router.navigateByUrl('/signin');
-		}
+		// if(!this.tokenStorageService.isUserSignedin()) {
+		// 	this.router.navigateByUrl('/signin');
+		// }
 
-		if(this.isSignedin) {
+		
 			this.router.navigateByUrl('/pixelart/create-pixelart');
-		}
+		
   }
 
   public closeCreateNewPixelart(): void {

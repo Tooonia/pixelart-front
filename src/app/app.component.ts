@@ -24,15 +24,16 @@ export class AppComponent {
   constructor(private tokenStorageService: TokenStorageService) { }
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
-    if (this.isLoggedIn) {
-      const user = this.tokenStorageService.getUser();
-      // this.roles = user.roles;
-      // this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-      // this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
-      this.username = user.alias;
-      this.alias = user.alias;
-      this.email = user.email;
-    }
+    // if (this.isLoggedIn) {
+    //   const user = this.tokenStorageService.getUser();
+    //   // const user = this.tokenStorageService.getUser();
+    //   // this.roles = user.roles;
+    //   // this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+    //   // this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
+    //   this.username = user.alias;
+    //   this.alias = user.alias;
+    //   this.email = user.email;
+    // }
   }
   logout(): void {
     this.tokenStorageService.signOut();

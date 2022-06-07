@@ -8,7 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxNavbarModule } from 'ngx-bootstrap-navbar';
 import { CoreModule } from './core/core.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { authInterceptorProviders } from './core/helpers/auth-interceptor.service'
+import { AuthInterceptorService } from './core/helpers/auth-interceptor.service'
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,15 @@ import { authInterceptorProviders } from './core/helpers/auth-interceptor.servic
     CoreModule,
     NgbModule
   ],
-  providers: [authInterceptorProviders],
+  providers: [
+    {
+    provide: HTTP_INTERCEPTORS, 
+    useClass: AuthInterceptorService, 
+    multi: true 
+  }
+  
+  ],
+  // providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -48,20 +48,20 @@ export class TokenStorageService {
     return window.sessionStorage.getItem(TOKEN_KEY);
   }
   // }
-  public saveUser(user: any): void {
-    window.sessionStorage.removeItem(USER_KEY);
-    window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
-  }
-  public getUser(): any {
-    const user = window.sessionStorage.getItem(USER_KEY);
-    // const user = window.sessionStorage.getItem(TOKEN_KEY);
-    if (user) {
-      console.log("Return value of getUser: " + JSON.parse(user));
-      console.log("Value of user: " + user);
-      return JSON.parse(user);
-    }
-    return {};
-  }
+  // public saveUser(user: any): void {
+  //   window.sessionStorage.removeItem(USER_KEY);
+  //   window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+  // }
+  // public getUser(): any {
+  //   const user = window.sessionStorage.getItem(USER_KEY);
+  //   // const user = window.sessionStorage.getItem(TOKEN_KEY);
+  //   if (user) {
+  //     console.log("Return value of getUser: " + JSON.parse(user));
+  //     console.log("Value of user: " + user);
+  //     return JSON.parse(user);
+  //   }
+  //   return {};
+  // }
 
   // ??? Ugyan a 2. kodbol valo, de furcsa
   public isUserSignedin() {

@@ -17,6 +17,9 @@ const TOKEN_HEADER_KEY = 'Authorization';       // for Spring Boot back-end
  * Class adding authentification information to every client request
  */
 @Injectable()
+//  @Injectable({
+//    providedIn: 'root'
+//  })
 export class AuthInterceptorService implements HttpInterceptor {
 // 2nd solution
   // constructor(private authService: AuthService) { }
@@ -51,18 +54,24 @@ export class AuthInterceptorService implements HttpInterceptor {
 // TODO: kipotolni 1st solution exception-nel!!! Es az egesz strukturaja jobb annak!
 
 // 1st solution
-  constructor(private tokenStorageService: TokenStorageService) { }
+  constructor(private tokenStorageService: TokenStorageService) {console.log("value of token inside constructor"); }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    console.log("value of token inside intercept");
     let authReq = req;
     const token = this.tokenStorageService.getToken();
-    console.log(token);
-    if (token != null) {
+    
+    if (token) {
       authReq = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
-    }
+  
     return next.handle(authReq);
+    }
+    else {
+      return next.handle(req);
+    }
   }
+
 }
-export const authInterceptorProviders = [
-  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }
-];
+// export const authInterceptorProviders = [
+//   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }
+// ];

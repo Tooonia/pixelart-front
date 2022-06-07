@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Request } from 'src/app/pixelart/model/request';
+import { JwtRequest } from 'src/app/pixelart/model/jwt-request';
+import { Usermodel } from 'src/app/pixelart/model/usermodel';
+import { pluck, share, shareReplay, tap } from 'rxjs/operators';
+import { JwtResponse } from 'src/app/pixelart/model/jwt-response';
+
 
 // 1st solution
 const AUTH_API = 'http://localhost:8085/api';
@@ -15,6 +19,18 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
+// 4th solution
+// constructor(private http: HttpClient) {
+// }
+  
+// login(email:string, password:string ) {
+// 	return this.http.post<Usermodel>('/api/login', {email, password})
+// 		// this is just the HTTP call, 
+// 		// we still need to handle the reception of the token
+// 		.shareReplay();
+// }
+
+
 
   // 2nd solution
   // private baseUrl = 'http://localhost:8085/api';
@@ -64,11 +80,8 @@ export class AuthService {
 
 // 1st solution
   constructor(private http: HttpClient) { }
-  login(email: string, password: string): Observable<any> {
-    return this.http.post(AUTH_API + '/authenticate', {
-      email,
-      password
-    }, httpOptions);
+  login(request: JwtRequest): Observable<JwtResponse> {
+    return this.http.post<JwtResponse>(AUTH_API + '/authenticate', request, httpOptions);
   }
   register(alias: string, email: string, password: string): Observable<any> {
     return this.http.post(AUTH_API + '/signup', {
