@@ -33,17 +33,17 @@ export class ListComponent implements OnInit {
     this.router.navigate(['/pixelart/catalog'])
   }
 
-  public onSaveCreatePixelart(createdPixelartItem: PixelartItem): void {
-    console.log("Received new pixelartItem: ", createdPixelartItem);
-    // createdPixelartItem.id = this.pixelartItemToCreate.id;
-    // createdPixelartItem.name = this.pixelartItemToCreate.name;
-    this.pixelartService.add(createdPixelartItem).subscribe(() => {
-      this.router.navigate(['/pixelart/catalog'])
-    })
-  }
+  // public onSaveCreatePixelart(createdPixelartItem: PixelartItem): void {
+  //   console.log("Received new pixelartItem: ", createdPixelartItem);
+  //   // createdPixelartItem.id = this.pixelartItemToCreate.id;
+  //   // createdPixelartItem.name = this.pixelartItemToCreate.name;
+  //   this.pixelartService.add(createdPixelartItem).subscribe(() => {
+  //     this.router.navigate(['/pixelart/catalog'])
+  //   })
+  // }
 
-  public createPixelart(): void {
-    this.router.navigate(['/pixelart/create-pixelart'])
-  }
+  // public createPixelart(): void {
+  //   this.router.navigate(['/pixelart/create-pixelart'])
+  // }
 
 }

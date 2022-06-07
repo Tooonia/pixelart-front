@@ -40,7 +40,7 @@ export class CreateComponent implements OnInit {
 		// }
 
 		
-			this.router.navigateByUrl('/pixelart/create-pixelart');
+			// this.router.navigateByUrl('/pixelart/create-pixelart');
 		
   }
 

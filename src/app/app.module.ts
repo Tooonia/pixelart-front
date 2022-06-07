@@ -25,11 +25,11 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     NgbModule
   ],
   providers: [
-    {
-    provide: HTTP_INTERCEPTORS, 
-    useClass: AuthInterceptorService, 
-    multi: true 
-  }
+  //   {
+  //   provide: HTTP_INTERCEPTORS, 
+  //   useClass: AuthInterceptorService, 
+  //   multi: true 
+  // }
   
   ],
   // providers: [authInterceptorProviders],

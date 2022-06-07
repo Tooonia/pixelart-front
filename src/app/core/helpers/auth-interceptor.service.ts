@@ -36,6 +36,7 @@ export class AuthInterceptorService implements HttpInterceptor {
     if (typeof token === 'string' && token.trim().length != 0) {
       var request = req.clone({
         setHeaders: {
+          // Authorization: `***REMOVED***`,
           Authorization: `Bearer ${this.authservice.getToken()}`,
         },
       });
