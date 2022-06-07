@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 
 @Component({
   selector: 'app-my-profile',
@@ -17,7 +16,7 @@ export class MyProfileComponent implements OnInit {
 
 	greeting: any[] = [];
 
-	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private authService: AuthService, private tokenStorageService: TokenStorageService) {}
+	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private authService: AuthService) {}
 
 	ngOnInit() {
 		this.isSignedin = this.authService.isUserSignedin();
@@ -36,8 +35,11 @@ export class MyProfileComponent implements OnInit {
 	}
   
   signout(): void {
-    this.tokenStorageService.signOut();
+    this.authService.signOut();
     window.location.reload();
+  }
+  deleteAccount(): void {
+    
   }
   
   

@@ -5,7 +5,6 @@ import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { PixelartItem } from '../../model/pixelart-item';
 import { PixelartModel } from '../../model/pixelart-model';
-import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 
 @Component({
   selector: 'app-create',
@@ -28,8 +27,7 @@ export class CreateComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
-    private http: HttpClient,
-    private tokenStorageService: TokenStorageService
+    private http: HttpClient
 
   ) { }
 

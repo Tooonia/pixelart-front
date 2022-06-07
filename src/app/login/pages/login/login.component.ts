@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { TokenStorageService } from 'src/app/core/services/token-storage.service';
-import { JwtRequest } from 'src/app/pixelart/model/jwt-request';
+import { JwtRequest } from 'src/app/pixelart/model/jwtrequest';
 
 @Component({
   selector: 'app-login',
@@ -96,13 +95,13 @@ export class LoginComponent implements OnInit {
 
   isSignedin = false;
 
-  constructor(private authService: AuthService, private router: Router, private tokenStorage: TokenStorageService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.isSignedin = this.authService.isUserSignedin();
+    this.isLoggedIn = this.authService.isUserSignedin();
 
-		if(this.isSignedin) {
-			this.router.navigateByUrl('/my-profile');
+		if(this.isLoggedIn) {
+			this.router.navigateByUrl('/login/my-profile');
 		}
     
     // 1st solution
@@ -115,14 +114,16 @@ export class LoginComponent implements OnInit {
     this.authService.signin(this.form).subscribe({
     // this.authService.login(this.form).subscribe({
       next: data => { // appeler jwtResponse
-        this.tokenStorage.saveToken(data.jwtToken);
+        this.authService.saveToken(data.jwtToken);
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.reloadPage();
       },
       error: err => {
+        if (err.error != null && err.error.message != null) {
         this.errorMessage = err.error.message;
-        this.isLoginFailed = true;
+        
+        } this.isLoginFailed = true;
       }
     });
   }

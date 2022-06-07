@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-const TOKEN_KEY = 'auth-token';
+// const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
 
 @Injectable({
@@ -8,7 +8,6 @@ const USER_KEY = 'auth-user';
 })
 export class TokenStorageService {
 
-  tokenPureInfo!: string;
   constructor() { }
   signOut(): void {
     window.sessionStorage.clear();
@@ -30,13 +29,13 @@ export class TokenStorageService {
     // window.sessionStorage.setItem(USER_KEY, this.tokenPureInfo);
 
     // Original solution:
-    window.sessionStorage.removeItem(TOKEN_KEY);
-    window.sessionStorage.setItem(TOKEN_KEY, token);
+    // window.sessionStorage.removeItem(TOKEN_KEY);
+    // window.sessionStorage.setItem(TOKEN_KEY, token);
   }
   /**
      * Gets the token of authentication that will be inserted into all the requests to the server
      */
-  public getToken(): string | null {
+  // public getToken(): string | null {
   // public getToken(): string | null {
     // const token = window.sessionStorage.getItem(TOKEN_KEY);
     
@@ -46,8 +45,8 @@ export class TokenStorageService {
     // Ez mukodott avval, mikor saveToken()-t is USER_KEY-re valtoztattam.
     // return window.sessionStorage.getItem(USER_KEY);
     // return token;
-    return window.sessionStorage.getItem(TOKEN_KEY) as string;
-  }
+    // return window.sessionStorage.getItem(TOKEN_KEY) as string;
+  // }
   // }
   // public saveUser(user: any): void {
   //   window.sessionStorage.removeItem(USER_KEY);
@@ -65,8 +64,8 @@ export class TokenStorageService {
   // }
 
   // ??? Ugyan a 2. kodbol valo, de furcsa
-  public isUserSignedin() {
-		return sessionStorage.getItem(USER_KEY) !== null;
-		// return sessionStorage.getItem('token') !== null;
-	}
+  // public isUserSignedin() {
+	// 	return sessionStorage.getItem(USER_KEY) !== null;
+	// 	// return sessionStorage.getItem('token') !== null;
+	// }
 }

@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
-import { TokenStorageService } from '../services/token-storage.service';
 
 // 1st solution
 const TOKEN_HEADER_KEY = 'Authorization';       // for Spring Boot back-end
@@ -54,33 +53,33 @@ export class AuthInterceptorService implements HttpInterceptor {
 // TODO: kipotolni 2nd solution exception-nel!!! Es az egesz strukturaja jobb annak!
 
 // 1st solution
-  constructor(private tokenStorageService: TokenStorageService) {
+  constructor(private authservice: AuthService) {
     console.log("value inside constructor"); }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log("value of token inside intercept" + this.tokenStorageService.getToken());
-    if (this.tokenStorageService.isUserSignedin() && this.tokenStorageService.getToken()) {
-      const request = req.clone({
-        headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + this.tokenStorageService.getToken())
+    console.log("value of token inside intercept" + this.authservice.getToken()); //value null
 
-          // headers: new HttpHeaders({
-          //   'Authorization': this.tokenStorageService.getToken() as string
-            // TOKEN_HEADER_KEY: this.tokenStorageService.getToken() 
-                          })
-              // req.headers.set(TOKEN_HEADER_KEY, this.tokenStorageService.getToken())
-              // req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + this.tokenStorageService.getToken())
-          
+    let token = '' + this.authservice.getToken();
+    if ( typeof token === "string" && !(token.trim().length == 0)) {
+    // if(token != null && token.length > 0) {
+    // if (this.authservice.getToken()) {
      
+        // req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + this.authservice.getToken())
+        var request = req.clone({
+          setHeaders: {
+              Authorization: `Bearer ${this.authservice.getToken()}`
+          }
+      });
+      
       return next.handle(request).pipe(
-    catchError(err => {
-      if(err instanceof HttpErrorResponse && err.status === 401) {
-        this.tokenStorageService.signOut();
-      }
+        catchError(err => {
+          if(err instanceof HttpErrorResponse && err.status === 401) {
+            this.authservice.signOut();
+          }
       return throwError(err);
-    }));
-  }
- 
-return next.handle(req);
+      }));
+    }
+    return next.handle(req);
 }
 
   //   let authReq = req;

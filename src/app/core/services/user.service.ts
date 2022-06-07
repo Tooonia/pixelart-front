@@ -49,4 +49,8 @@ export class UserService {
   public getUserBoard(): Observable<any> {
     return this.http.get((`${this.basePath}/pixelart-create`), { responseType: 'json'});
   }
+
+  // public deleteAccount(): Observable<any> {
+  //   return this.http.delete<any>(`${this.basePath}/my-profile/${uuid}`);
+  // }
 }

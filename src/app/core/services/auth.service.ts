@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { JwtRequest } from 'src/app/pixelart/model/jwt-request';
+import { JwtRequest } from 'src/app/pixelart/model/jwtrequest';
 import { Usermodel } from 'src/app/pixelart/model/usermodel';
 import { pluck, share, shareReplay, tap } from 'rxjs/operators';
 import { JwtResponse } from 'src/app/pixelart/model/jwt-response';
+import { RequestSignup } from 'src/app/pixelart/model/request-signup';
 
 
 // // 1st solution
@@ -14,42 +15,33 @@ const AUTH_API = 'http://localhost:8085/api';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
+const TOKEN_KEY = 'auth-token';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-// 4th solution
-// constructor(private http: HttpClient) {
-// }
-  
-// login(email:string, password:string ) {
-// 	return this.http.post<Usermodel>('/api/login', {email, password})
-// 		// this is just the HTTP call, 
-// 		// we still need to handle the reception of the token
-// 		.shareReplay();
-// }
-
-
-
   // 2nd solution
   private baseUrl = 'http://localhost:8085/api';
 
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) { }
 
-	signin(request: JwtRequest): Observable<any> {
-		return this.http.post<any>(this.baseUrl + '/authenticate', request, {headers: new HttpHeaders({ 'Content-Type': 'application/json' })}).pipe(map((resp) => {
-		// var stringResponse = resp.split(':').pop().split('"').pop().split('"')[0];    
-		
-			
+	signin(request: JwtRequest): Observable<JwtResponse> {
+		return this.http.post<any>(this.baseUrl + '/authenticate', request, {headers: new HttpHeaders({ 'Content-Type': 'application/json' })}).pipe(map((resp) => {  
+		console.log(resp);
+		// console.log(resp.token);
+		// console.log(sessionStorage.getItem(TOKEN_KEY))
+		// console.log(sessionStorage.getItem(resp.token))
+		// const token = resp.getToken();
 		sessionStorage.setItem('user', request.email);
-        sessionStorage.setItem('token', 'Bearer ' + resp.token);
+        // sessionStorage.setItem('token', 'Bearer ' + token);
+        sessionStorage.setItem('token', 'Bearer ' + resp.jwtToken);
         return resp;
       }));
 	}
 
-	signup(request: Request): Observable<any> {
-		return this.http.post<any>(this.baseUrl + '/signup', request, {headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' as 'json'}).pipe(map((resp) => {                                                         
+	signup(requestSignup: RequestSignup): Observable<any> {
+		return this.http.post<any>(this.baseUrl + '/signup', requestSignup, {headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' as 'json'}).pipe(map((resp) => {                                                         
 			return resp;
 		}));
 	}
@@ -69,14 +61,14 @@ export class AuthService {
 		return sessionStorage.getItem('user') as string;
 	}
 
-	getToken() {
-		let token = sessionStorage.getItem('token') as string;
-		return token;
-	}
-
-
-
-
+	// getAliasOfSignedinUser(): Observable<Usermodel> {
+	// 	const emailSignedInUser = sessionStorage.getItem('user');
+	// 	return this.http.get<Usermodel>(`${this.baseUrl}`) //TODO: csinalni findByEmail-t, de password nelkul!
+	// }
+	// getToken() {
+	// 	let token = sessionStorage.getItem('token') as string;
+	// 	return token;
+	// }
 
 // 1st solution
 //Corriger avec Mathieu:
@@ -91,4 +83,24 @@ export class AuthService {
       password
     }, httpOptions);
   }
+
+  signOut(): void {
+    window.sessionStorage.clear();
+  }
+
+  public saveToken(token: string): void {
+    window.sessionStorage.removeItem(TOKEN_KEY);
+    window.sessionStorage.setItem(TOKEN_KEY, token);
+	console.log("saveToken method" + window.sessionStorage.getItem(TOKEN_KEY))
+  }
+
+   /**
+     * Gets the token of authentication that will be inserted into all the requests to the server
+     */
+	public getToken(): string | null {
+		let token = window.sessionStorage.getItem(TOKEN_KEY);
+		console.log("getToken method" + token);
+		  return token;
+		//   return window.sessionStorage.getItem(TOKEN_KEY);
+	}
 }
