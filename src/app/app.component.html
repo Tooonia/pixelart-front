@@ -22,7 +22,8 @@
     </ul>
     <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
       <li class="nav-item">
-        <a href="/my-profile" class="nav-link" routerLink="login/my-profile">{{ username }}</a>
+        <a href="/my-profile" class="nav-link" routerLink="login/my-profile">{{ alias }}</a>
+        <!-- <a href="/my-profile" class="nav-link" routerLink="login/my-profile">{{ username }}</a> -->
       </li>
       <li class="nav-item">
         <a href class="nav-link" (click)="logout()">LogOut</a>

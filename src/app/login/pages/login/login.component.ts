@@ -61,25 +61,33 @@ export class LoginComponent implements OnInit {
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
-  roles: string[] = [];
+  // roles: string[] = [];
+  alias!: string;
+  email!: string;
 
   constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
 
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
-      this.roles = this.tokenStorage.getUser().roles;
+      // this.roles = this.tokenStorage.getUser().roles;
+      this.alias = this.tokenStorage.getUser().alias;
+      this.email = this.tokenStorage.getUser().email; //TODO: these values are "undefined"!!!
+      console.log("ngOninit value in logincomponent.ts :" + this.tokenStorage.getUser().email);
     }
   }
   onSubmit(): void {
     const { email, password } = this.form;
     this.authService.login(email, password).subscribe({
       next: data => {
-        this.tokenStorage.saveToken(data.accessToken);
+        this.tokenStorage.saveToken(data.jwtToken);
         this.tokenStorage.saveUser(data);
         this.isLoginFailed = false;
         this.isLoggedIn = true;
-        this.roles = this.tokenStorage.getUser().roles;
+        // this.roles = this.tokenStorage.getUser().roles;
+        this.alias = this.tokenStorage.getUser().alias;
+        this.email = this.tokenStorage.getUser().email;
+        console.log("Value of onSubmit in logincomponent.ts: " + this.tokenStorage.getUser().email); // not visible in Console
         this.reloadPage();
       },
       error: err => {
@@ -89,6 +97,7 @@ export class LoginComponent implements OnInit {
     });
   }
   reloadPage(): void {
+    console.log("Value of onSubmit in logincomponent.ts 2nd position: " + this.tokenStorage.getUser().email); // not visible in Console
     window.location.reload();
   }
 }

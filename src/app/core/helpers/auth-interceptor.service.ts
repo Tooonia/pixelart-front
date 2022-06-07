@@ -12,6 +12,10 @@ const TOKEN_HEADER_KEY = 'Authorization';       // for Spring Boot back-end
 // @Injectable({
 //   providedIn: 'root'
 // })
+
+/**
+ * Class adding authentification information to every client request
+ */
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
 // 2nd solution
@@ -44,14 +48,15 @@ export class AuthInterceptorService implements HttpInterceptor {
 
 
 
-
+// TODO: kipotolni 1st solution exception-nel!!! Es az egesz strukturaja jobb annak!
 
 // 1st solution
-  constructor(private token: TokenStorageService) { }
+  constructor(private tokenStorageService: TokenStorageService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let authReq = req;
-    const token = this.token.getToken();
+    const token = this.tokenStorageService.getToken();
+    console.log(token);
     if (token != null) {
       authReq = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
     }
