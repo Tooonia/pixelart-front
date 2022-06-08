@@ -8,6 +8,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxNavbarModule } from 'ngx-bootstrap-navbar';
 import { CoreModule } from './core/core.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import {NoopInterceptor} from "./http-interceptors/noop-interceptor";
+import {httpInterceptorProviders} from "./http-interceptors";
 
 @NgModule({
   declarations: [
@@ -22,7 +25,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     CoreModule,
     NgbModule
   ],
-  providers: [],
+  providers: [
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
