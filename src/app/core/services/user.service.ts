@@ -50,7 +50,12 @@ export class UserService {
     return this.http.get((`${this.basePath}/pixelart-create`), { responseType: 'json'});
   }
 
-  // public deleteAccount(): Observable<any> {
-  //   return this.http.delete<any>(`${this.basePath}/my-profile/${uuid}`);
-  // }
+  public deleteAccount(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.basePath}/my-profile/${id}`, {
+      headers: {
+        'Authorization': '***REMOVED***',
+      }
+    });
+    // this.http.delete<any>(`${this.basePath}/my-profile/${id}`);
+  }
 }

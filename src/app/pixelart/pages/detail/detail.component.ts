@@ -62,12 +62,13 @@ export class DetailComponent implements OnInit {
 // TODO This is supposed to be in the service.ts, with the delete() method, the refreshcollection part!
     this.pixelartService.findAll().subscribe((data: PixelartItem[]) => {
       this.pixelartItemsList = data;
+      this.router.navigate(['/pixelart/catalog'])
     },
     error => {
       console.log(error);
     })
 
-    this.router.navigate(['/pixelart/catalog'])
+    
   }
 
 }

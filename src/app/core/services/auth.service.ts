@@ -59,7 +59,7 @@ export class AuthService {
   signout() {
     sessionStorage.removeItem('user');
 
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl('/pixelart/catalog');
   }
 
   isUserSignedin() {
