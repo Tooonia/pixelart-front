@@ -8,14 +8,6 @@ import { PixelartModel } from 'src/app/pixelart/model/pixelart-model';
  * Class responsible to call the server side REST API
  * We put all pixelart related services here.
  */ 
-
-// TODO:similar to: projekt.service.ts = l'API by openapi generator and
-//  projekt-metier.service.ts = that has projekt.service.ts in its constructor
-            //  (/ konsult-metier.service.ts)
-// TODO Mathieu: I am missing/mixing here Interface and Implementation?
-
-// TODO: film.service.ts
-// orders.service.ts (Jeremy)
 @Injectable({
   providedIn: 'root'
 })
@@ -69,36 +61,31 @@ public getAllPixelArtByUser(id: number): Observable<PixelartItem[]> {
       }
     });
   }
-  // TODO: This is with the interface:
-  // public add(pixelartItem: PixelartItem): Observable<PixelartItem> {
-  //   return this.http.post<PixelartItem>(`${this.basePath}/pixelart`, pixelartItem);
-  // }
-
-  // UPDATE pixelart by id
+  
+/**
+ * UPDATE pixelart by id
+ * @param pixelartItem 
+ * @returns 
+ */
   public update(pixelartItem: PixelartItem): Observable<PixelartItem> {
     return this.http.put<PixelartItem>(`${this.basePath}/pixelart-edit/${pixelartItem.id}`, pixelartItem, {
       headers: {
         'Authorization': '***REMOVED***',
       }
     });
-// public update(pixelartItem: PixelartItem, pixelartId: Number): Observable<PixelartItem> {
-    // return this.http.put<PixelartItem>(`${this.basePath}/pixelart`, pixelartItem);
   }
 
-  // DELETE pixelart by id
-  // TODO: why <any> for Observable here?:
+  /**
+   * DELETE pixelart by id
+   * @param id 
+   * @returns 
+   */
   public deleteById(id: number): Observable<any> {
     return this.http.delete<any>(`${this.basePath}/pixelart-edit/${id}`, {
       headers: {
         'Authorization': '***REMOVED***',
       }
     });
-    // return this.http.delete(`${this.basePath}/pixelart/${id}`, {
-    //   responseType: 'json',
-    // });
-    // return this.http.delete<PixelartItem>(`${this.basePath}/pixelart/${id}`).pipe();
-    // Did not work with .pipe(tap()) <<< could not importe 'tap'?!
-    // TODO : Doing here the refreshcollection, instead of adding it to the delete button!!!
   }
 }
 

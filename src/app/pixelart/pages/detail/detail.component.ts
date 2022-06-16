@@ -56,17 +56,20 @@ export class DetailComponent implements OnInit {
     console.log(pixelartItem.id);
     this.pixelartService.deleteById(pixelartItem.id).subscribe((resp) => {
       console.log("Delete OK: ", resp);
+      
+      this.pixelartService.findAll().subscribe((data: PixelartItem[]) => {
+        this.pixelartItemsList = data;
+        this.router.navigate(['/pixelart/catalog'])
+      },
+        error => {
+        console.log(error);
+      })
+
     });
 // TODO Itt kellene lehet az a tab(), hogy tovabbi dolgokat csinalhassunk sans toucher à l'élément à voir?
 // TODO vagy valahogy egy blokkba tenni ezt a ket subscribe dolgot?
 // TODO This is supposed to be in the service.ts, with the delete() method, the refreshcollection part!
-    this.pixelartService.findAll().subscribe((data: PixelartItem[]) => {
-      this.pixelartItemsList = data;
-      this.router.navigate(['/pixelart/catalog'])
-    },
-    error => {
-      console.log(error);
-    })
+    
 
     
   }

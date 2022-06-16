@@ -49,15 +49,15 @@ export class MyProfileComponent implements OnInit {
     window.location.reload();
 
   }
-  deleteAccount(idUser: number): void {
-    // idUser = 25;
-    this.userService.deleteAccount(idUser).subscribe((resp) => {
-      console.log("Delete OK: ", resp)
-    });
-    this.authService.signout();
-    // window.location.reload();
-    // this.router.navigate(['/pixelart/catalog'])
-  }
+  // deleteAccount(idUser: number): void {
+  //   // idUser = 25;
+  //   this.userService.deleteAccount(idUser).subscribe((resp) => {
+  //     console.log("Delete OK: ", resp)
+  //   });
+  //   this.authService.signout();
+  //   // window.location.reload();
+  //   // this.router.navigate(['/pixelart/catalog'])
+  // }
 
   
   

@@ -20,7 +20,7 @@ const TOKEN_KEY = 'auth-token';
   providedIn: 'root',
 })
 export class AuthService {
-  // 2nd solution
+
   private baseUrl = 'http://localhost:8085/api';
 
   constructor(
@@ -99,6 +99,5 @@ export class AuthService {
     let token = window.sessionStorage.getItem(TOKEN_KEY);
     console.log('getToken method' + token);
     return token;
-    //   return window.sessionStorage.getItem(TOKEN_KEY);
   }
 }
