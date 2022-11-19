@@ -1,14 +1,18 @@
+<!-- TODO: This requires the canvas as a previous page!!!
+    Then: When clicked on "Save pixelart", it gets that page, with the preview of the pixelart,
+    and allows to add a title, then it is saved in the DB via "onSaveCreatePixelart($event)". -->
+
+
 <!-- sign-up.component -->
 <div class="detail-container pl-0 pr-0 container-fluid">
     <div class="header-metadata ml">
         <!-- TODO: this text in {{}} for internationalisation -->
         <div>Create New PixelArt</div>  
-        <!-- <div *ngIf="film?.length"> -->
-            <!-- TODO: Replace it with "close" button -->
+        <!-- TODO: Replace it with "close" button -->
         <div (click)="closeCreateNewPixelart()">X</div>
         <div>
             <app-manage-pixelart
-            [pixelartItem]="pixelartItemToCreate"
+            [pixelartItem]="newPixelartModel"
             (savedAction)="onSaveCreatePixelart($event)"
             (cancelledAction)="onCancelGoBackToCatalog()">
             </app-manage-pixelart>       

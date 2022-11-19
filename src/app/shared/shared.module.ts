@@ -4,6 +4,8 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { MaterialModules } from './shared.constant';
 import { CoreModule } from '../core/core.module';
+import { RouterModule } from '@angular/router';
+import { PixelartModule } from '../pixelart/pixelart.module';
 
 
 
@@ -15,13 +17,14 @@ import { CoreModule } from '../core/core.module';
   imports: [
     CommonModule,
     ...MaterialModules,
-    CoreModule
+    CoreModule,
+    // Routermodule needed to be imported so routerLink could work inside the header.component!
+    RouterModule
   ],
   exports: [
     FooterComponent,
     HeaderComponent,
-    MaterialModules,
-    CoreModule
+    MaterialModules
   ]
 })
 export class SharedModule { }

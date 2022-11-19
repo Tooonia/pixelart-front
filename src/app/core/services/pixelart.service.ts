@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
+import { PixelartModel } from 'src/app/pixelart/model/pixelart-model';
 
 // Class responsible to call the server side REST API
 // We put all pixelart related services here.
@@ -11,7 +12,7 @@ import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
             //  (/ konsult-metier.service.ts)
 // TODO Mathieu: I am missing/mixing here Interface and Implementation?
 
-// film.service.ts
+// TODO: film.service.ts
 // orders.service.ts (Jeremy)
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,7 @@ export class PixelartService {
 public refreshCollection(): void {
 
 }
-
-  // TODO: should this be inside constructor? like orders.service.ts (Jeremy)
+ 
   // GET all pixelart (catalog)
   public findAll(): Observable<PixelartItem[]> {
     // Url from the Back
@@ -40,11 +40,14 @@ public refreshCollection(): void {
     return this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`)
   }
 
-  // CREATE pixelart <<< requires the canvas!!!
-  // Orders of futur windows: When clicked on "Save pixelart", it allows to add a title, then it is saved in the DB.
-  public add(pixelartItem: PixelartItem): Observable<PixelartItem> {
-    return this.http.post<PixelartItem>(`${this.basePath}/pixelart`, pixelartItem);
+  // CREATE pixelart 
+    public add(pixelartModel: PixelartModel): Observable<PixelartModel> {
+    return this.http.post<PixelartModel>(`${this.basePath}/pixelart`, pixelartModel);
   }
+  // TODO: This is with the interface:
+  // public add(pixelartItem: PixelartItem): Observable<PixelartItem> {
+  //   return this.http.post<PixelartItem>(`${this.basePath}/pixelart`, pixelartItem);
+  // }
 
   // UPDATE pixelart by id
   public update(pixelartItem: PixelartItem): Observable<PixelartItem> {

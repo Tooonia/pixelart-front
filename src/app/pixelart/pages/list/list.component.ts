@@ -9,12 +9,12 @@ import { PixelartItem } from '../../model/pixelart-item';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-// This declaration is not necessary for displyaing the list inside that class, all is done within list-container:
+  // This declaration is not necessary for displyaing the list inside that class, all is done within list-container:
   // pixelartItems: PixelartItem[] | undefined;
   public pixelartItemToCreate!: PixelartItem;
+  public pixelartItem!: PixelartItem;
 
   constructor(
-    // These declarations are not necessary for displyaing the list inside that class, all is done within list-container:
     private router: Router,
     private pixelartService: PixelartService
   ) { }
@@ -40,6 +40,10 @@ export class ListComponent implements OnInit {
     this.pixelartService.add(createdPixelartItem).subscribe(() => {
       this.router.navigate(['/pixelart/catalog'])
     })
+  }
+
+  public createPixelart(): void {
+    this.router.navigate(['/pixelart/create-pixelart'])
   }
 
 }

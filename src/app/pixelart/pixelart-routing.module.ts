@@ -5,7 +5,6 @@ import { ListComponent } from './pages/list/list.component';
 import { DetailComponent } from './pages/detail/detail.component';
 import { UpdateComponent } from './pages/update/update.component';
 import { CreateComponent } from './pages/create/create.component';
-import { TestCreationComponent } from './pages/test-creation/test-creation.component';
 
 const routes: Routes = [
   {
@@ -16,15 +15,15 @@ const routes: Routes = [
     // canActivate: [AuthGuard]
   },
   {
-    path: ':id',
-    component: DetailComponent
-    // ,
+    // Paths need to be declared in the right order: https://angular.io/guide/router#route-order
+    // Eg.: when that particular declared later in that list, then not recognized and component not rendered in the browser!
+    path: 'create-pixelart',
+    component: CreateComponent
     // canActivate: [AuthGuard]
   },
   {
-    path: '',
-    redirectTo: 'catalog',
-    pathMatch: 'full'
+    path: ':id',
+    component: DetailComponent
     // ,
     // canActivate: [AuthGuard]
   },
@@ -33,11 +32,11 @@ const routes: Routes = [
     component: UpdateComponent
     // ,
     // canActivate: [AuthGuard]
-  }
-  ,
+  },
   {
-    path: 'create-pixelart',
-    component: CreateComponent
+    path: '',
+    redirectTo: 'catalog',
+    pathMatch: 'full'
     // ,
     // canActivate: [AuthGuard]
   }

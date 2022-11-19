@@ -14,15 +14,12 @@ export class PixelartCardComponent implements OnInit {
   // @Input() pixelartItem: PixelartItem | undefined;
   @Input()
   pixelartItem!: PixelartItem;
-  // TODO: see "any" here!
-  // id: any; 
 
   constructor(
     // GET pixelart by id on '/pixelart/id' works without these 2:
     // private pixelartService: PixelartService,
     // private route: ActivatedRoute,
     private router: Router
-    // Router is needed for goToDetail()
   ) { }
 
   // TODO: Est-ce qu'il doit être dans ngOnInit?

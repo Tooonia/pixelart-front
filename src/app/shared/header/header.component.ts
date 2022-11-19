@@ -24,6 +24,7 @@ export class HeaderComponent {
   handleClickGoMonCompte(): void {
     // If we are connected: open menu list of connected user: (this.open()?)
     if (this.isConnectedAsUser) {
+      // TODO: create component! 
         // this.router.navigate(['/myaccount']);
     }
     // Not connected ? go /login
@@ -32,7 +33,7 @@ export class HeaderComponent {
     }
 }
 handleClickChangeLanguage(): void {
-  
+  // TODO!!!
 }
 
 }
