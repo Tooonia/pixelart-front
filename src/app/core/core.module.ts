@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PixelartService } from './services/pixelart.service';
-
+import {httpInterceptorProviders} from "../http-interceptors";
 
 
 @NgModule({
@@ -10,6 +10,7 @@ import { PixelartService } from './services/pixelart.service';
     CommonModule
   ],
   providers: [
+    httpInterceptorProviders,
     PixelartService
   ]
 })

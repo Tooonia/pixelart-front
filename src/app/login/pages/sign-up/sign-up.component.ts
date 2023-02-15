@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { RequestSignup } from 'src/app/pixelart/model/request-signup';
+import { RequestSignupItem } from 'src/app/pixelart/model/request-signup-item';
 
 @Component({
   selector: 'app-sign-up',
@@ -24,7 +25,7 @@ export class SignUpComponent implements OnInit {
 	// doSignup() {
 	// 	if(this.email !== '' && this.email !== null && this.password !== '' && this.password !== null
   //   && this.alias !== '' && this.alias !== null) {
-	// 		const request: RequestSignup = { alias: this.alias, email: this.email, password: this.password };
+	// 		const request: RequestSignupItem = { alias: this.alias, email: this.email, password: this.password };
 
 	// 		this.authService.signup(request).subscribe((result)=> {
 	// 			//console.log(result);
@@ -42,24 +43,17 @@ export class SignUpComponent implements OnInit {
 
 
 
-
-
-
-
-
-
-
 // 1st solution
-  form: any = {
-    alias: null,
-    email: null,
-    password: null
+  form: RequestSignupItem = {
+    alias: '',
+    email: '',
+    password: ''
   };
   isSuccessful = false;
   isSignUpFailed = false;
   errorMessage = '';
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -70,9 +64,16 @@ export class SignUpComponent implements OnInit {
         console.log(data);
         this.isSuccessful = true;
         this.isSignUpFailed = false;
+        // TODO: message to user that sign-up was successful!
+
+          this.router.navigateByUrl('/login');
+        
+        // if(this.isSuccessful) {
+        //   this.router.navigateByUrl('/login');
+        // }
       },
       error: err => {
-        this.errorMessage = err.error.message;
+        this.errorMessage = err.error.message;//TODO: proper error message to write!?
         this.isSignUpFailed = true;
       }
     });

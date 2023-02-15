@@ -21,25 +21,31 @@ const TOKEN_HEADER_KEY = 'Authorization'; // for Spring Boot back-end
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
   constructor(private authservice: AuthService) {
-    console.log('value inside constructor');
   }
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log(
-      'value of token inside intercept' + this.authservice.getToken()
-    );
-
-    let token = '' + this.authservice.getToken();
-    if (typeof token === 'string' && token.trim().length != 0) {
+    // console.log(
+    //   'value of token inside intercept' + this.authservice.getToken()
+    // );
+    // let authRequest = req;
+    let token = this.authservice.getToken();
+    if (token) {
+      // authRequest = req.clone({ <<< TODO: works as well!
       var request = req.clone({
-        setHeaders: {
-          // Authorization: `***REMOVED***`,
-          Authorization: `Bearer ${this.authservice.getToken()}`,
-        },
+        headers: req.headers.set(TOKEN_HEADER_KEY, `Bearer ${token}`),
       });
+      // TODO: exam version and not working!
+    // let token = '' + this.authservice.getToken();
+    // if (typeof token === 'string' && token.trim().length != 0) {
+    //   var request = req.clone({
+    //     setHeaders: {
+    //       // Authorization: `***REMOVED***`,
+    //       Authorization: `Bearer ${this.authservice.getToken()}`,
+    //     },
+    //   });
 
       return next.handle(request).pipe(
         catchError((err) => {
@@ -50,6 +56,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         })
       );
     }
-    return next.handle(req);
+    return next.handle(req);//TODO: maybe as extra, and no need of it!
   }
+  // TODO: maybe add here HTTP_INTERCEPTORS <<< Mustapha and Mathieu!!!
 }

@@ -6,6 +6,10 @@ import { UserService } from 'src/app/core/services/user.service';
 import { PixelartItem } from '../../model/pixelart-item';
 import { PixelartModel } from '../../model/pixelart-model';
 
+//TODO: Normally, this will be our home.component.
+// In any case: when Save button is clicked, it should ask to login if not yet!!! And after that login
+// the browser should go back to that pixelart to save, and NOT to /my-profile as at initial login from Login button.
+
 @Component({
   selector: 'app-create',
   templateUrl: './create.component.html',
@@ -31,7 +35,7 @@ export class CreateComponent implements OnInit {
 
   ) { }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     // this.isSignedin = this.tokenStorageService.isUserSignedin();
 		// this.signedinUser = this.tokenStorageService.getUser();
 
@@ -39,9 +43,9 @@ export class CreateComponent implements OnInit {
 		// 	this.router.navigateByUrl('/signin');
 		// }
 
-		
+
 			// this.router.navigateByUrl('/pixelart/create-pixelart');
-		
+
   }
 
   public closeCreateNewPixelart(): void {
@@ -54,7 +58,7 @@ export class CreateComponent implements OnInit {
 
   public onSaveCreatePixelart(createdPixelartModel: PixelartModel): void {
     console.log("Received new pixelartItem: ", createdPixelartModel);
-  
+
     this.pixelartService.add(createdPixelartModel).subscribe(() => {
       // TODO: The catalog should be updated/refreshed!!!
       this.router.navigate(['/pixelart/catalog'])
@@ -63,7 +67,7 @@ export class CreateComponent implements OnInit {
 
 
   // TODO: This is the part without the PixelartModel, but with the interface PixelartItem:
-  
+
   // public onSaveCreatePixelart(createdPixelartItem: PixelartItem): void {
   //   console.log("Received new pixelartItem: ", createdPixelartItem);
   //   this.pixelartService.add(createdPixelartItem).subscribe(() => {
@@ -77,6 +81,6 @@ export class CreateComponent implements OnInit {
   //   })
   // }
 
-  
+
 
 }

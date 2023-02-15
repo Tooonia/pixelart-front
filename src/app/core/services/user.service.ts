@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
 
 // A class member can not a "const" keyword, that is why this declaration is here.
 // const API_URL = 'http://localhost:8085/api';
@@ -16,7 +17,7 @@ export class UserService {
 
   // Those are, again, URLs in Back-end code:
   /**
-   * GET public user profile 
+   * GET public user profile
    * @returns
    */
   public getUserProfile(id: number): Observable<any> {
@@ -24,7 +25,7 @@ export class UserService {
     return this.http.get<any>((`${this.basePath}/user/${id}`), { responseType: 'json'});
   }
   // /**
-  //  * GET public user profile 
+  //  * GET public user profile
   //  * @returns
   //  */
   // public getUserProfile(id: number): Observable<any> {
@@ -35,11 +36,20 @@ export class UserService {
   // }
 
   /**
-   * TODO: GET public content, list of Users for give it a try
+   * //TODO: GET public content, list of Users for give it a try << works! But not logical to have it on 'home' page!
    */
    public getPublicContent(): Observable<any> {
     return this.http.get((`${this.basePath}/users`), { responseType: 'json'});
   }
+
+  /**
+ * GET all pixelart from one User
+ * @param pixelartModel
+ * @returns
+ */
+public getAllPixelArtByUser(id: number): Observable<PixelartItem[]> {
+  return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-by-user/${id}`)
+}
 
   /**
    * POST a pixelart
@@ -52,9 +62,7 @@ export class UserService {
 
   public deleteAccount(id: number): Observable<any> {
     return this.http.delete<any>(`${this.basePath}/my-profile/${id}`, {
-      headers: {
-        'Authorization': '***REMOVED***',
-      }
+      responseType: 'json',
     });
     // this.http.delete<any>(`${this.basePath}/my-profile/${id}`);
   }

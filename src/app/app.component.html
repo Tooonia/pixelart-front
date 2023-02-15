@@ -1,12 +1,15 @@
+<!-- TODO: instead: <app-header> should come here! -->
 <div id="app">
-  <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <a href="#" class="navbar-brand">PixelArt</a>
+  <nav class="navbar navbar-expand navbar-light bg-light">
+    <!-- TODO: href and routerLink is often used together! Why?
+      <a class="navbar-brand" href="#" routerLink="home">PixelArt</a> -->
+    <a class="navbar-brand" routerLink="home">PixelArt</a>
     <ul class="navbar-nav mr-auto" routerLinkActive="active">
       <li class="nav-item">
         <a class="nav-link" routerLink="pixelart/catalog">Catalog</a>
       </li>
-      
-      
+
+
       <li class="nav-item">
         <!-- TODO: vagy /pixelart/create-pixelart -->
         <a class="nav-link" routerLink="pixelart/create-pixelart">Create</a>
@@ -32,6 +35,14 @@
   </nav>
   <div class="container">
     <router-outlet></router-outlet>
+    <app-footer
+    class="position-sticky"
+    ></app-footer>
+    <!-- From RUDI:
+      <app-footer
+    class="position-sticky"
+    [mediaSize]="mediaSize"
+  ></app-footer> -->
   </div>
 </div>
 
@@ -44,7 +55,7 @@
     <!-- [mediaSize]="mediaSize" -->
   <!-- </app-header> -->
 
-  
+
 
   <!-- <router-outlet></router-outlet>
   <app-footer

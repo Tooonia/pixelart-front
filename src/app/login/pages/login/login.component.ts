@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { JwtRequest } from 'src/app/pixelart/model/jwtrequest';
+import { JwtRequestItem } from 'src/app/pixelart/model/jwt-request-item';
 
 @Component({
   selector: 'app-login',
@@ -13,8 +13,8 @@ export class LoginComponent implements OnInit {
 // 4th solution
 // form:FormGroup;
 
-//     constructor(private fb:FormBuilder, 
-//                  private authService: AuthService, 
+//     constructor(private fb:FormBuilder,
+//                  private authService: AuthService,
 //                  private router: Router) {
 
 //         this.form = this.fb.group({
@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
 
 // 1st solution
   // form!: JwtRequest;
-  form:  JwtRequest = {
+  form:  JwtRequestItem = {
     email: '',
     password: ''
   };
@@ -101,12 +101,12 @@ export class LoginComponent implements OnInit {
     this.isLoggedIn = this.authService.isUserSignedin();
 
 		if(this.isLoggedIn) {
-			this.router.navigateByUrl('/login/my-profile');
+			this.router.navigateByUrl('/login/my-profile');//TODO: az app-routing login > loadChildren miatt nem '/my-profile' itt!
 		}
-    
+
     // 1st solution
     // if (this.tokenStorage.getToken()) {
-    //   this.isLoggedIn = true;   
+    //   this.isLoggedIn = true;
     // }
   }
   onSubmit(): void {
@@ -114,15 +114,15 @@ export class LoginComponent implements OnInit {
     this.authService.signin(this.form).subscribe({
     // this.authService.login(this.form).subscribe({
       next: data => { // appeler jwtResponse
-        this.authService.saveToken(data.jwtToken);
+        this.authService.saveToken(data.jwtToken); //TODO: do I need saveUser here?
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.reloadPage();
       },
       error: err => {
         if (err.error != null && err.error.message != null) {
-        this.errorMessage = err.error.message;
-        
+        this.errorMessage = err.error.message;//TODO: proper error message to write!?
+
         } this.isLoginFailed = true;
       }
     });

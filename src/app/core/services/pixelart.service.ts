@@ -7,7 +7,7 @@ import { PixelartModel } from 'src/app/pixelart/model/pixelart-model';
 /**
  * Class responsible to call the server side REST API
  * We put all pixelart related services here.
- */ 
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -20,10 +20,10 @@ export class PixelartService {
 public refreshCollection(): void {
 
 }
- 
+
 /**
  * GET all pixelart (catalog)
- * @returns 
+ * @returns
  */
   public findAll(): Observable<PixelartItem[]> {
     // Url from the Back
@@ -32,59 +32,53 @@ public refreshCollection(): void {
 
 /**
  * GET one pixelart by id
- * @param id 
- * @returns 
- */ 
+ * @param id
+ * @returns
+ */
   public getById(id: number): Observable<PixelartItem> {
     return this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`)
   }
 
-/**
- * GET all pixelart from one User
- * @param pixelartModel 
- * @returns 
- */
-public getAllPixelArtByUser(id: number): Observable<PixelartItem[]> {
-  return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-by-user/${id}`)
-}
+// /**
+//  * GET all pixelart from one User
+//  * @param pixelartModel
+//  * @returns
+//  */
+// public getAllPixelArtByUser(id: number): Observable<PixelartItem[]> {
+//   return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-by-user/${id}`)
+// }
 
 
 /**
  * CREATE pixelart
- * @param pixelartModel 
- * @returns 
- */ 
+ * @param pixelartModel
+ * @returns
+ */
   public add(pixelartModel: PixelartModel): Observable<PixelartModel> {
     return this.http.post<PixelartModel>(`${this.basePath}/pixelart-create`, pixelartModel, {
-      headers: {
-        'Authorization': '***REMOVED***',
-      }
+      responseType: 'json',
     });
   }
-  
+
 /**
  * UPDATE pixelart by id
- * @param pixelartItem 
- * @returns 
+ * @param pixelartItem
+ * @returns
  */
   public update(pixelartItem: PixelartItem): Observable<PixelartItem> {
     return this.http.put<PixelartItem>(`${this.basePath}/pixelart-edit/${pixelartItem.id}`, pixelartItem, {
-      headers: {
-        'Authorization': '***REMOVED***',
-      }
+      responseType: 'json',
     });
   }
 
   /**
    * DELETE pixelart by id
-   * @param id 
-   * @returns 
+   * @param id
+   * @returns
    */
   public deleteById(id: number): Observable<any> {
     return this.http.delete<any>(`${this.basePath}/pixelart-edit/${id}`, {
-      headers: {
-        'Authorization': '***REMOVED***',
-      }
+      responseType: 'json',
     });
   }
 }

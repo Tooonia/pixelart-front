@@ -11,6 +11,7 @@ import { UpdateComponent } from './pages/update/update.component';
 import { ManagePixelartComponent } from './components/manage-pixelart/manage-pixelart.component';
 import { CreateComponent } from './pages/create/create.component';
 import { HomeComponent } from './pages/home/home.component';
+import { PortfolioComponent } from './pages/portfolio/portfolio.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { HomeComponent } from './pages/home/home.component';
     UpdateComponent,
     ManagePixelartComponent,
     CreateComponent,
-    HomeComponent
+    HomeComponent,
+    PortfolioComponent
   ],
   imports: [
     CommonModule,

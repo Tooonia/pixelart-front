@@ -11,6 +11,8 @@ export class HomeComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
+    //TODO: Not logical that we have the list of Users on that page! Should be the canvas to draw!!!
+    // This page could redirect to CreateComponent directly!
     this.userService.getPublicContent().subscribe({
       next: data => {
         this.content = data;

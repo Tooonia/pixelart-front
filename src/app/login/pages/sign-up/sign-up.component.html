@@ -17,7 +17,7 @@
 				<td>Password:</td>
 				<td><input type='password' name='password' [(ngModel)]="password"/></td>
 			</tr>
-			
+
 			<tr>
 				<td><input name="submit" type="submit" value="Signup" /></td>
 				<td>Have an account? <a routerLink="/login">Login</a></td>
@@ -33,7 +33,7 @@
 
 
 
-
+<!-- TODO: see RUDI: sign-up.component.html!!! -->
 <!-- 1st solution -->
 <div class="col-md-12">
     <div class="card card-container">
@@ -115,6 +115,7 @@
         </div>
       </form>
       <div class="alert alert-success" *ngIf="isSuccessful">
+        <!-- TODO: not visible this success alert!!! -->
         Your registration is successful!
       </div>
     </div>
