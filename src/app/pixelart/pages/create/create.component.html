@@ -11,15 +11,20 @@
             <p>{{ content }}</p>
           </header>
         <!-- TODO: this text in {{}} for internationalisation -->
-        <div>Create New PixelArt</div>  
+        <div>Create New PixelArt</div>
         <!-- TODO: Replace it with "close" button -->
         <div (click)="closeCreateNewPixelart()">X</div>
         <div>
-            <app-manage-pixelart
+            <!-- <app-manage-pixelart
             [pixelartItem]="newPixelartModel"
             (savedAction)="onSaveCreatePixelart($event)"
             (cancelledAction)="onCancelGoBackToCatalog()">
-            </app-manage-pixelart>       
+            </app-manage-pixelart> -->
+            <app-manage-pixelart
+            [pixelartItem]="pixelartItemToCreate"
+            (savedAction)="onSaveCreatePixelart($event)"
+            (cancelledAction)="onCancelGoBackToCatalog()">
+            </app-manage-pixelart>
         </div>
     </div>
 </div>

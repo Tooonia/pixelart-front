@@ -17,8 +17,10 @@ import { PixelartModel } from '../../model/pixelart-model';
 })
 export class CreateComponent implements OnInit {
   // public pixelartItemToCreate = new PixelartItem();
+  // public pixelartItem!: PixelartItem;
   public pixelartItemToCreate!: PixelartItem;
-  public newPixelartModel = new PixelartModel();
+  // public newPixelartModel = new PixelartModel();
+  // public pixelartItemToCreate = new PixelartcreateModel();
   // newPixelartModel = {} as PixelartModel;
   content?: string;
 
@@ -56,31 +58,15 @@ export class CreateComponent implements OnInit {
     this.router.navigate(['/pixelart/catalog'])
   }
 
-  public onSaveCreatePixelart(createdPixelartModel: PixelartModel): void {
-    console.log("Received new pixelartItem: ", createdPixelartModel);
-
-    this.pixelartService.add(createdPixelartModel).subscribe(() => {
-      // TODO: The catalog should be updated/refreshed!!!
+  public onSaveCreatePixelart(createdPixelartItem: PixelartItem): void {
+    console.log("Received new pixelartItem: ", createdPixelartItem);
+    // TODO: needs a user message to pop out: You have to be signed in!
+    // Ideal process: when Save button clicked, and user is not signed in, navigating to Signin, where user
+    // can also process Signup, and the once loged in, the program goes back to the pixelart to be saved, so
+    // at the process of the creation. Changes are saved in the browser (?)
+    this.pixelartService.add(createdPixelartItem).subscribe(() => {
+      // When navigating, the catalog is shown as updated
       this.router.navigate(['/pixelart/catalog'])
     })
   }
-
-
-  // TODO: This is the part without the PixelartModel, but with the interface PixelartItem:
-
-  // public onSaveCreatePixelart(createdPixelartItem: PixelartItem): void {
-  //   console.log("Received new pixelartItem: ", createdPixelartItem);
-  //   this.pixelartService.add(createdPixelartItem).subscribe(() => {
-  //     this.router.navigate(['/pixelart/catalog'])
-  //   })
-  // }
-  // public onSaveCreatePixelart(designedPixelartItem: PixelartItem): void {
-  //   console.log("Received new pixelartItem: ", designedPixelartItem);
-  //   this.pixelartService.add(designedPixelartItem).subscribe(() => {
-  //     this.router.navigate(['/pixelart/catalog'])
-  //   })
-  // }
-
-
-
 }
