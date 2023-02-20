@@ -12,8 +12,8 @@ export class DetailComponent implements OnInit {
 
   // TODO: works with or without @Input() when used with get pixelartName method. Why?:
   //  @Input() private pixelartItem!: PixelartItem;
-    // pixelartItem!: PixelartItem;
-    @Input() pixelartItem!: PixelartItem;
+    pixelartItem!: PixelartItem;
+    // @Input() pixelartItem!: PixelartItem;
     pixelartItemsList!: PixelartItem[];
   // private _pixelartItem!: PixelartItem;
 
@@ -24,7 +24,7 @@ export class DetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-  
+
     this.pixelartService.getById(this.route.snapshot.params.id).subscribe(data => {
        this.pixelartItem = data;
       //  console.log(this.pixelartItem)
@@ -47,27 +47,26 @@ export class DetailComponent implements OnInit {
     this.router.navigate(['/pixelart/catalog'])
   }
 
-  // When adding that route, it is needed to be added of course to pixelart-routing.module.ts too:
   editPixelart(pixelartItem: PixelartItem): void {
     this.router.navigate(['/pixelart/edit-pixelart', pixelartItem.id])
   }
 
   deletePixelart(pixelartItem: PixelartItem): void {
+  // TODO Itt kellene lehet az a tab(), hogy tovabbi dolgokat csinalhassunk sans toucher à l'élément à voir?
+  // TODO vagy valahogy egy blokkba tenni ezt a ket subscribe dolgot?
+  // TODO Is it supposed to be in the service.ts, with the delete() method, the refreshcollection part?
     console.log(pixelartItem.id);
     this.pixelartService.deleteById(pixelartItem.id).subscribe((resp) => {
       console.log("Delete OK: ", resp);
+
+      this.pixelartService.findAll().subscribe((data: PixelartItem[]) => {
+        this.pixelartItemsList = data;
+        this.router.navigate(['/pixelart/catalog'])
+      },
+        error => {
+        console.log(error);
+      })
+
     });
-// TODO Itt kellene lehet az a tab(), hogy tovabbi dolgokat csinalhassunk sans toucher à l'élément à voir?
-// TODO vagy valahogy egy blokkba tenni ezt a ket subscribe dolgot?
-// TODO This is supposed to be in the service.ts, with the delete() method, the refreshcollection part!
-    this.pixelartService.findAll().subscribe((data: PixelartItem[]) => {
-      this.pixelartItemsList = data;
-    },
-    error => {
-      console.log(error);
-    })
-
-    this.router.navigate(['/pixelart/catalog'])
   }
-
 }

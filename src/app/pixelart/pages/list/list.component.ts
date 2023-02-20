@@ -11,8 +11,8 @@ import { PixelartItem } from '../../model/pixelart-item';
 export class ListComponent implements OnInit {
   // This declaration is not necessary for displyaing the list inside that class, all is done within list-container:
   // pixelartItems: PixelartItem[] | undefined;
-  public pixelartItemToCreate!: PixelartItem;
-  public pixelartItem!: PixelartItem;
+  public pixelartItemToCreate!: PixelartItem;//TODO: necessary here?
+  public pixelartItem!: PixelartItem;//TODO: necessary here?
 
   constructor(
     private router: Router,
@@ -25,25 +25,25 @@ export class ListComponent implements OnInit {
     //   pixelartItems => this.pixelartItems = pixelartItems
     // )
   }
-  public closeCreateNewPixelart(): void {
+  public closeCreateNewPixelart(): void { //TODO: no need of this, right?
     this.router.navigate(['/pixelart/catalog'])
   }
 
-  public onCancelGoBackToCatalog(): void {
+  public onCancelGoBackToCatalog(): void { //TODO: no need of this, right?
     this.router.navigate(['/pixelart/catalog'])
   }
 
-  public onSaveCreatePixelart(createdPixelartItem: PixelartItem): void {
-    console.log("Received new pixelartItem: ", createdPixelartItem);
-    // createdPixelartItem.id = this.pixelartItemToCreate.id;
-    // createdPixelartItem.name = this.pixelartItemToCreate.name;
-    this.pixelartService.add(createdPixelartItem).subscribe(() => {
-      this.router.navigate(['/pixelart/catalog'])
-    })
-  }
+  // public onSaveCreatePixelart(createdPixelartItem: PixelartItem): void {
+  //   console.log("Received new pixelartItem: ", createdPixelartItem);
+  //   // createdPixelartItem.id = this.pixelartItemToCreate.id;
+  //   // createdPixelartItem.name = this.pixelartItemToCreate.name;
+  //   this.pixelartService.add(createdPixelartItem).subscribe(() => {
+  //     this.router.navigate(['/pixelart/catalog'])
+  //   })
+  // }
 
-  public createPixelart(): void {
-    this.router.navigate(['/pixelart/create-pixelart'])
-  }
+  // public createPixelart(): void {
+  //   this.router.navigate(['/pixelart/create-pixelart'])
+  // }
 
 }

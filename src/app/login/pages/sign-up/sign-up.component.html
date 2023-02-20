@@ -1,0 +1,122 @@
+<!-- 2nd solution -->
+<!-- <div id="signup-box">
+	<h2>Signup Here</h2>
+	<div style="color : red" *ngIf='error'>{{error}}</div>
+	<div style="color : green" *ngIf='success'>{{success}}</div>
+	<form name='signupForm' (submit)="doSignup()">
+		<table>
+			<tr>
+				<td>Alias:</td>
+				<td><input type='text' name='alias' [(ngModel)]="alias"></td>
+			</tr>
+			<tr>
+				<td>Email:</td>
+				<td><input type='text' name='email' [(ngModel)]="email"></td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><input type='password' name='password' [(ngModel)]="password"/></td>
+			</tr>
+
+			<tr>
+				<td><input name="submit" type="submit" value="Signup" /></td>
+				<td>Have an account? <a routerLink="/login">Login</a></td>
+			</tr>
+		</table>
+	</form>
+</div> -->
+
+
+
+
+
+
+
+
+<!-- TODO: see RUDI: sign-up.component.html!!! -->
+<!-- 1st solution -->
+<div class="col-md-12">
+    <div class="card card-container">
+      <img
+        id="profile-img"
+        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+        class="profile-img-card"
+      />
+      <form
+        *ngIf="!isSuccessful"
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+      >
+        <div class="form-group">
+          <label for="alias">Alias</label>
+          <input
+            type="text"
+            class="form-control"
+            name="alias"
+            [(ngModel)]="form.alias"
+            required
+            minlength="3"
+            maxlength="20"
+            #alias="ngModel"
+          />
+          <div class="alert-danger" *ngIf="alias.errors && f.submitted">
+            <div *ngIf="alias.errors['required']">Alias is required</div>
+            <div *ngIf="alias.errors['minlength']">
+              Alias must be at least 3 characters
+            </div>
+            <div *ngIf="alias.errors['maxlength']">
+              Alias must be at most 20 characters
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            [(ngModel)]="form.email"
+            required
+            email
+            #email="ngModel"
+          />
+          <div class="alert-danger" *ngIf="email.errors && f.submitted">
+            <div *ngIf="email.errors['required']">Email is required</div>
+            <div *ngIf="email.errors['email']">
+              Email must be a valid email address
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            [(ngModel)]="form.password"
+            required
+            minlength="6"
+            #password="ngModel"
+          />
+          <div class="alert-danger" *ngIf="password.errors && f.submitted">
+            <div *ngIf="password.errors['required']">Password is required</div>
+            <div *ngIf="password.errors['minlength']">
+              Password must be at least 6 characters
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block">Sign Up</button>
+        </div>
+        <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+          Signup failed!<br />{{ errorMessage }}
+        </div>
+      </form>
+      <div class="alert alert-success" *ngIf="isSuccessful">
+        <!-- TODO: not visible this success alert!!! -->
+        Your registration is successful!
+      </div>
+    </div>
+  </div>

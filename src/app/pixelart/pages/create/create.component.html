@@ -4,18 +4,27 @@
 
 
 <!-- sign-up.component -->
-<div class="detail-container pl-0 pr-0 container-fluid">
+<div class="detail-container container pl-0 pr-0 container-fluid">
     <div class="header-metadata ml">
+        <!-- TODO: These 3 lines from tutorial! -->
+        <header class="jumbotron">
+            <p>{{ content }}</p>
+          </header>
         <!-- TODO: this text in {{}} for internationalisation -->
-        <div>Create New PixelArt</div>  
+        <div>Create New PixelArt</div>
         <!-- TODO: Replace it with "close" button -->
         <div (click)="closeCreateNewPixelart()">X</div>
         <div>
-            <app-manage-pixelart
+            <!-- <app-manage-pixelart
             [pixelartItem]="newPixelartModel"
             (savedAction)="onSaveCreatePixelart($event)"
             (cancelledAction)="onCancelGoBackToCatalog()">
-            </app-manage-pixelart>       
+            </app-manage-pixelart> -->
+            <app-manage-pixelart
+            [pixelartItem]="pixelartItemToCreate"
+            (savedAction)="onSaveCreatePixelart($event)"
+            (cancelledAction)="onCancelGoBackToCatalog()">
+            </app-manage-pixelart>
         </div>
     </div>
 </div>

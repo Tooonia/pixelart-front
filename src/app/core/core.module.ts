@@ -4,7 +4,6 @@ import { PixelartService } from './services/pixelart.service';
 import {httpInterceptorProviders} from "../http-interceptors";
 
 
-
 @NgModule({
   declarations: [],
   imports: [
@@ -12,7 +11,7 @@ import {httpInterceptorProviders} from "../http-interceptors";
   ],
   providers: [
     httpInterceptorProviders,
-    PixelartService,
+    PixelartService
   ]
 })
 export class CoreModule { }

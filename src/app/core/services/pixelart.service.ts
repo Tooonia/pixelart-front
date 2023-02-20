@@ -2,18 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
-import { PixelartModel } from 'src/app/pixelart/model/pixelart-model';
+import { catchError } from 'rxjs/operators';
 
-// Class responsible to call the server side REST API
-// We put all pixelart related services here.
-
-// TODO:similar to: projekt.service.ts = l'API by openapi generator and
-//  projekt-metier.service.ts = that has projekt.service.ts in its constructor
-            //  (/ konsult-metier.service.ts)
-// TODO Mathieu: I am missing/mixing here Interface and Implementation?
-
-// TODO: film.service.ts
-// orders.service.ts (Jeremy)
+/**
+ * Class responsible to call the server side REST API
+ * We put all pixelart related services here.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -26,46 +20,77 @@ export class PixelartService {
 public refreshCollection(): void {
 
 }
- 
-  // GET all pixelart (catalog)
+
+/**
+ * GET all pixelart (catalog)
+ * @returns
+ */
   public findAll(): Observable<PixelartItem[]> {
     // Url from the Back
-    return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart`)
+    return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-catalog`);
   }
 
-  // GET all pixelart by connected User <<< with authent!
-
-  // GET pixelart by id
+/**
+ * GET one pixelart by id
+ * @param id
+ * @returns
+ */
   public getById(id: number): Observable<PixelartItem> {
-    return this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`)
+    return this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`);
   }
 
-  // CREATE pixelart 
-    public add(pixelartModel: PixelartModel): Observable<PixelartModel> {
-    return this.http.post<PixelartModel>(`${this.basePath}/pixelart`, pixelartModel);
-  }
-  // TODO: This is with the interface:
-  // public add(pixelartItem: PixelartItem): Observable<PixelartItem> {
-  //   return this.http.post<PixelartItem>(`${this.basePath}/pixelart`, pixelartItem);
+// /**
+//  * GET all pixelart from one User
+//  * @param pixelartModel
+//  * @returns
+//  */
+//  This is now in user.service.ts:
+// public getAllPixelArtByUser(id: number): Observable<PixelartItem[]> {
+//   return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-by-user/${id}`)
+// }
+
+
+/**
+ * CREATE pixelart
+ * @param pixelartItem //works with pixelartModel as well
+ * @returns
+ */
+  // TODO: Defining handleError() in a separate config.service.ts/http-error-handler.service.ts
+  // as recommended in https://angular.io/guide/http#handling-request-errors ??? But then
+  // }).pipe(
+  //   catchError(this.handleError('add', pixelartModel))
+  // );
   // }
-
-  // UPDATE pixelart by id
-  public update(pixelartItem: PixelartItem): Observable<PixelartItem> {
-    return this.http.put<PixelartItem>(`${this.basePath}/pixelart/${pixelartItem.id}`, pixelartItem);
-// public update(pixelartItem: PixelartItem, pixelartId: Number): Observable<PixelartItem> {
-    // return this.http.put<PixelartItem>(`${this.basePath}/pixelart`, pixelartItem);
+  public add(pixelartItem: PixelartItem): Observable<PixelartItem> {
+    return this.http.post<PixelartItem>(`${this.basePath}/pixelart-create`, pixelartItem, {
+      responseType: 'json',
+      // When we had the Bearer token problem previously, we managed to test methods by tiping token value here:
+      // headers: {
+      //   'Authorization': '***REMOVED***',
+      // }
+    });
   }
 
-  // DELETE pixelart by id
-  // TODO: why <any> for Observable here?:
+/**
+ * UPDATE pixelart by id
+ * @param pixelartItem
+ * @returns
+ */
+  public update(pixelartToUpdate: PixelartItem): Observable<PixelartItem> {
+    return this.http.put<PixelartItem>(`${this.basePath}/pixelart-edit/${pixelartToUpdate.id}`, pixelartToUpdate, {
+      responseType: 'json',
+    });
+  }
+
+  /**
+   * DELETE pixelart by id
+   * @param id
+   * @returns
+   */
   public deleteById(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.basePath}/pixelart/${id}`);
-    // return this.http.delete(`${this.basePath}/pixelart/${id}`, {
-    //   responseType: 'json',
-    // });
-    // return this.http.delete<PixelartItem>(`${this.basePath}/pixelart/${id}`).pipe();
-    // Did not work with .pipe(tap()) <<< could not importe 'tap'?!
-    // TODO : Doing here the refreshcollection, instead of adding it to the delete button!!!
+    return this.http.delete<any>(`${this.basePath}/pixelart-edit/${id}`, {
+      responseType: 'json',
+    });
   }
 }
 
