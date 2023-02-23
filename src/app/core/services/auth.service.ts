@@ -90,8 +90,10 @@ export class AuthService {
     return sessionStorage.getItem('auth-token') !== null;
   }
 
-  getSignedinUser() {
+  // 'user' here represents the email of the user
+  getSignedinUser()  {
     return sessionStorage.getItem('user') as string;
+
   }
 
   signOut(): void {
@@ -112,4 +114,29 @@ export class AuthService {
     console.log('getToken method ' + token);
     return token;
   }
+
+  // /**
+  //  *
+  //  */
+  // public getSignedInUser(): any {
+  //   const userEmail = this.getSignedinUser();
+  //   //...
+
+  //   return {};
+  // }
+
+  // TODO: talan nem kell!
+  public getUserInfo() {
+    const token = this.getToken();
+    let payload;
+    if (token) {
+      payload = token.split(".")[1];
+      payload = window.atob(payload);
+      console.log(payload);
+      return JSON.parse(payload);
+    } else {
+      return null;
+    }
+  }
+
 }

@@ -1,20 +1,24 @@
 <!-- 2nd solution -->
-<div *ngIf="isSignedin">
-	<p>Welcome back, {{ signedinUser }}!</p>
-
-	<div *ngFor="let greet of greeting">
-		{{greet}}
-	</div>
-  <p>
-    Ici faudrait la liste de ses propres pixelart
-    <!-- My pixelarts <<< éventuellement reprenre PortfolioComponent, quand on clique dessus, et
+<div *ngIf="isSignedin" ngFor="signedinUser">
+	<p>Welcome back, {{ signedinUser?.alias }}!
+  </p>
+  <p>List of your pixelArts:</p>
+	<!-- <div *ngFor="let pixelart of pixelarts">
+		<app-pixelart-card></app-pixelart-card> or pixelart-list ???
+    <p>{{ pixelart.name }}</p>
+	</div> -->
+  <div *ngIf="signedinUser?.pixelarts?.length">
+    TODO: akkor irja ki az elemet, ha letezik!
+    <!-- My pixelarts <<< éventuellement reprendre PortfolioComponent, quand on clique dessus, et
     un fejlec apparait avec My Pixelarts, + dans l'url: /my-pixelart -->
-  </p>
-  <p>
-    Ici faudrait aussi un bouton pour effacer son compte user
-  </p>
-	<!-- <p><a style="text-decoration: underline; cursor: pointer;" (click)="deleteAccount(idUser)">Delete account</a></p> -->
-	<!-- <p><a style="text-decoration: underline; cursor: pointer;" (click)="deleteAccount(idUser)">Delete account</a></p> -->
+    <ul *ngFor="let pixelart of signedinUser?.pixelarts">
+        <!-- ici, si je ne respecte pas l'appellation des propriétés de mon code Java,
+        il faudra faire le mapping dans le service, comme c'est le cas actuellement -->
+        <li>{{ pixelart.name}}</li>
+    </ul>
+  </div>
+    <!-- "Manage user account" button to insert here!
+	  <p><a style="text-decoration: underline; cursor: pointer;" (click)="deleteAccount(idUser)">Delete account</a></p> -->
 </div>
 
 
@@ -40,12 +44,6 @@ Csak: alias, email, my-pixelart lista -->
       <strong>Email:</strong>
       {{ currentUser.email }}
     </p>
-    <strong>Roles:</strong>
-    <ul>
-      <li *ngFor="let role of currentUser.roles">
-        {{ role }}
-      </li>
-    </ul>
   </div>
   <ng-template #loggedOut>
     Please login.

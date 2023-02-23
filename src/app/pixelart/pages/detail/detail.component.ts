@@ -58,7 +58,8 @@ export class DetailComponent implements OnInit {
     console.log(pixelartItem.id);
     this.pixelartService.deleteById(pixelartItem.id).subscribe((resp) => {
       console.log("Delete OK: ", resp);
-
+      // Kell valami error message, h nem sikerult torolni, mert akkor is az irja ki consoleba, h OK,
+      // ha adott szemelynek ne, volt hozzaferese!
       this.pixelartService.findAll().subscribe((data: PixelartItem[]) => {
         this.pixelartItemsList = data;
         this.router.navigate(['/pixelart/catalog'])

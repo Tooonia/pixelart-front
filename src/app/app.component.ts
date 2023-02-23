@@ -32,7 +32,7 @@ export class AppComponent {
     //   // this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
     //   // this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
     //   this.username = user.alias;
-      this.alias = this.authService.getSignedinUser();
+      this.email = this.authService.getSignedinUser();
     //   this.email = user.email;
     // }
   }
