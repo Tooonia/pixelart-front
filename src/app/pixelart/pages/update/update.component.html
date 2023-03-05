@@ -2,7 +2,7 @@
 <div class="detail-container pl-0 pr-0 container-fluid d-flex">
     <div class="header-metadata ml">
         <!-- TODO: this text in {{}} for internationalisation -->
-        <div>Edit Details</div>  
+        <div>Edit Details</div>
         <!-- <div *ngIf="film?.length"> -->
             <!-- TODO: Replace it with "close" button -->
         <div (click)="closePixelartEditDetails()">X</div>
@@ -11,7 +11,7 @@
             [pixelartItem]="pixelartItemToUpdate"
             (savedAction)="onSaveUpdatePixelart($event)"
             (cancelledAction)="onCancelGoBackToDetails()">
-            </app-manage-pixelart>       
+            </app-manage-pixelart>
         </div>
     </div>
 </div>

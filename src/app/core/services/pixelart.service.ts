@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 /**
  * Class responsible to call the server side REST API
@@ -16,10 +16,6 @@ export class PixelartService {
   private basePath = 'http://localhost:8085/api';
 
   constructor(private http: HttpClient) { }
-
-public refreshCollection(): void {
-
-}
 
 /**
  * GET all pixelart (catalog)
@@ -39,16 +35,25 @@ public refreshCollection(): void {
     return this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`);
   }
 
-// /**
-//  * GET all pixelart from one User
-//  * @param pixelartModel
-//  * @returns
-//  */
-//  This is now in user.service.ts:
-// public getAllPixelArtByUser(id: number): Observable<PixelartItem[]> {
-//   return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-by-user/${id}`)
-// }
-
+/**
+ * GET all pixelart from one User by user id
+ * @param id
+ * @returns
+ */
+  public getAllPixelArtByUser(id: number): Observable<PixelartItem[]> {
+    return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-by-user/${id}`)
+    // .pipe(
+    //   map((data:any) => new PixelartItemModel[] (
+    //     data.id,
+    //     data.name,
+    //     data.user ? data.user.map((user: any) => new UserPrivateItemModel(
+    //       user.id,
+    //       user.alias,
+    //       user.user_email,
+    //       user.pixelarts
+    //     )) : [] //Megerteni ezt a reszt!
+    //   )));
+  }
 
 /**
  * CREATE pixelart
@@ -64,7 +69,7 @@ public refreshCollection(): void {
   public add(pixelartItem: PixelartItem): Observable<PixelartItem> {
     return this.http.post<PixelartItem>(`${this.basePath}/pixelart-create`, pixelartItem, {
       responseType: 'json',
-      // When we had the Bearer token problem previously, we managed to test methods by tiping token value here:
+      // When we had the Bearer token problem previously, we managed to test methods by typing token value here:
       // headers: {
       //   'Authorization': '***REMOVED***',
       // }

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { PixelartItem } from '../../model/pixelart-item';
+import { PixelartSimpleItem } from '../../model/pixelart-simple-item';
 
 @Component({
   selector: 'app-pixelart-card',
@@ -13,7 +14,7 @@ export class PixelartCardComponent implements OnInit {
   // and not with "undefined" added:
   // @Input() pixelartItem: PixelartItem | undefined;
   @Input()
-  pixelartItem!: PixelartItem;
+  pixelartItem!: PixelartSimpleItem;
 
   constructor(
     // GET pixelart by id on '/pixelart/id' works without these 2:

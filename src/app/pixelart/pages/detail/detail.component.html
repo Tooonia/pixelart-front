@@ -7,7 +7,7 @@
             <!-- TODO: Replace it with "close" button -->
         <div (click)="closePixelartDetails()">X</div>
         <div>
-            <!-- TODO: Use <app-manage-pixelart> component instead. See how to name buttons! -->
+            <!-- TODO: Use <app-pixelart-card> component instead. See how to name buttons! -->
             <mat-card >
                 <mat-card-content>
                     <mat-card-title>
@@ -19,9 +19,11 @@
 
                     </mat-card-title>
 
+                    <!-- <mat-card-actions *ngIf="isSignedin buttonsToShow"> -->
                     <mat-card-actions>
                         <!-- TODO: buttons only visible if pixelart of the authenticated user!!! *ngIf?
                         otherwise: only close details button to show!!! -->
+                        <!-- *ngIf="isSignedin" -->
                         <button mat-button (click)="editPixelart(pixelartItem)">Edit art</button>
                         <button mat-button (click)="deletePixelart(pixelartItem)">Delete art</button>
                     </mat-card-actions>

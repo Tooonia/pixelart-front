@@ -10,15 +10,16 @@
     + submission-project.component.html -->
 
     <mat-card-content class="d-flex">
-        <form 
+        <form
             [formGroup]="managePixelartForm"
             (ngSubmit)="saveAction()">
             <!-- class="manage-pixelart-container" -->
-            <div class="d-flex"> 
+            <div class="d-flex">
                 <mat-form-field appearance="standard">
                     <!-- TODO: internationalisation -->
                     <mat-label>Title</mat-label>
                     <!-- TODO: text validation, handle special characters!!! For security! -->
+                    <!-- TODO: [(ngModel)]="pixelartItem" to add here?  -->
                     <input type="text" matInput placeholder="Title of pixelart"
                     formControlName="name" autocomplete="off" required>
                 </mat-form-field>
@@ -28,7 +29,7 @@
 
     <mat-card-actions class="d-flex">
         <button (click)="cancelAction()">Cancel</button>
-        <button 
+        <button
             type="submit"
             (click)="saveAction()"
             [disabled]="!isValid">Save</button>

@@ -9,40 +9,6 @@ import { RequestSignupItem } from 'src/app/pixelart/model/request-signup-item';
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
-  // 2nd solution
-  // constructor(private authService: AuthService) { }
-
-  // alias: string = '';
-	// email: string = '';
-	// password: string = '';
-
-	// error: string = '';
-	// success: string = '';
-
-	// ngOnInit(): void {
-	// }
-
-	// doSignup() {
-	// 	if(this.email !== '' && this.email !== null && this.password !== '' && this.password !== null
-  //   && this.alias !== '' && this.alias !== null) {
-	// 		const request: RequestSignupItem = { alias: this.alias, email: this.email, password: this.password };
-
-	// 		this.authService.signup(request).subscribe((result)=> {
-	// 			//console.log(result);
-	// 			//this.success = 'Signup successful';
-	// 			this.success = result;
-	// 		}, (err) => {
-	// 			//console.log(err);
-	// 			this.error = 'Something went wrong during signup';
-	// 		});
-	// 	} else {
-	// 		this.error = 'All fields are mandatory';
-	// 	}
-	// }
-
-
-
-
 // 1st solution
   form: RequestSignupItem = {
     alias: '',
@@ -53,7 +19,9 @@ export class SignUpComponent implements OnInit {
   isSignUpFailed = false;
   errorMessage = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -65,10 +33,8 @@ export class SignUpComponent implements OnInit {
         this.isSuccessful = true;
         this.isSignUpFailed = false;
         // TODO: message to user that sign-up was successful!
-
-          this.router.navigateByUrl('/login');
-        
-        // if(this.isSuccessful) {
+        this.router.navigateByUrl('/login');
+        // if(this.isSuccessful) { //TODO: nem igy kellene irni?
         //   this.router.navigateByUrl('/login');
         // }
       },

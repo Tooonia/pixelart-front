@@ -10,76 +10,6 @@ import { JwtRequestItem } from 'src/app/pixelart/model/jwt-request-item';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-// 4th solution
-// form:FormGroup;
-
-//     constructor(private fb:FormBuilder,
-//                  private authService: AuthService,
-//                  private router: Router) {
-
-//         this.form = this.fb.group({
-//             email: ['',Validators.required],
-//             password: ['',Validators.required]
-//         });
-//     }
-
-//     login() {
-//         const val = this.form.value;
-
-//         if (val.email && val.password) {
-//             this.authService.login(val.email, val.password)
-//                 .subscribe(
-//                     () => {
-//                         console.log("User is logged in");
-//                         this.router.navigateByUrl('/my-profile');
-//                     }
-//                 );
-//         }
-//     }
-
-
-
-
-
-
-  // 2nd solution
-  // username: string = '';
-// 	password : string = '';
-
-// 	isSignedin = false;
-
-// 	error: string = '';
-
-// 	constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {}
-
-// 	ngOnInit() {
-// 		this.isSignedin = this.authService.isUserSignedin();
-
-// 		if(this.isSignedin) {
-// 			this.router.navigateByUrl('home');
-// 		}
-// 	}
-
-// 	doSignin() {
-// 		if(this.username !== '' && this.username !== null && this.password !== '' && this.password !== null) {
-// 			const request: Request = { userName: this.username, userPwd: this.password};
-
-// 			this.authService.signin(request).subscribe((result)=> {
-// 				//this.router.navigate(['/home']);
-// 				this.router.navigateByUrl('home');
-// 			}, () => {
-// 				this.error = 'Either invalid credentials or something went wrong';
-// 			});
-// 		} else {
-// 			this.error = 'Invalid Credentials';
-// 		}
-// 	}
-
-
-
-
-
-
 // 1st solution
   // form!: JwtRequest;
   form:  JwtRequestItem = {
@@ -89,7 +19,6 @@ export class LoginComponent implements OnInit {
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
-  // roles: string[] = [];
   alias!: string;
   email!: string;
 
@@ -131,4 +60,66 @@ export class LoginComponent implements OnInit {
     // console.log("Value of onSubmit in logincomponent.ts 2nd position: " + this.tokenStorage.getUser().email); // not visible in Console
     window.location.reload();
   }
+
+
+//  4th solution
+//  form:FormGroup;
+
+//     constructor(private fb:FormBuilder,
+//                  private authService: AuthService,
+//                  private router: Router) {
+
+//         this.form = this.fb.group({
+//             email: ['',Validators.required],
+//             password: ['',Validators.required]
+//         });
+//     }
+
+//     login() {
+//         const val = this.form.value;
+
+//         if (val.email && val.password) {
+//             this.authService.login(val.email, val.password)
+//                 .subscribe(
+//                     () => {
+//                         console.log("User is logged in");
+//                         this.router.navigateByUrl('/my-profile');
+//                     }
+//                 );
+//         }
+//     }
+
+
+//  2nd solution
+//  username: string = '';
+// 	password : string = '';
+
+// 	isSignedin = false;
+
+// 	error: string = '';
+
+// 	constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {}
+
+// 	ngOnInit() {
+// 		this.isSignedin = this.authService.isUserSignedin();
+
+// 		if(this.isSignedin) {
+// 			this.router.navigateByUrl('home');
+// 		}
+// 	}
+
+// 	doSignin() {
+// 		if(this.username !== '' && this.username !== null && this.password !== '' && this.password !== null) {
+// 			const request: Request = { userName: this.username, userPwd: this.password};
+
+// 			this.authService.signin(request).subscribe((result)=> {
+// 				//this.router.navigate(['/home']);
+// 				this.router.navigateByUrl('home');
+// 			}, () => {
+// 				this.error = 'Either invalid credentials or something went wrong';
+// 			});
+// 		} else {
+// 			this.error = 'Invalid Credentials';
+// 		}
+// 	}
 }

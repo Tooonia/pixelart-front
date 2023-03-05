@@ -4,7 +4,6 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { PixelartItem } from '../../model/pixelart-item';
-import { PixelartModel } from '../../model/pixelart-model';
 
 //TODO: Normally, this will be our home.component.
 // In any case: when Save button is clicked, it should ask to login if not yet!!! And after that login

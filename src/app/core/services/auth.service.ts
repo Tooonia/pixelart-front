@@ -4,11 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { JwtRequestItem } from 'src/app/pixelart/model/jwt-request-item';
-import { pluck, share, shareReplay, tap } from 'rxjs/operators';
 import { JwtResponseItem } from 'src/app/pixelart/model/jwt-response-item';
 import { RequestSignupItem } from 'src/app/pixelart/model/request-signup-item';
 
-// // 1st solution
+// 1st solution
 const AUTH_API = 'http://localhost:8085/api';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -41,21 +40,23 @@ export class AuthService {
         })
       );
   }
-//TODO: this method is used in the 2nd solution within sign-up.component.ts
-  signup(requestSignup: RequestSignupItem): Observable<any> {
-    return this.http
-      .post<any>(this.baseUrl + '/signup', requestSignup, {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-        responseType: 'text' as 'json',
-      })
-      .pipe(
-        map((resp) => {
-          return resp;
-        })
-      );
-  }
-  //TODO: 3rd method finally works, used in the 1st solution within sign-up.component.ts
-// we need to specify the name of parameters as written in the Back-end code (=JsonProperty names)
+
+  // This method is used in the 2nd solution within sign-up.component.ts
+  // signup(requestSignup: RequestSignupItem): Observable<any> {
+  //   return this.http
+  //     .post<any>(this.baseUrl + '/signup', requestSignup, {
+  //       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  //       responseType: 'text' as 'json',
+  //     })
+  //     .pipe(
+  //       map((resp) => {
+  //         return resp;
+  //       })
+  //     );
+  // }
+  
+  // 3rd method finally works, used in the 1st solution within sign-up.component.ts
+  // we need to specify the name of parameters as written in the Back-end code (=JsonProperty names)
   register(alias: string, email: string, password: string): Observable<any> {
     return this.http.post(
       AUTH_API + '/signup',
@@ -65,20 +66,15 @@ export class AuthService {
         user_password: password,
       },
       httpOptions
-    );
+    )
+    // TODO: see the meaning of that part, as it works with or without that following code snippet:
+    // .pipe(
+    //   map((resp) => {
+    //     return resp;
+    //   })
+    // )
+    ;
   }
-  // //TODO: this method is used in the 1st solution within sign-up.component.ts
-  // register(alias: string, email: string, password: string): Observable<any> {
-  //   return this.http.post(
-  //     AUTH_API + '/signup',
-  //     {
-  //       alias,
-  //       email,
-  //       password,
-  //     },
-  //     httpOptions
-  //   );
-  // }
 
   signout() {
     sessionStorage.removeItem('user');
@@ -114,16 +110,6 @@ export class AuthService {
     console.log('getToken method ' + token);
     return token;
   }
-
-  // /**
-  //  *
-  //  */
-  // public getSignedInUser(): any {
-  //   const userEmail = this.getSignedinUser();
-  //   //...
-
-  //   return {};
-  // }
 
   // TODO: talan nem kell!
   public getUserInfo() {

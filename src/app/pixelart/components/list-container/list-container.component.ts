@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { PixelartService } from '../../../core/services/pixelart.service';
 import { PixelartItem } from '../../model/pixelart-item';
 
-// Class responsible to call service and get all pixelart items
+/**
+ * Class responsible to call pixelart service and get all pixelart items
+ */
 
 @Component({
   selector: 'app-list-container',
@@ -13,7 +15,7 @@ import { PixelartItem } from '../../model/pixelart-item';
 export class ListContainerComponent implements OnInit {
   pixelartItemsList: PixelartItem[] | undefined;
   // pixelartItem: PixelartItem | undefined;
-  
+
   constructor(
     private pixelartService: PixelartService,
     // private route: ActivatedRoute,
