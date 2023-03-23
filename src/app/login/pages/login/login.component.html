@@ -8,12 +8,12 @@
       </div>
       <div class="form-field">
           <label>Password:</label>
-          <input name="password" formControlName="password" 
+          <input name="password" formControlName="password"
                  type="password">
       </div>
   </fieldset>
   <div class="form-buttons">
-      <button class="button button-primary" 
+      <button class="button button-primary"
               (click)="login()">Login</button>
   </div>
 </form> -->
@@ -122,13 +122,14 @@
       </form>
       <div class="alert alert-success" *ngIf="isLoggedIn">
         Logged in as {{ email }}.
+        <!-- Logged in as {{ email }}. -->
         <!-- Logged in as {{ alias }}. -->
       </div>
     </div>
   </div>
 
 
-<!--from stackblitz: 
+<!--from stackblitz:
      <mat-card>
     <mat-card-title>Login</mat-card-title>
 <mat-card-content>

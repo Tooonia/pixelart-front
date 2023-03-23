@@ -50,6 +50,13 @@ export class UserService {
   }
 
   // /**
+  //  * GET public user profile by email
+  //  */
+  // public getUserProfileByEmail(email: string): Observable<UserGetItem> {
+  //   return this.http.get<UserGetItem>((`${this.basePath}/me`), { responseType: 'json'});
+  // }
+
+  // /**
   //  * GET private profile of connected user
   //  * 2nd option : This works together with 2nd solution in my-profile.component:
   //  */

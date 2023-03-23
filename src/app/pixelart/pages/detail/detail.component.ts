@@ -12,7 +12,7 @@ import { UserGetItem } from '../../model/user-get-item';
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit {
-
+@Input() pixelartToDisplay! : PixelartItem;
   // TODO: works with or without @Input() when used with get pixelartName method. Why?:
   // so pixelartItem.name is printed out, but 2 error messages if I refresh the page,
   // 1 if I click on Details:
@@ -20,9 +20,10 @@ export class DetailComponent implements OnInit {
     // at DetailComponent_Template (detail.component.html:18:25)"
   //  @Input() private pixelartItem!: PixelartItem;
     // pixelartItem!: PixelartItem;
-    @Input() pixelartItem!: PixelartItem;
+    // @Input() pixelartItem!: PixelartItem;
     pixelartItemsList!: PixelartItem[];
   // private _pixelartItem!: PixelartItem;
+
     isSignedin = false;
     signedinUser! : UserGetItem;
     signedinUserPixelartList!: PixelartItem[];
@@ -40,7 +41,7 @@ export class DetailComponent implements OnInit {
       const pixelartItemId = Number(params.get('id'));
       console.log(pixelartItemId);
       this.pixelartService.getById(pixelartItemId).subscribe((data: PixelartItem) => {
-        this.pixelartItem = data;
+        this.pixelartToDisplay = data;
       })
     })
   }

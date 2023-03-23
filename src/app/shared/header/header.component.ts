@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
@@ -9,21 +8,23 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 
 export class HeaderComponent implements OnInit {
-title = 'pixelart-front';
-// TODO: review that file to remove unused code!!!
-  // 1st solution
-  // private roles: string[] = [];
-  // 1st solution
-  // private roles: string[] = [];
-
-   alias!: string;
-   email!: string;
-
+  @ViewChild('toggleButton') toggleButton!: ElementRef;
+  @ViewChild('menu') menu!: ElementRef;
+  title = 'pixelart-front';
+  alias!: string;
+  email!: string;
   isLoggedIn = false;
-  // showAdminBoard = false;
-  // showModeratorBoard = false;
   username?: string;
-  constructor(private authService: AuthService) { }
+
+  constructor(private authService: AuthService, private renderer: Renderer2) {
+    // When there is a click outside of the hamburger button, it closes the hambuerger menu on xs screen:
+    this.renderer.listen('document', 'click',(e:Event)=>{
+      if(e.target !== this.toggleButton.nativeElement ){
+        this.renderer.removeClass(this.menu.nativeElement, 'show');
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.isLoggedIn = !!this.authService.getToken();
     // if (this.isLoggedIn) {
@@ -37,11 +38,11 @@ title = 'pixelart-front';
     //   this.email = user.email;
     // }
   }
+
   logout(): void {
     this.authService.signOut();
     window.location.reload();
   }
-
 }
 
 

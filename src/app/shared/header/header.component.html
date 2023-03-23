@@ -1,4 +1,4 @@
-<!-- TODO: Prevent simoultaneous opening of the 2 menus on xs size!Elvileg automatikusan d-flex -->
+<!-- Elvileg automatikusan d-flex -->
 <!-- TODO: href and routerLink is often used together! Why? <a class="navbar-brand" href="#" routerLink="home">PixelArt</a> -->
 
 <!-- Wrapping everything inside a <div class="container"> would add extra space around -->
@@ -8,7 +8,7 @@
   aria-label="navbar-desktop">
   <div class="container-fluid">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerPixelartMenu"
-      aria-controls="navbarTogglerPixelartMenu" aria-expanded="false" aria-label="Toggle navigation">
+      aria-controls="navbarTogglerPixelartMenu" aria-expanded="false" aria-label="Toggle navigation" #toggleButton>
       <span class="navbar-toggler-icon"></span>
     </button>
     <!-- Neha header-en belul a button es a logoprofile -->
@@ -22,7 +22,7 @@
     <!-- ms-auto on the navbar-nav "ul" element here sets the nav elements to the right in the navbar-->
     <!-- order-xs-first need to be declared: since Bootstrap has the "mobile first" approch, everything scales up when setting screeen sizes,
           so 'order-sm-2' sets the order from sm screen size to up. -->
-    <div class="collapse navbar-collapse order-xs-first order-3 order-sm-2" id="navbarTogglerPixelartMenu">
+    <div class="collapse navbar-collapse order-xs-first order-3 order-sm-2" id="navbarTogglerPixelartMenu" #menu>
       <ul class="nav navbar-nav ms-auto" routerLinkActive="active">
         <li class="nav-item">
           <a class="nav-link" routerLink="pixelart/catalog">Catalog</a>

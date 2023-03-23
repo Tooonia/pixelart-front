@@ -8,14 +8,19 @@
         <div (click)="closePixelartDetails()">X</div>
         <div>
             <!-- TODO: Use <app-pixelart-card> component instead. See how to name buttons! -->
-            <mat-card >
+            <mat-card
+            (clickedItem)= "pixelartToDisplay">
+            <!-- [pixelartToDisplay]="clickedItem"> -->
+            <!-- (selectedPixelartItem)="pixelartToDisplay"> -->
                 <mat-card-content>
                     <mat-card-title>
                         <!-- If pixelartItem set to private in the .ts, then it only works
                             with a get pixelartName() method, what we call then like this here: -->
                               <!-- {{ pixelartItemName }} -->
-                             <!-- TODO: in console, error: Cannot read properties of undefined, but it prints out details correctly! ??? -->
-                        {{ pixelartItem.name }}
+                             <!-- TODO: in console, error: Cannot read properties of undefined, but it prints out details correctly! ???
+                            When adding the ? at the end of 'pixelartItem?', it's without error in the console. -->
+                        <!-- {{ pixelartItem.name }} -->
+                        {{ pixelartToDisplay.name }}
 
                     </mat-card-title>
 
@@ -24,8 +29,9 @@
                         <!-- TODO: buttons only visible if pixelart of the authenticated user!!! *ngIf?
                         otherwise: only close details button to show!!! -->
                         <!-- *ngIf="isSignedin" -->
-                        <button mat-button (click)="editPixelart(pixelartItem)">Edit art</button>
-                        <button mat-button (click)="deletePixelart(pixelartItem)">Delete art</button>
+                        <!-- Maybe: (click)="editPixelart(pixelartItem)=$event" and geting that value to the changed name ?-->
+                        <button mat-button (click)="editPixelart(pixelartToDisplay)">Edit art</button>
+                        <button mat-button (click)="deletePixelart(pixelartToDisplay)">Delete art</button>
                     </mat-card-actions>
                 </mat-card-content>
             </mat-card>

@@ -1,10 +1,14 @@
+<!-- TODO: something should be set here and in detail-component,, as we are navigating from here to there.
+There is link between pixelart-card and list-container-->
+
 <div>
         <!-- TODO: mediasize parameters to complete here! -->
         <div>
             <div class="title"> <!--<app-page-title> component to create!!! -->
                 Catalog - temporary title
             </div>
-            <app-list-container></app-list-container>
+            <app-list-container
+            (pixelartItemSelected)="onClickedPixelartItem($event)"></app-list-container>
             <!-- <app-manage-pixelart
             [pixelartItem]="pixelartItemToCreate"
             (savedAction)="onSaveCreatePixelart($event)"

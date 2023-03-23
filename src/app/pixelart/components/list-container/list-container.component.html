@@ -3,7 +3,8 @@
         <div *ngFor="let pixelartItem of pixelartItemsList">
         <!--TODO: complete with [ngClass] and mediasize, having max 4 in a row!!! -->
             <app-pixelart-card
-                [pixelartItem]="pixelartItem">
+                [pixelartItem]="pixelartItem"
+                (selectedPixelartItem)="onSelectedPixelart(pixelartItem)">
                 <!-- Or: (selectMetadata)="selectMetadata.emit($event)" on list-container -->
                 <!-- TODO: prepare reusable button for 'Details' -->
 

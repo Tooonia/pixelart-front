@@ -57,6 +57,7 @@ export class CreateComponent implements OnInit {
     this.router.navigate(['/pixelart/catalog'])
   }
 
+  // TODO: in the argument of the method, it should be (event : Event) if we have that in .html
   public onSaveCreatePixelart(createdPixelartItem: PixelartItem): void {
     console.log("Received new pixelartItem: ", createdPixelartItem);
     // TODO: needs a user message to pop out: You have to be signed in!

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthService } from './core/services/auth.service';
 // import { TokenStorageService } from './core/services/token-storage.service';
 
 @Component({

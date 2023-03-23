@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { PixelartService } from '../../../core/services/pixelart.service';
 import { PixelartItem } from '../../model/pixelart-item';
@@ -13,8 +13,12 @@ import { PixelartItem } from '../../model/pixelart-item';
   styleUrls: ['./list-container.component.scss']
 })
 export class ListContainerComponent implements OnInit {
+  // IMPORTANT: it seems @Input() and @Output() declarations needs to be added before properties.
+  @Output() pixelartItemSelected = new EventEmitter<PixelartItem>();
   pixelartItemsList: PixelartItem[] | undefined;
+
   // pixelartItem: PixelartItem | undefined;
+
 
   constructor(
     private pixelartService: PixelartService,
@@ -30,6 +34,10 @@ export class ListContainerComponent implements OnInit {
     error => {
       console.log(error);
     })
+  }
+
+  onSelectedPixelart(pixelartItem : PixelartItem) {
+    this.pixelartItemSelected.emit(pixelartItem);
   }
 
 }

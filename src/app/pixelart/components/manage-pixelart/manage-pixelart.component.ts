@@ -40,8 +40,10 @@ export class ManagePixelartComponent implements OnInit {
   public saveAction(): void {
     console.log("Current form: ", this.managePixelartForm);
     console.log("Form has been submitted: ", this.managePixelartForm.value);
-
-    this.savedAction.emit(this.managePixelartForm.value);
+// Previously, but I think this is not the managePixelartForm that should be sent with emit:
+    // this.savedAction.emit(this.managePixelartForm.value);
+    this.pixelartItem = this.managePixelartForm.value;
+    this.savedAction.emit(this.pixelartItem);
   }
 // reuse-declaration.component.ts, clickCancel()
   public cancelAction(): void {
@@ -49,6 +51,9 @@ export class ManagePixelartComponent implements OnInit {
     // specially when updatePixelArt: we must go back to Details!!!
     // CREATE can go back to catalog!
     // TODO/QUESTION: correct?: emit(this.managePixelartForm.value)
-    this.cancelledAction.emit(this.managePixelartForm.value)
+    // Previously, but I think this is not the managePixelartForm that should be sent with emit:
+    // this.cancelledAction.emit(this.managePixelartForm.value)
+    this.pixelartItem = this.managePixelartForm.value; //TODO: amikor forditva voltak az = ket vegen, nem mukodott!!!
+    this.cancelledAction.emit(this.pixelartItem); //TODO: maybe no need to have an eventemitter<PixelItem> on that function?
   }
 }

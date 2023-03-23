@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { JwtRequestItem } from 'src/app/pixelart/model/jwt-request-item';
+import { UserService } from 'src/app/core/services/user.service';
+import { UserGetItem } from 'src/app/pixelart/model/user-get-item';
 
 @Component({
   selector: 'app-login',
@@ -21,10 +23,14 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   alias!: string;
   email!: string;
+  connectedUser!: UserGetItem;
 
   isSignedin = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private userService: UserService) { }
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isUserSignedin();
@@ -46,6 +52,15 @@ export class LoginComponent implements OnInit {
         this.authService.saveToken(data.jwtToken); //TODO: do I need saveUser here?
         this.isLoginFailed = false;
         this.isLoggedIn = true;
+        this.email = this.form.email; //THIS WORKS
+        // this.email = this.authService.getSignedinUser(); //THIS WORKS
+        // THE FOLLOWING DOES NOT WORK:
+        // this.userService.getUserProfileByEmail(this.form.email).subscribe(data => {
+        // // this.userService.getPrivateUserProfile().subscribe(data => {
+        //     this.connectedUser = data;
+        //     console.log(data);
+        //   }
+        // );
         this.reloadPage();
       },
       error: err => {
