@@ -49,12 +49,13 @@ export class UserService {
     return this.http.get<UserGetItem>((`${this.basePath}/my-profile/${id}`), { responseType: 'json'});
   }
 
-  // /**
-  //  * GET public user profile by email
-  //  */
-  // public getUserProfileByEmail(email: string): Observable<UserGetItem> {
-  //   return this.http.get<UserGetItem>((`${this.basePath}/me`), { responseType: 'json'});
-  // }
+  /**
+   * GET public user profile by email << DOES NOT WORK YET
+   */
+  public getUserProfileByEmail(email: string): Observable<UserGetItem> {
+    return this.http.get<UserGetItem>((`${this.basePath}/me`), { params: {[email]: email}, responseType: 'json'});
+    // return this.http.get<UserGetItem>((`${this.basePath}/me`), { params: {email}, responseType: 'json'});
+  }
 
   // /**
   //  * GET private profile of connected user

@@ -121,8 +121,9 @@
         </div>
       </form>
       <div class="alert alert-success" *ngIf="isLoggedIn">
-        Logged in as {{ email }}.
-        <!-- Logged in as {{ email }}. -->
+        <!-- Logged in as {{ connectedUser.alias }}. -->
+        Logged in with:
+        <p>{{ email }}</p>
         <!-- Logged in as {{ alias }}. -->
       </div>
     </div>

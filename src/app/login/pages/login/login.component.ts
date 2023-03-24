@@ -55,6 +55,18 @@ export class LoginComponent implements OnInit {
         this.email = this.form.email; //THIS WORKS
         // this.email = this.authService.getSignedinUser(); //THIS WORKS
         // THE FOLLOWING DOES NOT WORK:
+        // this.userService.getUserProfileByEmail(this.form.email).subscribe({
+        //   next: data => {
+        // this.userService.getPrivateUserProfile().subscribe(data => {
+          // THE FOLLOWING DOES NOT WORK:
+        // this.userService.getUserProfileByEmail(this.form.email).subscribe(data => {
+        //     this.connectedUser.id = data.id;
+        //     this.connectedUser.alias = data.alias;
+        //     this.connectedUser.user_email = data.user_email;
+        //     this.connectedUser.pixelarts = data.pixelarts;
+        //     console.log(data);
+        //   }
+        // );
         // this.userService.getUserProfileByEmail(this.form.email).subscribe(data => {
         // // this.userService.getPrivateUserProfile().subscribe(data => {
         //     this.connectedUser = data;
