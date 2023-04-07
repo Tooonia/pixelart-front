@@ -14,7 +14,7 @@ import { PixelartItem } from '../../model/pixelart-item';
 })
 export class ListContainerComponent implements OnInit {
   // IMPORTANT: it seems @Input() and @Output() declarations needs to be added before properties.
-  @Output() pixelartItemSelected = new EventEmitter<PixelartItem>();
+  // @Output() pixelartItemSelected = new EventEmitter<PixelartItem>(); //n°118 szerint
   pixelartItemsList: PixelartItem[] | undefined;
 
   // pixelartItem: PixelartItem | undefined;
@@ -36,8 +36,8 @@ export class ListContainerComponent implements OnInit {
     })
   }
 
-  onSelectedPixelart(pixelartItem : PixelartItem) {
-    this.pixelartItemSelected.emit(pixelartItem);
-  }
+  // onSelectedPixelart(pixelartItem : PixelartItem) {
+  //   this.pixelartItemSelected.emit(pixelartItem);
+  // }
 
 }

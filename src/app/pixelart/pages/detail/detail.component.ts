@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { UserService } from 'src/app/core/services/user.service';
@@ -12,7 +12,8 @@ import { UserGetItem } from '../../model/user-get-item';
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit {
-@Input() pixelartToDisplay! : PixelartItem;
+  // TODO: n°161: itt nincs @Input(), mert Routing-gal kapjuk a pixelartItem infot!
+pixelartToDisplay! : PixelartItem;
   // TODO: works with or without @Input() when used with get pixelartName method. Why?:
   // so pixelartItem.name is printed out, but 2 error messages if I refresh the page,
   // 1 if I click on Details:
@@ -36,22 +37,50 @@ export class DetailComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService
   ) {
-    // 2nd try based on update.component.ts
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      const pixelartItemId = Number(params.get('id'));
-      console.log(pixelartItemId);
-      this.pixelartService.getById(pixelartItemId).subscribe((data: PixelartItem) => {
-        this.pixelartToDisplay = data;
-      })
-    })
+
   }
 
   ngOnInit(): void {
+    // n°161 NOT WORKING:
+    this.route.params.subscribe(
+      (params: Params) => {
+        const id = +params['id'];
+        // this.pixelartToDisplay = this.pixelartService.getById(id);
+        // this.pixelartToDisplay = params;
+        this.pixelartService.getById(id).subscribe((data: PixelartItem) => {
+            this.pixelartToDisplay = data;
+      }
+    )});
+
+
+
     // PREVIOUSLY IN THIS CLASS:
-    // this.pixelartService.getById(this.route.snapshot.params.id).subscribe(data => {
-    //   this.pixelartItem = data;
-    //  //  console.log(this.pixelartItem)
+    // TODO: from video n°133 the syntax is: this.route.snapshot.params['id']
+    // https://stackoverflow.com/questions/68006823/angular-11-type-observableobject-is-missing-the-following-properties-from-ty
+    // n°161 as well:
+    // const id = +this.route.snapshot.params['id'];
+    // this.pixelartService.getById(id).subscribe((data: PixelartItem) => {
+    //   this.pixelartToDisplay = data;
+    //   // this.pixelartToDisplay.id = data['id']; //TODO: ezekkel nem megy!
+    //   // this.pixelartToDisplay.name = data['name'];
+    //   // this.pixelartToDisplay.user = data['user'];
+    //   // console.log(this.pixelartToDisplay);
     //  });
+    // TODO: nekem nem megy ugy, ahogy a tanar irta, mert en a getById() methodomban Observable-lal dolgozom, itt meg PixelartItem van.
+    // const id = +this.route.snapshot.params['id'];
+    // this.pixelartToDisplay = this.pixelartService.getById(id);
+
+
+// 2nd try based on update.component.ts // PREVIOUSLY this part was in the constructor(), but better to do
+// all initialization in the ngOnInit()
+// TODO: n°134 szerint ez csak akkor kell, ha a page might be reloaded with updated info, and we want to react to any changes thereafter:
+    // this.route.paramMap.subscribe((params: ParamMap) => {
+    //   const pixelartItemId = Number(params.get('id'));
+    //   console.log(pixelartItemId);
+    //   this.pixelartService.getById(pixelartItemId).subscribe((data: PixelartItem) => {
+    //     this.pixelartToDisplay = data;
+    //   })
+    // });
 
     // THIS SOLUTION ALWAYS SHOWS THE LAST PIXELART OF THE CONNECTED USER:
     this.isSignedin = this.authService.isUserSignedin();

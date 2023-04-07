@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
@@ -12,7 +12,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class PixelartService {
-
+  pixelartSelected = new EventEmitter<PixelartItem>();
   private basePath = 'http://localhost:8085/api';
 
   constructor(private http: HttpClient) { }

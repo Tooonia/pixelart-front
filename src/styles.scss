@@ -6,3 +6,11 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: OpenSans, sans-serif; background-color: #CCEFC2;}
 
+.active {
+    font-weight: 600;
+}
+
+.dropdown-item.active {
+    background-color: transparent;
+}
+

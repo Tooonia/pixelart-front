@@ -6,5 +6,6 @@ export interface UserGetItem {
     id: number;
     alias: string;
     user_email: string;
-    pixelarts: PixelartSimpleItem[];
+    // pixelarts: PixelartSimpleItem[];
+    pixelarts: PixelartItem[];
 }

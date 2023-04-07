@@ -22,7 +22,7 @@ export class PortfolioComponent implements OnInit {
   // @Input() signedinUser!: UserPrivateItemModel;
   // pixelarts! : PixelartItemModel[];
   pixelarts! : PixelartItem[];
-  @Input() pixelartItem!: PixelartSimpleItem;
+  pixelartItem!: PixelartItem;
   // signedinUser! : UserPrivateItemModel;
   signedinUser!: UserGetItem;
 

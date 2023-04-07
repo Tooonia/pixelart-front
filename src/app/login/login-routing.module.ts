@@ -9,6 +9,7 @@ const routes: Routes = [
   {
     path: '',
     component: LoginComponent,
+    pathMatch: 'full'
     // canActivate: [AuthGuard]
   },
   {
@@ -25,7 +26,13 @@ const routes: Routes = [
     path: 'login', //TODO: not necessary!!!
     component: LoginComponent,
     // canActivate: [AuthGuard]
-  }
+  },
+  {
+    // Wildcard Path
+    path: '**',
+    redirectTo: '/login'
+    // canActivate: [AuthGuard]
+   }
 ]
 
 @NgModule({

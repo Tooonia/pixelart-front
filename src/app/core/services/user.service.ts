@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PixelartSimpleItem } from 'src/app/pixelart/model/pixelart-simple-item';
 import { UserGetItem } from 'src/app/pixelart/model/user-get-item';
 import { AuthService } from './auth.service';
 

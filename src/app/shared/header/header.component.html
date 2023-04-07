@@ -23,21 +23,22 @@
     <!-- order-xs-first need to be declared: since Bootstrap has the "mobile first" approch, everything scales up when setting screeen sizes,
           so 'order-sm-2' sets the order from sm screen size to up. -->
     <div class="collapse navbar-collapse order-xs-first order-3 order-sm-2" id="navbarTogglerPixelartMenu" #menu>
-      <ul class="nav navbar-nav ms-auto" routerLinkActive="active">
-        <li class="nav-item">
+      <ul class="nav navbar-nav ms-auto">
+        <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="pixelart/catalog">Catalog</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="pixelart/create-pixelart">Create</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="login/sign-up" *ngIf="!isLoggedIn">Sign Up</a>
+        <!-- [routerLinkActiveOptions]="{exact: true}" ensures that only the exact URL will be set for active, not together with the child routes (as the default behaviour) -->
+        <li class="nav-item" *ngIf="!isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <a class="nav-link" routerLink="login/sign-up">Sign Up</a>
         </li>
       </ul>
     </div>
 
     <ul class="nav navbar-nav mb-auto order-xs-first order-2 order-sm-3">
-      <li class="nav-item" *ngIf="!isLoggedIn">
+      <li class="nav-item" *ngIf="!isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
         <a class="nav-link" routerLink="login">Login</a>
       </li>
       <!-- 'd-flex' and 'align-items-center' aligns the position of the icon and the little dropdown triangle -->
@@ -48,15 +49,15 @@
         </div>
         <!-- 'dropdown-menu-end' positions the dropdown menu to the right -->
         <ul class="dropdown-menu dropdown-menu-end">
-          <li class="dropdown-item">
-            <a class="nav-link" href="/my-profile" routerLink="login/my-profile">My profile</a>
+          <li class="dropdown-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link" routerLink="login/my-profile">My profile</a>
           </li>
-          <li class="dropdown-item">
-            <a class="nav-link" href="/pixelart/my-pixelart" routerLink="pixelart/my-pixelart">My
+          <li class="dropdown-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link" routerLink="pixelart/my-pixelart">My
               pixelarts</a>
           </li>
           <li class="dropdown-item">
-            <a class="nav-link" href="#" (click)="logout()">Sign out</a>
+            <a class="nav-link" (click)="logout()">Sign out</a>
           </li>
         </ul>
       </li>

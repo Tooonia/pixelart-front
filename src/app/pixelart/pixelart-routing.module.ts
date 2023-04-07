@@ -12,6 +12,13 @@ import { PortfolioComponent } from './pages/portfolio/portfolio.component';
  */
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: '/catalog',
+    pathMatch: 'full'
+    // ,
+    // canActivate: [AuthGuard]
+  },
+  {
     // Path Pixelart Cards
     path: 'catalog',
     component: ListComponent
@@ -47,11 +54,10 @@ const routes: Routes = [
     // canActivate: [AuthGuard]
   },
   {
-    path: '',
-    redirectTo: 'catalog',
-    pathMatch: 'full'
-    // ,
-    // canActivate: [AuthGuard]
+   // Wildcard Path
+   path: '**',
+   redirectTo: '/catalog'
+   // canActivate: [AuthGuard]
   }
 ]
 

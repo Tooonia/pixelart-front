@@ -1,6 +1,8 @@
 <!-- TODO: is it correct here, the click event?
-Do I need the @Output EventEmitter on click as in data-set-card.component? -->
+Do I need the @Output EventEmitter on click as in data-set-card.component?
+Elvileg ez pont igy tortenik: az EventEmitter a pixelartService-ben van, itt pedig .emit(this.pixelartItem)-->
 <mat-card
+    style="cursor: pointer;"
     (click)="goToDetail()">
     <mat-card-content>
         <!-- TODO: Ide kell valami, ha selected (amikor gombok: Update & Delete),
