@@ -58,11 +58,12 @@ export class MyProfileComponent implements OnInit {
     this.router.navigate(['/pixelart/my-pixelart'])
   }
 
-  signout(): void {
-    this.authService.signOut();
-    window.location.reload();
+  // TODO: egyelore nem hasznalom!
+  // signout(): void {
+  //   this.authService.signOut();
+  //   window.location.reload();
 
-  }
+  // }
 
   // deleteAccount(idUser: number): void {
   //   // idUser = 25;

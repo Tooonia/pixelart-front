@@ -5,82 +5,94 @@
     <img
       id="profile-img"
       src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-      class="profile-img-card"
-    />
+      class="profile-img-card"/>
     <form
-      *ngIf="!isSuccessful"
+      *ngIf="!isLoggedIn"
       name="form"
-      (ngSubmit)="f.form.valid && onSubmit()"
-      #f="ngForm"
-      novalidate
-    >
+      (ngSubmit)="onSubmit()"
+      #f="ngForm">
       <div class="form-group">
         <label for="alias">Alias</label>
         <input
           type="text"
+          id="alias"
           class="form-control"
+          ngModel
           name="alias"
-          [(ngModel)]="form.alias"
           required
           minlength="3"
           maxlength="20"
-          #alias="ngModel"
-        />
-        <div class="alert-danger" *ngIf="alias.errors && f.submitted">
+          #alias="ngModel">
+        <div
+          class="help-block"
+          role="alert"
+          *ngIf="alias.errors && alias.touched && alias.invalid">
           <div *ngIf="alias.errors['required']">Alias is required</div>
-          <div *ngIf="alias.errors['minlength']">
-            Alias must be at least 3 characters
-          </div>
-          <div *ngIf="alias.errors['maxlength']">
-            Alias must be at most 20 characters
-          </div>
+          <div *ngIf="alias.errors['minlength']">Alias must be at least 3 characters</div>
+          <div *ngIf="alias.errors['maxlength']">Alias must be at most 20 characters</div>
         </div>
       </div>
       <div class="form-group">
         <label for="email">Email</label>
         <input
           type="email"
+          id="email"
           class="form-control"
+          ngModel
           name="email"
-          [(ngModel)]="form.email"
           required
           email
-          #email="ngModel"
-        />
-        <div class="alert-danger" *ngIf="email.errors && f.submitted">
-          <div *ngIf="email.errors['required']">Email is required</div>
-          <div *ngIf="email.errors['email']">
-            Email must be a valid email address
-          </div>
+          #email="ngModel">
+        <div
+          class="help-block"
+          role="alert"
+          *ngIf="email.errors && email.touched && email.invalid">
+          <div *ngIf="email.errors['required']">Please enter a valid email</div>
         </div>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
+        <!-- TODO: attenni 10-re! -->
         <input
           type="password"
+          id="password"
           class="form-control"
+          ngModel
           name="password"
-          [(ngModel)]="form.password"
           required
-          minlength="6"
-          #password="ngModel"
-        />
-        <div class="alert-danger" *ngIf="password.errors && f.submitted">
+          minlength="9"
+          #password="ngModel">
+        <div
+          class="help-block"
+          role="alert"
+          *ngIf="password.errors && password.touched && password.invalid">
           <div *ngIf="password.errors['required']">Password is required</div>
-          <div *ngIf="password.errors['minlength']">
-            Password must be at least 6 characters
+          <div *ngIf="password.errors['minlength']">Password must be at least 9 characters
           </div>
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary btn-block">Sign Up</button>
+        <button
+          class="btn btn-primary btn-block"
+          type="submit"
+          [disabled]="!f.valid">Sign Up
+        </button>
       </div>
-      <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
-        Signup failed!<br />{{ errorMessage }}
+      <div class="form-group">
+        <div
+          class="alert alert-warning"
+          role="alert"
+          *ngIf="f.submitted && isSignUpFailed">
+          <!-- *ngIf="f.submitted && isSignUpFailed && f.dirty && f.touched" -->
+          <!-- Signup failed:
+          <div *ngIf="aliasExists && emailExists">This alias and email exist already.</div>
+          <div *ngIf="aliasExists && !emailExists">This alias exists already. Please choose another one.</div>
+          <div *ngIf="emailExists && !aliasExists">This email exists already. Please choose another one.</div> -->
+          Signup failed: {{ errorMessage }}
+        </div>
       </div>
     </form>
-    <div class="alert alert-success" *ngIf="isSuccessful">
-      <!-- TODO: not visible this success alert!!! -->
+    <div class="alert alert-success" *ngIf="isSignupSuccessful">
       Your registration is successful!
     </div>
   </div>

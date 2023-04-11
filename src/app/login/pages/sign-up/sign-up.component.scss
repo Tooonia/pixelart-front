@@ -22,11 +22,41 @@
     background-color: red;
   }
 
-  .button {
-    display: flex;
-    justify-content: flex-end;
-  }
+  // .button {
+  //   display: flex;
+  //   justify-content: flex-end;
+  // }
 
   .col-md-12 {
     display: contents;
+  }
+
+  // TODO: share these setting with the signup component!!!
+  .form-group {
+    margin-bottom: 10px;
+
+    & > button {
+      display: flex;
+      margin: auto;
+    }
+  }
+
+  form {
+    margin: 10px
+  }
+
+  input.ng-invalid.ng-touched {
+    border: 1px solid rgb(247, 10, 200);
+  }
+
+  label {
+    font-weight: 600;
+  }
+
+  // .alert {
+  //   max-width: 300px;
+  // }
+  
+  .card-container {
+    max-width: 300px;
   }

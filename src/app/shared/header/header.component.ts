@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
@@ -16,7 +17,9 @@ export class HeaderComponent implements OnInit {
   isLoggedIn = false;
   username?: string;
 
-  constructor(private authService: AuthService, private renderer: Renderer2) {
+  constructor(private authService: AuthService,
+              private renderer: Renderer2,
+              private router: Router) {
     // When there is a click outside of the hamburger button, it closes the hambuerger menu on xs screen:
     this.renderer.listen('document', 'click',(e:Event)=>{
       if(e.target !== this.toggleButton.nativeElement ){
@@ -26,7 +29,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoggedIn = !!this.authService.getToken();
+    this.isLoggedIn = !!this.authService.getToken(); //TODO: megnezni ezt a ket !!-t!
     // if (this.isLoggedIn) {
     //   const user = this.tokenStorageService.getUser();
     //   // const user = this.tokenStorageService.getUser();
@@ -34,14 +37,14 @@ export class HeaderComponent implements OnInit {
     //   // this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
     //   // this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
     //   this.username = user.alias;
-      this.email = this.authService.getSignedinUser();
+    this.email = this.authService.getSignedinUser();
     //   this.email = user.email;
     // }
   }
 
   logout(): void {
     this.authService.signOut();
-    window.location.reload();
+    this.isLoggedIn = false;
   }
 }
 

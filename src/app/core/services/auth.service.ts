@@ -54,16 +54,17 @@ export class AuthService {
   //       })
   //     );
   // }
-  
+
   // 3rd method finally works, used in the 1st solution within sign-up.component.ts
   // we need to specify the name of parameters as written in the Back-end code (=JsonProperty names)
-  register(alias: string, email: string, password: string): Observable<any> {
+  // register(alias: string, email: string, password: string): Observable<any> {
+  register(signupRequest: RequestSignupItem): Observable<any> {
     return this.http.post(
       AUTH_API + '/signup',
       {
-        alias: alias,
-        user_email: email,
-        user_password: password,
+        alias: signupRequest.alias,
+        user_email: signupRequest.email,
+        user_password: signupRequest.password,
       },
       httpOptions
     )
@@ -76,11 +77,11 @@ export class AuthService {
     ;
   }
 
-  signout() {
-    sessionStorage.removeItem('user');
+  // signout() {
+  //   sessionStorage.removeItem('user');
 
-    this.router.navigateByUrl('/pixelart/catalog');
-  }
+  //   this.router.navigateByUrl('/pixelart/catalog');
+  // }
 
   isUserSignedin() {
     return sessionStorage.getItem('auth-token') !== null;
@@ -94,6 +95,7 @@ export class AuthService {
 
   signOut(): void {
     window.sessionStorage.clear();
+    this.router.navigateByUrl('/pixelart/catalog');
   }
 
   public saveToken(token: string): void {

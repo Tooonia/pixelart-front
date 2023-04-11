@@ -29,6 +29,14 @@ export class UserService {
     private authService: AuthService) { }
 
   // Those are, again, URLs from Back-end code:
+/**
+ * GET all users with public profile
+ */
+public getAllUsers(): Observable<UserGetItem[]> {
+  // return this.http.get(API_URL + '/my-profile', { responseType: 'text' });
+  return this.http.get<UserGetItem[]>((`${this.basePath}/users`), { responseType: 'json'});
+}
+
   /**
    * GET public user profile
    * @returns
