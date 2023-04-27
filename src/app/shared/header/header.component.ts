@@ -29,7 +29,8 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoggedIn = !!this.authService.getToken(); //TODO: megnezni ezt a ket !!-t!
+    //'!!' returns a boolean value, true-ish if value is not 'null' or 'undefined'.
+    this.isLoggedIn = !!this.authService.getToken();
     // if (this.isLoggedIn) {
     //   const user = this.tokenStorageService.getUser();
     //   // const user = this.tokenStorageService.getUser();
@@ -38,6 +39,7 @@ export class HeaderComponent implements OnInit {
     //   // this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
     //   this.username = user.alias;
     this.email = this.authService.getSignedinUser();
+    // console.log('In header the email: ' + this.email); //WORKS!
     //   this.email = user.email;
     // }
   }

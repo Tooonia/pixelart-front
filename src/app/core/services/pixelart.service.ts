@@ -23,6 +23,7 @@ export class PixelartService {
  */
   public findAll(): Observable<PixelartItem[]> {
     // Url from the Back
+    console.log('findAll method : ' + this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-catalog`));  // THIS IS object Object also!
     return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-catalog`);
   }
 
@@ -32,7 +33,18 @@ export class PixelartService {
  * @returns
  */
   public getById(id: number): Observable<PixelartItem> {
-    return this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`);
+    console.log('Hello, getById does not work ' + this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`));
+    return this.http.get<PixelartItem>((`${this.basePath}/pixelart/${id}`), { responseType: 'json'});
+    // .pipe(
+    //   map((data) => {
+    //     console.log('Ez az uj data: ' + data); // NOT WORKING: Still object Object!!!
+    //     return data;
+    //   }),
+    //   catchError((err, caught) => {
+    //     console.error(err);
+    //     throw err;
+    //   })
+    // );// DOES NOT WORK!!!
   }
 
 /**
@@ -41,7 +53,7 @@ export class PixelartService {
  * @returns
  */
   public getAllPixelArtByUser(id: number): Observable<PixelartItem[]> {
-    return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-by-user/${id}`)
+    return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-by-user/${id}`);
     // .pipe(
     //   map((data:any) => new PixelartItemModel[] (
     //     data.id,
@@ -92,8 +104,8 @@ export class PixelartService {
    * @param id
    * @returns
    */
-  public deleteById(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.basePath}/pixelart-edit/${id}`, {
+  public deleteById(id: number): Observable<PixelartItem> {
+    return this.http.delete<PixelartItem>(`${this.basePath}/pixelart-edit/${id}`, {
       responseType: 'json',
     });
   }

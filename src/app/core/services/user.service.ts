@@ -33,7 +33,7 @@ export class UserService {
  * GET all users with public profile
  */
 public getAllUsers(): Observable<UserGetItem[]> {
-  // return this.http.get(API_URL + '/my-profile', { responseType: 'text' });
+  // return this.http.get(API_URL + '/my-profile', { responseType: 'text' }); // FONTOS: the default is 'json', when set to 'text': it doesn't get converted to a JavaScript object as with 'json'.
   return this.http.get<UserGetItem[]>((`${this.basePath}/users`), { responseType: 'json'});
 }
 
@@ -41,9 +41,9 @@ public getAllUsers(): Observable<UserGetItem[]> {
    * GET public user profile
    * @returns
    */
-  public getUserProfile(id: number): Observable<any> {
+  public getUserProfile(id: number): Observable<UserGetItem> {
     // return this.http.get(API_URL + '/my-profile', { responseType: 'text' });
-    return this.http.get<any>((`${this.basePath}/user/${id}`), { responseType: 'json'});
+    return this.http.get<UserGetItem>((`${this.basePath}/user/${id}`), { responseType: 'json'});
   }
 
   /**
@@ -57,10 +57,10 @@ public getAllUsers(): Observable<UserGetItem[]> {
   }
 
   /**
-   * GET public user profile by email << DOES NOT WORK YET
+   * GET public user profile by email << DOES NOT WORK YET; TODO: vajon kell ide a params: email?
    */
   public getUserProfileByEmail(email: string): Observable<UserGetItem> {
-    return this.http.get<UserGetItem>((`${this.basePath}/me`), { params: {[email]: email}, responseType: 'json'});
+    return this.http.get<UserGetItem>((`${this.basePath}/me`), { params: {email}, responseType: 'json'});
     // return this.http.get<UserGetItem>((`${this.basePath}/me`), { params: {email}, responseType: 'json'});
   }
 
@@ -98,7 +98,7 @@ public getAllUsers(): Observable<UserGetItem[]> {
    * //TODO: GET public content, list of Users for give it a try << works! But not logical to have it on 'home' page!
    */
    public getPublicContent(): Observable<any> {
-    return this.http.get((`${this.basePath}/users`), { responseType: 'json'});
+    return this.http.get<any>((`${this.basePath}/users`), { responseType: 'json'});
   }
 
   /**

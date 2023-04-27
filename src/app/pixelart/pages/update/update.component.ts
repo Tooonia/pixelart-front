@@ -21,6 +21,10 @@ export class UpdateComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
+
+   }
+
+  ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const pixelartItemId = Number(params.get('id'));
       console.log(pixelartItemId);
@@ -28,9 +32,6 @@ export class UpdateComponent implements OnInit {
         this.pixelartItemToUpdate = pixelartItem;
       })
     })
-   }
-
-  ngOnInit(): void {
   }
 
   public onSaveUpdatePixelart(modifiedPixelartItem: PixelartItem): void {

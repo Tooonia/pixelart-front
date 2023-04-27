@@ -12,6 +12,7 @@ import { UserGetItem } from 'src/app/pixelart/model/user-get-item';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  // By using @ViewChild() to access the form, we can have access to it even earlier than of submitting it.
   @ViewChild('f', { static: false }) loginForm!: NgForm;
 // 1st solution
   // form!: JwtRequest;
