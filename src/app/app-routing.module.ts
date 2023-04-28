@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     // Empty Path. 'pathMatch: 'full'' ensures that this path is only taken account if the exact value is an empty string at that place in URL:
     path: '',
-    redirectTo: '/pixelart',
+    redirectTo: 'pixelart',
     pathMatch: 'full',
     // canActivate: [AuthGuard]
   },
@@ -33,13 +33,13 @@ const routes: Routes = [
       .then(m => m.LoginModule),
   // canActivate: [AuthGuard]
 }
-// ,
-// {
-//  // Wildcard Path TODO: ide megsem ez kell, mert ez mindig igaz lenne, ugye?
-//  path: '**',
-//  redirectTo: '/pixelart'
-//  // canActivate: [AuthGuard]
-// }
+,
+{
+ // Wildcard Path TODO: ide megsem ez kell, mert ez mindig igaz lenne, ugye?
+ path: '**',
+ redirectTo: 'pixelart'
+ // canActivate: [AuthGuard]
+}
 ]
 
 @NgModule({

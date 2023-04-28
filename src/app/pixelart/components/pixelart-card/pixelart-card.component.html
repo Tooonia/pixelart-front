@@ -4,7 +4,8 @@ Elvileg ez pont igy tortenik: az EventEmitter a pixelartService-ben van, itt ped
 <div class="container">
     <div fxLayout="row wrap">
         <div fxFlex="25%">
-            <mat-card style="cursor: pointer;" (click)="goToDetail()">
+            <mat-card style="cursor: pointer;" (click)="goToDetail(index)">
+                <!-- <mat-card-content *ngIf="pixelartItem"> -->
                 <mat-card-content>
                     <!-- TODO: Ide kell valami, ha selected (amikor gombok: Update & Delete),
             vagy ha csak meg akarom jeleniteni az adatait -->

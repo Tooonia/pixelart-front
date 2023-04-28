@@ -10,7 +10,9 @@
     + submission-project.component.html -->
 
     <mat-card-content class="d-flex">
+        <!-- With *ngIf="pixelartItem" inside <form>, the placeholder name is printed out ?! -->
         <form
+            *ngIf="managePixelartForm"
             [formGroup]="managePixelartForm"
             (ngSubmit)="saveAction()">
             <!-- class="manage-pixelart-container" -->
@@ -20,19 +22,29 @@
                     <mat-label>Title</mat-label>
                     <!-- TODO: text validation, handle special characters!!! For security! -->
                     <!-- TODO: [(ngModel)]="pixelartItem" to add here?  -->
-                    <input type="text" matInput placeholder="Title of pixelart"
-                    formControlName="name" autocomplete="off" required>
+                    <input
+                        type="text"
+                        matInput
+                        placeholder="Title of pixelart"
+                        formControlName="name"
+                        autocomplete="off"
+                        required>
                 </mat-form-field>
+                <p>{{pixelartItem?.name}}</p>
+                <!-- MUKODIK, itt az ertek! -->
             </div>
         </form>
     </mat-card-content>
 
     <mat-card-actions class="d-flex">
-        <button (click)="cancelAction()">Cancel</button>
+        <button type="button" (click)="cancelAction()">Cancel</button>
+        <!-- TODO: ide mar nem kell szerintem click="saveAction()" -->
+        <!-- [disabled]="!managePixelartForm.valid" -->
+        <!-- [disabled]="!editMode && name !== null" a name-et nem ismeri fel, meg #name-mel sem az input element-en -->
         <button
             type="submit"
             (click)="saveAction()"
-            [disabled]="!isValid">Save</button>
+            >Save</button>
     </mat-card-actions>
 </mat-card>
 

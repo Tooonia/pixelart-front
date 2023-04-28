@@ -74,4 +74,9 @@ export class PortfolioComponent implements OnInit {
       // // console.log(this.signedinUser.pixelarts[1].name);
       })
   }
+
+  // onGoToDetail(index: number) {
+  //   this.pixelartService.pixelartClickedForDetail.next(index);
+  //   this.router.navigate(['/pixelart/my-pixelart', this.pixelartItem.id]);
+  // }
 }

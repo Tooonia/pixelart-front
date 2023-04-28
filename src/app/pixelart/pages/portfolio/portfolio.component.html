@@ -22,10 +22,17 @@ akkor a sajatunkat, amely rajzait edit/delete-elni is tudjuk. -->
       il faudra faire le mapping dans le service, comme c'est le cas actuellement -->
       <!-- <li>{{ pixelart.name}}</li>
   </ul> -->
-
-        <div *ngFor="let pixelartItem of signedinUser?.pixelarts">
+<!-- TODO: lehet, h ide kell egy FormGroup / FormArray, es annak lesz a neve az index, ahogy n°231!!! same for list!-->
+        <div >
+          <!-- (click)="onGoToDetail(i)" -->
             <app-pixelart-card
-                [pixelartItem]="pixelartItem">
+                *ngFor="let pixelartItem of signedinUser?.pixelarts; let i = index"
+                [pixelartItem]="pixelartItem"
+                >
+
+                <!-- [pixelartItem]="pixelartItem[i]" -->
+
+
             </app-pixelart-card>
         </div>
     </div>

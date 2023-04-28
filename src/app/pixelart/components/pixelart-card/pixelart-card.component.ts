@@ -14,6 +14,7 @@ export class PixelartCardComponent implements OnInit {
   // and not with "undefined" added:
   // @Input() pixelartItem: PixelartItem | undefined;
   @Input() pixelartItem!: PixelartItem;
+  @Input() index!: number;
   // @Output() selectedPixelartItem = new EventEmitter<void>(); //n°118: no need for that
   // @Output() pixelartItemDetailClick = new EventEmitter<PixelartSimpleItem>();
 
@@ -34,8 +35,9 @@ export class PixelartCardComponent implements OnInit {
   }
 
   // Here to prepare: select() and / or goToDetail()
-  goToDetail(): void { //TODO: itt elvileg nem lehetne /void, ha even-et adok meg parameterben, nem?
+  goToDetail(index: number): void { //TODO: itt elvileg nem lehetne /void, ha even-et adok meg parameterben, nem?
     if(this.pixelartItem.id) {
+      this.index = index;
       // this.selectedPixelartItem.emit();
       // this.pixelartItem =
       // this.pixelartService.pixelartSelected.emit(this.pixelartItem);

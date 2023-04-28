@@ -1,9 +1,15 @@
 <div class="container-fluid d-flex">
     <div fxLayout="row wrap" class="gap d-flex">
-        <div *ngFor="let pixelartItem of pixelartItemsList">
+        <div>
         <!--TODO: complete with [ngClass] and mediasize, having max 4 in a row!!! -->
             <app-pixelart-card
-                [pixelartItem]="pixelartItem">
+                *ngFor="let pixelartItem of pixelartItemsList; let i = index"
+                [pixelartItem]="pixelartItem"
+                [index]="i">
+                <!-- (click)="onViewDetail(i)"> -->
+
+                <!-- [pixelartItem]="pixelartItem[i]" -->
+
                 <!-- Or: (selectMetadata)="selectMetadata.emit($event)" on list-container -->
                 <!-- TODO: prepare reusable button for 'Details' -->
 

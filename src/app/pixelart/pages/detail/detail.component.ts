@@ -28,7 +28,8 @@ pixelartToDisplay! : PixelartItem;
     isSignedin = false;
     signedinUser! : UserGetItem;
     signedinUserPixelartList!: PixelartItem[];
-    buttonsToShow: boolean = false;
+    allowToUpdate: boolean = false;
+    id!: number;
 
   constructor(
     private pixelartService : PixelartService,
@@ -39,18 +40,43 @@ pixelartToDisplay! : PixelartItem;
   ) {
 
   }
-
+// TODO: nagyon darabosan tolti be a detail oldalt, meg biztos nem jo!!!
   ngOnInit(): void {
     // n°161 NOT WORKING:
     this.route.params.subscribe(
       (params: Params) => {
-        const id = +params['id'];
+        this.id = +params['id'];
         // this.pixelartToDisplay = this.pixelartService.getById(id);
         // this.pixelartToDisplay = params;
-        this.pixelartService.getById(id).subscribe((data: PixelartItem) => {
+        console.log('Detail id value: '+ this.id); // MUKODIK: Kiadja a szamot!
+        this.isSignedin = this.authService.isUserSignedin();
+
+        this.pixelartService.getById(this.id).subscribe((data: PixelartItem) => {
             this.pixelartToDisplay = data;
-      }
-    )});
+            console.log('EZ A DETAIL : ' +this.pixelartToDisplay); //object Object ez is!!! NEM MUKODIK!!!
+            // console.log(this.isSignedin);
+            // console.log(this.authService.getSignedinUser());
+            // console.log(this.pixelartToDisplay.user); //undefined
+            const userEmail = this.authService.getSignedinUser();
+            // TODO: ide kell, if (signedIn), mert egyelore folyamatosan me?email=null-t mutat, ha a detail-re megyek es utana a Network-ot nezem!!!
+            if (userEmail) {
+              this.userService.getUserProfileByEmail(userEmail).subscribe( (user: UserGetItem) => {
+                const userPixelarts = user.pixelarts;
+                for (let i = 0; i < userPixelarts.length; i++) {
+                 if (userPixelarts[i].id === this.id) {
+                    this.allowToUpdate = true;
+                  }
+               }
+
+            // if (this.isSignedin && this.pixelartToDisplay.user.user_email === this.authService.getSignedinUser()) { //TODO: hogy ferek hozza a user infohoz ez pixelart-bol??? NEM MEGY, undefined, mert id_user_fk a user es nem ismeri fel user-rel!
+            //   console.log(this.pixelartToDisplay.user.user_email);
+            //   this.allowToUpdate = true;
+            //  }
+              }
+              )
+            }
+
+  });
 
 
 
@@ -83,7 +109,7 @@ pixelartToDisplay! : PixelartItem;
     // });
 
     // THIS SOLUTION ALWAYS SHOWS THE LAST PIXELART OF THE CONNECTED USER:
-    this.isSignedin = this.authService.isUserSignedin();
+
     // if(this.authService.isUserSignedin() ) {
     //   this.route.paramMap.subscribe((params: ParamMap) => {
     //     const pixelartItemId = Number(params.get('id'));
@@ -110,7 +136,8 @@ pixelartToDisplay! : PixelartItem;
           // mutassa az Edit es delete button-okat }
       // ha nincs bejelentkezve, akkor /pixelart-piblic-info
       // ha be van jelentkezve: akkor private info ??
-		}
+		})
+  }
 // 1st try
     // this.pixelartService.getById(this.route.snapshot.params.id).subscribe(data => {
     //    this.pixelartItem = data;
@@ -132,21 +159,26 @@ pixelartToDisplay! : PixelartItem;
     // TODO: see navigation history eventually instead : route-history.service.ts
     // We need here: come back to previously visited page if possible, if not, go to catalog!
     // For now, it is not smooth enough, when window changes
-    this.router.navigate(['/pixelart/catalog'])
+    // this.router.navigate(['/pixelart/catalog']); //TODO: itt kell revenir à l'étape précédente/url précédente!!!
+
+    // this.location.back(); //TODO: NOT WORKING WELL, as goes back to 'manage-pixelart' all the time, needs to be completed!!! as there is one situation it might not work!!! itt kell revenir à l'étape précédente/url précédente!!!
+    //Valami olyasmi kell, h 'if previous url my-pixelart, akkor oda menjen vissza, egyebkent meg a fooldal listajara'.
+    this.router.navigate(['/pixelart/catalog']); //TODO: itt kell revenir à l'étape précédente/url précédente!!!
+    // this.router.navigate(['../'], {relativeTo: this.route}); //TODO: itt kell revenir à l'étape précédente/url précédente!!!
   }
 
   // TODO: normally editPixelart and deletePixelart both redirect to portfolio page
   // as only a connected user will see those buttons on own pixelarts!
-  editPixelart(pixelartItem: PixelartItem): void {
-    this.router.navigate(['/pixelart/edit-pixelart', pixelartItem.id])
+  editPixelart(): void {
+    this.router.navigate(['/pixelart/edit-pixelart', this.pixelartToDisplay.id])
   }
 
-  deletePixelart(pixelartItem: PixelartItem): void {
+  deletePixelart(): void {
   // TODO Itt kellene lehet az a tab(), hogy tovabbi dolgokat csinalhassunk sans toucher à l'élément à voir?
   // TODO vagy valahogy egy blokkba tenni ezt a ket subscribe dolgot?
   // TODO Is it supposed to be in the service.ts, with the delete() method, the refreshcollection part?
-    console.log(pixelartItem.id);
-    this.pixelartService.deleteById(pixelartItem.id).subscribe((resp) => {
+    // console.log(pixelartItem.id);
+    this.pixelartService.deleteById(this.pixelartToDisplay.id).subscribe((resp) => {
       console.log("Delete OK: ", resp);
       // Kell valami error message, h nem sikerult torolni, mert akkor is az irja ki consoleba, h OK,
       // ha adott szemelynek ne, volt hozzaferese!

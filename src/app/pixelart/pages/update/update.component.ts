@@ -27,7 +27,7 @@ export class UpdateComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const pixelartItemId = Number(params.get('id'));
-      console.log(pixelartItemId);
+      console.log('Inside update.ts ngOnInit: ' + pixelartItemId);
       this.pixelartService.getById(pixelartItemId).subscribe((pixelartItem: PixelartItem) => {
         this.pixelartItemToUpdate = pixelartItem;
       })

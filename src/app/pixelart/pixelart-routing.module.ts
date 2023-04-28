@@ -13,7 +13,7 @@ import { PortfolioComponent } from './pages/portfolio/portfolio.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/catalog',
+    redirectTo: 'catalog',
     pathMatch: 'full'
     // ,
     // canActivate: [AuthGuard]
@@ -41,6 +41,10 @@ const routes: Routes = [
     component: PortfolioComponent
     // canActivate: [AuthGuard]
   },
+  //   path: 'my-pixelart/:id',
+  //   component: DetailComponent
+  //   // canActivate: [AuthGuard]
+  // },
   {
     path: ':id',
     component: DetailComponent
@@ -56,7 +60,7 @@ const routes: Routes = [
   {
    // Wildcard Path
    path: '**',
-   redirectTo: '/catalog'
+   redirectTo: 'catalog'
    // canActivate: [AuthGuard]
   }
 ]

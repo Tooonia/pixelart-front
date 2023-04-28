@@ -5,7 +5,7 @@
         <div>Details</div>
         <!-- <div *ngIf="film?.length"> -->
             <!-- TODO: Replace it with "close" button -->
-        <div (click)="closePixelartDetails()">X</div>
+        <div style="cursor: pointer;" (click)="closePixelartDetails()">X</div>
         <div>
             <!-- TODO: Use <app-pixelart-card> component instead. See how to name buttons! -->
             <mat-card>
@@ -19,7 +19,6 @@
                         <!-- <mat-card-content *ngIf="pixelartToDisplay">
                             <mat-card-title>
                                 {{ pixelartToDisplay.name }} -->
-
                 <mat-card-content>
                     <mat-card-title>
                         <!-- If pixelartItem set to private in the .ts, then it only works
@@ -28,14 +27,10 @@
                         {{ pixelartToDisplay?.name }}
                     </mat-card-title>
 
-                    <!-- <mat-card-actions *ngIf="isSignedin buttonsToShow"> -->
-                    <mat-card-actions>
-                        <!-- TODO: buttons only visible if pixelart of the authenticated user!!! *ngIf?
-                        otherwise: only close details button to show!!! -->
-                        <!-- *ngIf="isSignedin" -->
+                    <mat-card-actions *ngIf="isSignedin && allowToUpdate">
                         <!-- Maybe: (click)="editPixelart(pixelartItem)=$event" and geting that value to the changed name ?-->
-                        <button mat-button (click)="editPixelart(pixelartToDisplay)">Edit art</button>
-                        <button mat-button (click)="deletePixelart(pixelartToDisplay)">Delete art</button>
+                        <button mat-button (click)="editPixelart()">Edit art</button>
+                        <button mat-button (click)="deletePixelart()">Delete art</button>
                     </mat-card-actions>
                 </mat-card-content>
             </mat-card>

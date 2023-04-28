@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
 import { catchError, map } from 'rxjs/operators';
 
@@ -13,6 +13,7 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class PixelartService {
   pixelartSelected = new EventEmitter<PixelartItem>();
+  pixelartClickedForDetail = new Subject<number>();
   private basePath = 'http://localhost:8085/api';
 
   constructor(private http: HttpClient) { }
@@ -109,5 +110,7 @@ export class PixelartService {
       responseType: 'json',
     });
   }
+
+
 }
 
