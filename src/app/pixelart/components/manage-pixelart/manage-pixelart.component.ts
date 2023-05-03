@@ -71,7 +71,7 @@ export class ManagePixelartComponent implements OnInit {
               console.log('EZ form name ?' + this.managePixelartForm.value.name);
               console.log('EZ name ?' + this.pixelartItem.name); //EZ VISZONT MUKODIK! kiirja az eredmeny!!!???
               console.log('EZ ?' + this.pixelartItem.id); //object Object csak az eredmeny!!!???
-              console.log('EZ ?' + this.pixelartItem.user); //object Object csak az eredmeny!!!???
+              console.log('EZ a user : ' + this.pixelartItem.user); //object Object csak az eredmeny!!!???
               console.log('EZ?' + data.name);
               console.log('EZ?' + data.id);
             // .pipe(

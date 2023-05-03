@@ -21,12 +21,12 @@ export class EmailAliasValidatorDirective implements Validator {
           for (let i = 0; i < users.length; i++) {
             if (users[i].alias === control.value.alias) {
               console.log('Inside of alias exists, control value: '+ control.value.alias);
-              if (users[i].user_email === control.value.email) {
+              if (users[i].userEmail === control.value.email) {
                 console.log('Inside of alias and mail exist, control value: '+ control.value.email);
                 resolve({'AliasAndEmailAreTaken' : true});
               }
               resolve({'AliasIsTaken' : true});
-            } else if (users[i].user_email === control.value.email) {
+            } else if (users[i].userEmail === control.value.email) {
                 resolve({'EmailIsTaken' : true});
             } else {
               console.log('Inside if else at the end, control value: '+ control.value)

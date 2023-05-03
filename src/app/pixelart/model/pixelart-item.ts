@@ -1,4 +1,5 @@
 import { UserGetItem } from "./user-get-item";
+import { UserGetSlimItem } from "./user-get-slim-item";
 
 export interface PixelartItem {
 

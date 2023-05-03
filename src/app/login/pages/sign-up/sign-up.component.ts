@@ -17,8 +17,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
 @ViewChild('f', { static: false }) signupForm!: NgForm;
   form: RequestSignupItem = {
     alias: '',
-    email: '',
-    password: ''
+    userEmail: '',
+    userPassword: ''
   };
   isLoggedIn = false;
   isSignupSuccessful = false;
@@ -51,8 +51,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     // const { alias, email, password } = this.form;
     this.form.alias = this.signupForm.value.alias;
-    this.form.email = this.signupForm.value.email;
-    this.form.password = this.signupForm.value.password;
+    this.form.userEmail = this.signupForm.value.email;
+    this.form.userPassword = this.signupForm.value.password;
     this.signupSubscription = this.authService.register(this.form).subscribe({
       next: data => {
         console.log(data);
@@ -96,7 +96,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
             this.aliasExists = true;
               // this.errorMessage.push('alias');
           }
-          if(users[i].user_email === this.signupForm.value.email) {
+          if(users[i].userEmail === this.signupForm.value.email) {
             this.emailExists = true;
             // this.errorMessage.push(' and email')
           }

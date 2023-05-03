@@ -63,8 +63,8 @@ export class AuthService {
       AUTH_API + '/signup',
       {
         alias: signupRequest.alias,
-        user_email: signupRequest.email,
-        user_password: signupRequest.password,
+        userEmail: signupRequest.userEmail,
+        userPassword: signupRequest.userPassword,
       },
       httpOptions
     )

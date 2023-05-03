@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
 import { catchError, map } from 'rxjs/operators';
+import { PixelartSimpleItem } from 'src/app/pixelart/model/pixelart-simple-item';
 
 /**
  * Class responsible to call the server side REST API
@@ -79,8 +80,8 @@ export class PixelartService {
   //   catchError(this.handleError('add', pixelartModel))
   // );
   // }
-  public add(pixelartItem: PixelartItem): Observable<PixelartItem> {
-    return this.http.post<PixelartItem>(`${this.basePath}/pixelart-create`, pixelartItem, {
+  public add(pixelartSimpleItem: PixelartSimpleItem): Observable<PixelartSimpleItem> {
+    return this.http.post<PixelartSimpleItem>(`${this.basePath}/pixelart-create`, pixelartSimpleItem, {
       responseType: 'json',
       // When we had the Bearer token problem previously, we managed to test methods by typing token value here:
       // headers: {
