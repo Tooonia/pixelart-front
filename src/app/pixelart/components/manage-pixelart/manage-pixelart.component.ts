@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Route, Router } from '@angular/router';
 import { PixelartItem } from '../../model/pixelart-item';
@@ -12,20 +12,30 @@ import { map } from 'rxjs/operators';
   templateUrl: './manage-pixelart.component.html',
   styleUrls: ['./manage-pixelart.component.scss']
 })
-export class ManagePixelartComponent implements OnInit {
+export class ManagePixelartComponent implements OnInit, AfterViewInit {
+  @ViewChild('myCanvas', {static: true}) canvas!: ElementRef<HTMLCanvasElement>;
   // TODO: without in Rudi, public for Jeremy, azt hiszem, a default a public:
   managePixelartForm!: FormGroup;
+  manageCanvasForm!: FormGroup;
   @Input() pixelartItem!: PixelartItem;
   @Output() savedAction = new EventEmitter<PixelartItem>();
   @Output() cancelledAction = new EventEmitter<PixelartItem>();
   editMode: boolean = false;
   id!: number;
+  context!: CanvasRenderingContext2D | null; //Without "| null" there was an error:
+  // Type 'CanvasRenderingContext2D | null' is not assignable to type 'CanvasRenderingContext2D'.
+  canvasHeight: number = 0;
+  canvasWidth: number = 0;
+  canvasColor: string = '';
+  isBackgroundWhite: boolean = false;
+  isBackgroundGrey: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private route:  ActivatedRoute,
-    private pixelartService: PixelartService
+    private pixelartService: PixelartService,
+    private renderer: Renderer2
     ) { }
 
   // Test validity of form
@@ -34,6 +44,25 @@ export class ManagePixelartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.manageCanvasForm = new FormGroup( {
+      'height': new FormControl(0),
+      'width': new FormControl(0),
+      'color': new FormControl(null),
+    });
+
+    if (this.canvas.nativeElement.getContext('2d') !== null) {
+      this.context = this.canvas.nativeElement.getContext('2d');
+    }
+
+    // if (this.context) {
+    //   // this.context.stroke();
+    //   // this.context.fillRect(20, 20, 100, 100);
+    //   // this.context.stroke();
+    //   this.context.strokeRect(20, 20, 10, 10);
+    //   this.context.strokeRect(22, 22, 10, 10);
+
+    // }
+
     // console.log('Initialization elott : ' + this.managePixelartForm.value); // NEM LATSZIK
       // console.log('Initialization elott : ' + this.pixelartItem.name); // NEM LATSZIK
       // this.managePixelartForm = this.formBuilder.group( { // NEM LATSZIK
@@ -117,6 +146,12 @@ export class ManagePixelartComponent implements OnInit {
       // console.log('managePixelartForm: ' + this.managePixelartForm.value); // NEM LATSZIK
   }
 
+  ngAfterViewInit(): void {
+    // if (this.canvas.nativeElement.getContext('2d') !== null) {
+    //   this.context = this.canvas.nativeElement.getContext('2d');
+    // }
+  }
+
   public saveAction(): void {
     console.log("Current form: ", this.managePixelartForm);
     console.log("Form has been submitted: ", this.managePixelartForm.value);
@@ -136,5 +171,61 @@ export class ManagePixelartComponent implements OnInit {
     // this.cancelledAction.emit(this.managePixelartForm.value)
     // this.pixelartItem = this.managePixelartForm.value; //TODO: amikor forditva voltak az = ket vegen, nem mukodott!!!
     this.cancelledAction.emit(this.pixelartItem); //TODO: maybe no need to have an eventemitter<PixelItem> on that function?
+  }
+
+  onValidateCanvasSize() {
+    // this.canvasHeight = this.manageCanvasForm.value.height;
+    // this.canvasWidth = this.manageCanvasForm.value.width;
+    this.canvas.nativeElement.height = this.manageCanvasForm.value.height;
+    this.canvas.nativeElement.width = this.manageCanvasForm.value.width;
+
+    // this.canvasColor = this.manageCanvasForm.value.color;
+    // this.manageCanvasForm.setValue({'height' : this.canvasHeight, 'width' : this.canvasWidth, 'color' : "#ff6347"}, {emitEvent: false});
+    // this.canvas.nativeElement.setAttribute(display: 'block');
+    this.renderer.setStyle(this.canvas.nativeElement, 'display', 'block');
+    // this.renderer.setStyle(this.canvas.nativeElement, 'width', 200);
+    // this.renderer.setStyle(this.canvas.nativeElement, 'height', 200);
+    this.makeGrid(this.canvas.nativeElement.height, this.canvas.nativeElement.width);
+  }
+
+  makeGrid(height: number, width: number) {
+    if (this.context) {
+      for (let j = 0; j < height; j += 1) {
+        if (this.isBackgroundGrey) {
+          this.isBackgroundWhite = false;
+          for (let i = 0; i < width; i += 1) {
+            if (!this.isBackgroundWhite) {
+              this.context.fillStyle = 'lightgrey';
+              // this.context.fillRect(i, j, 1, 1);
+              // this.isBackgroundWhite = !this.isBackgroundWhite;
+            } else {
+              this.context.fillStyle = 'white';
+              // this.context.fillRect(i, j, 1, 1);
+              // this.isBackgroundWhite = !this.isBackgroundWhite;
+            }
+            this.context.fillRect(i, j, 1, 1);
+            this.isBackgroundWhite = !this.isBackgroundWhite;
+          }
+        } else {
+          this.isBackgroundWhite = true;
+          for (let i = 0; i < width; i += 1) {
+
+            if (this.isBackgroundWhite) {
+              this.context.fillStyle = 'white';
+              // this.context.fillRect(i, j, 1, 1);
+              // this.isBackgroundWhite = !this.isBackgroundWhite;
+            } else {
+              this.context.fillStyle = 'lightgrey';
+              // this.context.fillRect(i, j, 1, 1);
+              // this.isBackgroundWhite = !this.isBackgroundWhite;
+            }
+            this.context.fillRect(i, j, 1, 1);
+            this.isBackgroundWhite = !this.isBackgroundWhite;
+          }
+        }
+        this.isBackgroundGrey = !this.isBackgroundGrey;
+      }
+      this.context.stroke();
+    }
   }
 }

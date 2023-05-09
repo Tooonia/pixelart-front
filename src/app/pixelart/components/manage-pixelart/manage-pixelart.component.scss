@@ -1,0 +1,21 @@
+
+#sizePicker {
+    width: 200px;
+    height: 200px;
+}
+
+#pixelCanvas {
+    display: none;
+    margin: auto;
+    width: 300px; //Without these 2 dimension settings, the canvas stays at its sizes set in the HTML on canvas element.
+    height: 300px;
+    // padding: 50px;
+    image-rendering: pixelated; //Renders the colored pixels really net, not blurred.
+    border: 1px solid grey; // Somehow a little "double-border" with the border of the parent div, but missing border lines without.
+}
+
+.canvasDiv {
+    border: 1px solid darkgrey;
+    width: 300px;
+    height: 300px;
+}

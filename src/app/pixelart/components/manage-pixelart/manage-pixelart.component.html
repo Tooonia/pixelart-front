@@ -11,8 +11,9 @@
 
     <mat-card-content class="d-flex">
         <!-- With *ngIf="pixelartItem" inside <form>, the placeholder name is printed out ?! -->
+            <!-- TODO: even without *ngIf="managePixelartForm", and canvas inside the form, or puting the canvas outside the form -->
         <form
-            *ngIf="managePixelartForm"
+
             [formGroup]="managePixelartForm"
             (ngSubmit)="saveAction()">
             <!-- class="manage-pixelart-container" -->
@@ -30,10 +31,36 @@
                         autocomplete="off"
                         required>
                 </mat-form-field>
-                <p>{{pixelartItem?.name}}</p>
+                <!-- <p>{{pixelartItem?.name}}</p> -->
                 <!-- MUKODIK, itt az ertek! -->
+                <h2>Choose Grid Size</h2>
+    <form id="sizePicker"
+        [formGroup]="manageCanvasForm"
+            (ngSubmit)="onValidateCanvasSize()">
+        Grid Height:
+        <input type="number" formControlName="height" id="inputHeight" name="height" min="1" value="1">
+        Grid Width:
+        <input type="number" formControlName="width" id="inputWeight" name="width" min="1" value="1">
+        <button type="submit" (click)="onValidateCanvasSize()">Create Canvas</button>
+        <h2>Pick A Color</h2>
+        <input type="color" formControlName="color" id="colorPicker">
+    </form>
+    <div class="canvasDiv">
+
+        <!-- ON CANVAS:  width="50"
+        height="50" -->
+        <canvas
+                    id="pixelCanvas"
+                    #myCanvas
+                    >
+                    Canvas with the pixels to paint.
+                </canvas>
+
             </div>
+    </div>
+
         </form>
+        <!-- <canvas #myCanvas></canvas> -->
     </mat-card-content>
 
     <mat-card-actions class="d-flex">
