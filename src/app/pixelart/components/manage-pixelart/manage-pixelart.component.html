@@ -34,26 +34,31 @@
                 <!-- <p>{{pixelartItem?.name}}</p> -->
                 <!-- MUKODIK, itt az ertek! -->
                 <h2>Choose Grid Size</h2>
+                <!-- TODO: kell ngSubmit ide?  -->
     <form id="sizePicker"
         [formGroup]="manageCanvasForm"
             (ngSubmit)="onValidateCanvasSize()">
-        Grid Height:
-        <input type="number" formControlName="height" id="inputHeight" name="height" min="1" value="1">
         Grid Width:
         <input type="number" formControlName="width" id="inputWeight" name="width" min="1" value="1">
-        <button type="submit" (click)="onValidateCanvasSize()">Create Canvas</button>
+        Grid Height:
+        <input type="number" formControlName="height" id="inputHeight" name="height" min="1" value="1">
+        <button type="button" (click)="onValidateCanvasSize()">Create Canvas</button>
         <h2>Pick A Color</h2>
-        <input type="color" formControlName="color" id="colorPicker">
+        <input type="color" formControlName="color" format="'rgb'" id="colorPicker" #myPickedColor>
     </form>
     <div class="canvasDiv">
 
         <!-- ON CANVAS:  width="50"
         height="50" -->
+        <!-- sources:
+            https://pauljadam.com/demos/canvas.html
+            https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
         <canvas
                     id="pixelCanvas"
                     #myCanvas
+                    aria-label="Canvas with the pixels to paint"
+                    role="img"
                     >
-                    Canvas with the pixels to paint.
                 </canvas>
 
             </div>
