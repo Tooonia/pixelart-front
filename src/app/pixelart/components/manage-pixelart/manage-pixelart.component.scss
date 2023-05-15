@@ -5,17 +5,29 @@
 }
 
 #pixelCanvas {
-    display: none;
     margin: auto;
-    width: 300px; //Without these 2 dimension settings, the canvas stays at its sizes set in the HTML on canvas element.
-    height: 300px;
+    // width: 200px; //Without these 2 dimension settings, the canvas stays at its sizes set in the HTML on canvas element.
+    // height: 200px;
+    // transform: scale(10);
     // padding: 50px;
     image-rendering: pixelated; //Renders the colored pixels really net, not blurred.
-    border: 1px solid grey; // Somehow a little "double-border" with the border of the parent div, but missing border lines without.
+    // border: 1px solid grey; // Somehow a little "double-border" with the border of the parent div, but missing border lines without.
+    box-sizing: border-box;
 }
 
 .canvasDiv {
     border: 1px solid darkgrey;
-    width: 300px;
-    height: 300px;
+    width: 400px;
+    // width: fit-content;
+    height: 400px;
+    // height: fit-content;
+    align-content: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.pixelDrawingBlockContainer {
+    display: none;
+    width: 100%;
+    height: 100%;
 }

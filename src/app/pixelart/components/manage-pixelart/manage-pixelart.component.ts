@@ -17,6 +17,9 @@ import { Pixel } from '../../model/pixel';
 export class ManagePixelartComponent implements OnInit, AfterViewInit {
   @ViewChild('myCanvas', {static: true}) canvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('myPickedColor', {static: true}) pickedColor!: ElementRef;
+  @ViewChild('pixelDrawingBlockContainer', {static: true}) containerDivForDrawingBlock!: ElementRef;
+  @ViewChild('gridSizeSettingContainer', {static: true}) containerDivForGridSizeSetting!: ElementRef;
+  @ViewChild('canvasDiv', {static: true}) containerDivForCanvas!: ElementRef;
   // TODO: without in Rudi, public for Jeremy, azt hiszem, a default a public:
   managePixelartForm!: FormGroup;
   manageCanvasForm!: FormGroup;
@@ -32,6 +35,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   canvasColor: string = '';
   isBackgroundWhite: boolean = false;
   isBackgroundGrey: boolean = false;
+  scaleToSize!: number;
   imageData!: ImageData;
   image!: HTMLImageElement;
   paint: boolean = false;
@@ -58,29 +62,28 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.manageCanvasForm = new FormGroup( {
       'height': new FormControl(0),
-      'width': new FormControl(0),
-      'color': new FormControl(null),
+      'width': new FormControl(0)
     });
 
-    if (this.canvas.nativeElement.getContext('2d', { willReadFrequently: true }) !== null) {
-      this.context = this.canvas.nativeElement.getContext('2d');
-      // this.image = new Image();
-      // this.image.addEventListener("load", () => {
-      //   // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas#getting_the_pixel_data_for_a_context
-      //   // TODO: lehet ide kell a DB-bol a kep URL!
-      //   this.context?.drawImage(this.image, 0, 0);
-      //   this.image.style.display = "none";
-      //   console.log(this.context);
-      //   console.log(this.image);
-      // EZ VOLT ITT:
-        // this.renderer.listen(this.canvas.nativeElement, 'click', (event) => {
-        //   this.colorPixel(event, this.imageData)}); //EDDIG
-      // });
-      // this.redraw();
-      // this.colorPixel();
-      // this.createUserEvents();
-      this.addInteractions();
-    }
+    // if (this.canvas.nativeElement.getContext('2d', { willReadFrequently: true }) !== null) {
+    //   this.context = this.canvas.nativeElement.getContext('2d');
+    //   // this.image = new Image();
+    //   // this.image.addEventListener("load", () => {
+    //   //   // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas#getting_the_pixel_data_for_a_context
+    //   //   // TODO: lehet ide kell a DB-bol a kep URL!
+    //   //   this.context?.drawImage(this.image, 0, 0);
+    //   //   this.image.style.display = "none";
+    //   //   console.log(this.context);
+    //   //   console.log(this.image);
+    //   // EZ VOLT ITT:
+    //     // this.renderer.listen(this.canvas.nativeElement, 'click', (event) => {
+    //     //   this.colorPixel(event, this.imageData)}); //EDDIG
+    //   // });
+    //   // this.redraw();
+    //   // this.colorPixel();
+    //   // this.createUserEvents();
+    //   this.addInteractions();
+    // }
     // else {} // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage#checking_for_support
 
     // if (this.context) {
@@ -127,11 +130,15 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
                 'name': this.pixelartItem.name
               })
               console.log('EZ form name ?' + this.managePixelartForm.value.name);
-              console.log('EZ name ?' + this.pixelartItem.name); //EZ VISZONT MUKODIK! kiirja az eredmeny!!!???
-              console.log('EZ ?' + this.pixelartItem.id); //object Object csak az eredmeny!!!???
-              console.log('EZ a user : ' + this.pixelartItem.user); //object Object csak az eredmeny!!!???
-              console.log('EZ?' + data.name);
-              console.log('EZ?' + data.id);
+              console.log('EZ this.pixelartItem.name ?' + this.pixelartItem.name); //EZ VISZONT MUKODIK! kiirja az eredmeny!!!???
+              console.log('EZ this.pixelartItem.id ?' + this.pixelartItem.id); //object Object csak az eredmeny!!!???
+              console.log('EZ a this.pixelartItem.user : ' + this.pixelartItem.user); //object Object csak az eredmeny!!!???
+              console.log('EZ data.name ?' + data.name);
+              console.log('EZ data.id?' + data.id);
+
+              this.renderer.setStyle(this.containerDivForGridSizeSetting.nativeElement, 'display', 'none');
+              this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'block');
+              // TODO: rendering is nagyon darabos!!! Az elejen megjelenik az is, aminek nem kellene!!! setTimout?
             // .pipe(
               //   map((data:any) => new PixelartItemModel[] (
               //     data.id,
@@ -145,6 +152,8 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
               //   )));
 
         })
+      } else {
+        this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'none');
       }
       // console.log('Initialization elott : ' + this.managePixelartForm.value); // NEM LATSZIK
       // console.log('Initialization elott : ' + this.pixelartItem.name); // NEM LATSZIK
@@ -317,19 +326,29 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
       const clickedPixel = this.colorPixel(this.mousePosition);
       console.log('clickedPixel value: ' + clickedPixel);
       this.pixelsClicked.push(clickedPixel);
-    })
+      console.log(this.pixelsClicked); // TODO ERROR: it puts 2 identical Pixel element on each click to the array!!! WHY?
+    });
+    // this.canvas.nativeElement.addEventListener('mouseover', (event) => {
+
+    //   this.calculateMousePositionInCanvas(event);
+    //   console.log('mouseHover value: '+ this.mousePosition.x + this.mousePosition.y);
+    // });
   }
 
   calculateMousePositionInCanvas(e: MouseEvent) {
     this.mousePosition = new Point(
-      e.clientX  -
-        // this.canvas.nativeElement.offsetLeft,
-        this.canvas.nativeElement.offsetLeft,
-      e.clientY -
-        this.canvas.nativeElement.offsetTop
+      // e.clientX  -
+      //   this.canvas.nativeElement.offsetLeft,
+      // e.clientY -
+      //   this.canvas.nativeElement.offsetTop
+      e.offsetX
+      , e.offsetY// offsetX and Y values sets the pixel position within the target element (canvas) from its edge.
     );
     console.log(e.clientX);
     console.log(e.clientY);
+    console.log(e.offsetX);
+    console.log(e.offsetY);
+    console.log(this.canvas.nativeElement.getBoundingClientRect());
     console.log('mousePosition: ' + this.mousePosition.x + ' and ' + this.mousePosition.y);
     console.log('offseftLeft: ' + this.canvas.nativeElement.offsetLeft);
     console.log('offsetTop: ' + this.canvas.nativeElement.offsetTop);
@@ -365,7 +384,45 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
     // this.canvasColor = this.manageCanvasForm.value.color;
     // this.manageCanvasForm.setValue({}, {emitEvent: false});//TODO: nem kellene megis ide valami a server fele?
     this.renderer.setStyle(this.canvas.nativeElement, 'display', 'block');
+    // const rectCanvas = this.canvas.nativeElement.getBoundingClientRect();
     this.makeGrid(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    // if (this.containerDivForCanvas.nativeElement.getAttribute('width') !== null) {
+      this.scaleToSize =
+                      (this.canvas.nativeElement.width >= this.canvas.nativeElement.height ?
+                      Math.floor(380/this.canvas.nativeElement.width) :
+                      Math.floor(380/this.canvas.nativeElement.height));
+
+          // console.log('MathFloor: ' + Math.floor(this.containerDivForCanvas.nativeElement.width/this.canvas.nativeElement.width));
+          console.log('MathFloor: ' + Math.floor(380/this.canvas.nativeElement.width));
+          // console.log('divWidth: ' + this.containerDivForCanvas.nativeElement.offsetWidth);
+    // }
+    // this.renderer.setStyle(this.canvas.nativeElement, 'transform', `scale(${ this.scaleToSize })`); // Can have incorrect CSS values applied to them.
+    this.renderer.setStyle(this.canvas.nativeElement, 'scale', this.scaleToSize);
+    console.log('canvas size after resizing: ' + this.canvas.nativeElement.width, this.canvas.nativeElement.height); //20 20 values, ha 20x20as gridet csinaltam, amugy 380x380px.
+    this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'block');
+    this.renderer.setStyle(this.containerDivForGridSizeSetting.nativeElement, 'display', 'none');
+
+    if (this.canvas.nativeElement.getContext('2d', { willReadFrequently: true }) !== null) {
+      this.context = this.canvas.nativeElement.getContext('2d');
+      // this.image = new Image();
+      // this.image.addEventListener("load", () => {
+      //   // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas#getting_the_pixel_data_for_a_context
+      //   // TODO: lehet ide kell a DB-bol a kep URL!
+      //   this.context?.drawImage(this.image, 0, 0);
+      //   this.image.style.display = "none";
+      //   console.log(this.context);
+      //   console.log(this.image);
+      // EZ VOLT ITT:
+        // this.renderer.listen(this.canvas.nativeElement, 'click', (event) => {
+        //   this.colorPixel(event, this.imageData)}); //EDDIG
+      // });
+      // this.redraw();
+      // this.colorPixel();
+      // this.createUserEvents();
+      this.addInteractions();
+    }
+
+
     this.imageData = new ImageData(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     console.log('this.imageData az elejen: ' + this.imageData);
     // console.log('this.imageData.colorSpace az elejen: ' + this.imageData.colorSpace);
@@ -373,24 +430,24 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
     console.log('this.imageData.height az elejen: ' + this.imageData.height);
     console.log('this.imageData.width az elejen: ' + this.imageData.width);
     console.log('this.imageData az elejen: ' + this.imageData);
-    const blueComponent = this.imageData.data[50 * (this.imageData.width * 4) + 200 * 4 + 2];
-    console.log('blueComponent: ' + blueComponent);
-    const numBytes = this.imageData.data.length;
-    console.log('numBytes: ' + numBytes);
-    const xCoord = 2;
-const yCoord = 3;
-const canvasWidth = this.imageData.width;
+//     const blueComponent = this.imageData.data[50 * (this.imageData.width * 4) + 200 * 4 + 2];
+//     console.log('blueComponent: ' + blueComponent);
+//     const numBytes = this.imageData.data.length;
+//     console.log('numBytes: ' + numBytes);
+//     const xCoord = 2;
+// const yCoord = 3;
+// const canvasWidth = this.imageData.width;
 
-const getColorIndicesForCoord = (x: number, y: number, width: number) => {
-  const red = y * (width * 4) + x * 4;
-  return [red, red + 1, red + 2, red + 3];
-};
+// const getColorIndicesForCoord = (x: number, y: number, width: number) => {
+//   const red = y * (width * 4) + x * 4;
+//   return [red, red + 1, red + 2, red + 3];
+// };
 
-const colorIndices = getColorIndicesForCoord(xCoord, yCoord, canvasWidth);
+// const colorIndices = getColorIndicesForCoord(xCoord, yCoord, canvasWidth);
 
-const [redIndex, greenIndex, blueIndex, alphaIndex] = colorIndices;
-console.log('colorIndecis: ' + colorIndices);
-console.log('redIndex: ' + redIndex.valueOf()); //RETURNS the number of the bit.
+// const [redIndex, greenIndex, blueIndex, alphaIndex] = colorIndices;
+// console.log('colorIndecis: ' + colorIndices);
+// console.log('redIndex: ' + redIndex.valueOf()); //RETURNS the number of the bit.
 
 
 
@@ -446,7 +503,7 @@ console.log('redIndex: ' + redIndex.valueOf()); //RETURNS the number of the bit.
     let pickedColorToSet = this.pickedColor.nativeElement.value;
     console.log(this.pickedColor.nativeElement.value); // FONTOS: rendben megjelenik a HEX ertek!: #000000
     console.log('pickedColorToSet value: ' + pickedColorToSet); // FONTOS: rendben megjelenik a HEX ertek!: #000000
-    let pixelToColor = new Pixel(point.x, point.y, 10, 10);
+    let pixelToColor = new Pixel(point.x, point.y, 1, 1);
     console.log('pixelToColor x value: '+ pixelToColor.x);
     console.log('pixelToColor y value: '+ pixelToColor.y);
     console.log('pixelToColor width value: '+ pixelToColor.width);
