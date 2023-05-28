@@ -31,7 +31,7 @@ export class AuthInterceptorService implements HttpInterceptor {
       });
     // When we had the functionning problem of that file, we added manually in the previous method:
     //     setHeaders: {
-    //       // Authorization: `***REMOVED***`,
+    //       // Authorization: `Bearer tokenToInsertHereEnDur`,
     //       Authorization: `Bearer ${this.authservice.getToken()}`,
     //     },
     //   });

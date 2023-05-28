@@ -85,7 +85,7 @@ export class PixelartService {
       responseType: 'json',
       // When we had the Bearer token problem previously, we managed to test methods by typing token value here:
       // headers: {
-      //   'Authorization': '***REMOVED***',
+      //   'Authorization': 'Bearer tokenToInsertHereEnDur',
       // }
     });
   }
