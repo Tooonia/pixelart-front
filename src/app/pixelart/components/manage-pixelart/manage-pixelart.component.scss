@@ -12,7 +12,8 @@
     // padding: 50px;
     image-rendering: pixelated; //Renders the colored pixels really net, not blurred.
     // border: 1px solid grey; // Somehow a little "double-border" with the border of the parent div, but missing border lines without.
-    box-sizing: border-box;
+    // TODO: If transform scale is set, then the 1px border is huge, also scaled up!
+    cursor: pointer;
 }
 
 .canvasDiv {

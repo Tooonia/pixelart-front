@@ -234,7 +234,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
         // this.redraw();
         // this.colorPixel();
         // this.createUserEvents();
-        this.addInteractions();
+        // this.addInteractions();
       }
 
     // this.canvas.nativeElement.addEventListener('click', this.colorPixel.bind(this));
@@ -325,8 +325,13 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
       this.calculateMousePositionInCanvas(event);
       const clickedPixel = this.colorPixel(this.mousePosition);
       console.log('clickedPixel value: ' + clickedPixel);
-      this.pixelsClicked.push(clickedPixel);
-      console.log(this.pixelsClicked); // TODO ERROR: it puts 2 identical Pixel element on each click to the array!!! WHY?
+      this.pixelsClicked.push(clickedPixel); //TODO: FONTOS: update the array: a clicked pixel should appear there only once, with the lastly applied color!!!
+      console.log(clickedPixel); // elotte levo szoveg nelkul rendesen kiirja az x, y, width es height adatokat.
+      console.log(this.pixelsClicked); // TODO ERROR: it puts 2 identical Pixel element on each click to the array!!! WHY? MEG akkor is, ha outside the validated canvas size (5x5-nel kiirja a 6, 5, 1, 1-et!)
+      console.log(this.imageData.data);
+      // console.log('inside addInteractions: clickedPixel: ' + clickedPixel);
+      // console.log('inside addInteractions: pixelsClicked array: ' + this.pixelsClicked); // TODO ERROR: it puts 2 identical Pixel element on each click to the array!!! WHY?
+      // console.log('inside addInteractions: imageData.data: ' + this.imageData.data);
     });
     // this.canvas.nativeElement.addEventListener('mouseover', (event) => {
 
@@ -427,6 +432,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
     console.log('this.imageData az elejen: ' + this.imageData);
     // console.log('this.imageData.colorSpace az elejen: ' + this.imageData.colorSpace);
     console.log('this.imageData.data az elejen: ' + this.imageData.data);
+    console.log('this.imageData.data[2] az elejen: ' + this.imageData.data[2]); //Kiadja a 0-t.
     console.log('this.imageData.height az elejen: ' + this.imageData.height);
     console.log('this.imageData.width az elejen: ' + this.imageData.width);
     console.log('this.imageData az elejen: ' + this.imageData);
@@ -520,6 +526,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
       this.context.fillStyle = pickedColorToSet;
       console.log('fillStyle value: '+ this.context.fillStyle);
       this.context.fillRect(pixelToColor.x, pixelToColor.y, pixelToColor.width, pixelToColor.height);
+
     }
 
 
@@ -541,7 +548,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
         // const data = clickedPixel?.data;
         // console.log('data: ' + data); //Prints out: 0,0,0,0
         // console.log('getImageData(x, y, 1, 1)' + this.context?.getImageData(x, y, 1, 1)); //Prints out: [object ImageData]
-        // let pickedColorToSet = this.pickedColor.nativeElement.value;
+        // // let pickedColorToSet = this.pickedColor.nativeElement.value;
         // console.log(this.pickedColor.nativeElement.value); // FONTOS: rendben megjelenik a HEX ertek!: #000000
         // this.renderer.setStyle(data, 'background', pickedColorToSet);
         // // this.renderer.setStyle(data, 'background-color', pickedColorToSet);
