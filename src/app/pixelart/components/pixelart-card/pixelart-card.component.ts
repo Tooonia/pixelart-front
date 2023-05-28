@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+// import * as EventEmitter from 'events'; DOES NOT WORK WITH THIS IMPORT!!!
 import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { PixelartItem } from '../../model/pixelart-item';
 
@@ -12,12 +13,14 @@ export class PixelartCardComponent implements OnInit {
   // TODO: see why does it work with "!" definite assignment assertion,
   // and not with "undefined" added:
   // @Input() pixelartItem: PixelartItem | undefined;
-  @Input()
-  pixelartItem!: PixelartItem;
+  @Input() pixelartItem!: PixelartItem;
+  @Input() index!: number;
+  // @Output() selectedPixelartItem = new EventEmitter<void>(); //n°118: no need for that
+  // @Output() pixelartItemDetailClick = new EventEmitter<PixelartSimpleItem>();
 
   constructor(
     // GET pixelart by id on '/pixelart/id' works without these 2:
-    // private pixelartService: PixelartService,
+    private pixelartService: PixelartService,
     // private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -32,8 +35,13 @@ export class PixelartCardComponent implements OnInit {
   }
 
   // Here to prepare: select() and / or goToDetail()
-  goToDetail(): void {
-    if(this.pixelartItem.id)
-    this.router.navigate(['/pixelart/' + this.pixelartItem.id])
+  goToDetail(index: number): void { //TODO: itt elvileg nem lehetne /void, ha even-et adok meg parameterben, nem?
+    if(this.pixelartItem.id) {
+      this.index = index;
+      // this.selectedPixelartItem.emit();
+      // this.pixelartItem =
+      // this.pixelartService.pixelartSelected.emit(this.pixelartItem);
+      this.router.navigate(['/pixelart/' + this.pixelartItem.id])
+  }
   }
 }

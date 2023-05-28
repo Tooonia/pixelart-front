@@ -1,15 +1,23 @@
- <!-- TODO: is it correct here, the click event? 
-Do I need the @Output EventEmitter on click as in data-set-card.component? -->
-<mat-card
-    (click)="goToDetail()">
-    <mat-card-content>
-        <!-- TODO: Ide kell valami, ha selected (amikor gombok: Update & Delete), 
+<!-- TODO: is it correct here, the click event?
+Do I need the @Output EventEmitter on click as in data-set-card.component?
+Elvileg ez pont igy tortenik: az EventEmitter a pixelartService-ben van, itt pedig .emit(this.pixelartItem)-->
+<div class="container">
+    <div fxLayout="row wrap">
+        <div fxFlex="25%">
+            <mat-card style="cursor: pointer;" (click)="goToDetail(index)">
+                <!-- <mat-card-content *ngIf="pixelartItem"> -->
+                <mat-card-content>
+                    <!-- TODO: Ide kell valami, ha selected (amikor gombok: Update & Delete),
             vagy ha csak meg akarom jeleniteni az adatait -->
-        <div>
-            <!-- This class is supposed to display only the pixelart image, and used for list-container only 
+                    <div>
+                        <!-- This class is supposed to display only the pixelart image, and used for list-container only
             TODO: or see how is it possible to display only parts when is used for 'List', and when used for 'Details' -->
-            {{pixelartItem.name}}
-        </div>
-    </mat-card-content>
+                        {{pixelartItem.name}}
+                        <!-- {{pixelartItem.name}} by {{pixelartItem.user}} -->
+                    </div>
+                </mat-card-content>
 
-</mat-card>
+            </mat-card>
+        </div>
+    </div>
+</div>

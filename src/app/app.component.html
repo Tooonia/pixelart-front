@@ -1,39 +1,7 @@
-<!-- TODO: instead: <app-header> should come here! -->
 <div id="app">
-  <nav class="navbar navbar-expand navbar-light bg-light">
-    <!-- TODO: href and routerLink is often used together! Why?
-      <a class="navbar-brand" href="#" routerLink="home">PixelArt</a> -->
-    <a class="navbar-brand" routerLink="home">PixelArt</a>
-    <ul class="navbar-nav mr-auto" routerLinkActive="active">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="pixelart/catalog">Catalog</a>
-      </li>
-
-
-      <li class="nav-item">
-        <!-- TODO: vagy /pixelart/create-pixelart -->
-        <a class="nav-link" routerLink="pixelart/create-pixelart">Create</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="login/sign-up">Sign Up</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="login">Login</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="login/my-profile">{{ alias }}</a>
-        <!-- <a href="/my-profile" class="nav-link" routerLink="login/my-profile">{{ username }}</a> -->
-      </li>
-      <li class="nav-item">
-        <a href class="nav-link" (click)="logout()">LogOut</a>
-      </li>
-    </ul>
-  </nav>
-  <div class="container">
+  <!-- '.container-fluid' gives a smoother transition when changing screen sizes than '.container' -->
+  <div class="container-fluid">
+    <app-header></app-header>
     <router-outlet></router-outlet>
     <app-footer
     class="position-sticky"
@@ -47,15 +15,10 @@
 </div>
 
 
-
-
-
 <!-- <div class="app-pixelart d-flex flex-column"> -->
   <!-- <app-header> -->
     <!-- [mediaSize]="mediaSize" -->
   <!-- </app-header> -->
-
-
 
   <!-- <router-outlet></router-outlet>
   <app-footer

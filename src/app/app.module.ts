@@ -13,6 +13,8 @@ import { AuthInterceptorService } from './core/helpers/auth-interceptor.service'
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {NoopInterceptor} from "./http-interceptors/noop-interceptor";
 import {httpInterceptorProviders} from "./http-interceptors";
+import { EmailAliasValidatorDirective } from './core/helpers/email-alias-validator.directive';
+import { NG_ASYNC_VALIDATORS } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,10 @@ import {httpInterceptorProviders} from "./http-interceptors";
   ],
   providers: [
     httpInterceptorProviders
+    ,
+    // EmailAliasValidatorDirective
+    {provide: NG_ASYNC_VALIDATORS,
+    useExisting: EmailAliasValidatorDirective, multi: true}
   //   {
   //   provide: HTTP_INTERCEPTORS,
   //   useClass: AuthInterceptorService,

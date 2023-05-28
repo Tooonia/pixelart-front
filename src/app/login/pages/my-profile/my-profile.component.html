@@ -1,52 +1,11 @@
 <!-- 2nd solution -->
-<div *ngIf="isSignedin">
-	<p>Welcome back, {{ signedinUser }}!</p>
+<div *ngIf="isSignedin" >
+  <!-- TODO: ngFor kell ide? ngFor="signedinUser" works without as well-->
+	<p>My profile</p>
+  <p>My alias : {{ signedinUser?.alias }}</p>
+  <p>My email : {{ signedinUser?.userEmail }}</p>
+  <button (click)="goToMyPortfolio()">See my pixelarts</button>
 
-	<div *ngFor="let greet of greeting">
-		{{greet}}
-	</div>
-  <p>
-    Ici faudrait la liste de ses propres pixelart
-    <!-- My pixelarts <<< éventuellement reprenre PortfolioComponent, quand on clique dessus, et
-    un fejlec apparait avec My Pixelarts, + dans l'url: /my-pixelart -->
-  </p>
-  <p>
-    Ici faudrait aussi un bouton pour effacer son compte user
-  </p>
-	<!-- <p><a style="text-decoration: underline; cursor: pointer;" (click)="deleteAccount(idUser)">Delete account</a></p> -->
-	<!-- <p><a style="text-decoration: underline; cursor: pointer;" (click)="deleteAccount(idUser)">Delete account</a></p> -->
+    <!-- "Manage user account" button to insert here!
+	  <p><a style="text-decoration: underline; cursor: pointer;" (click)="deleteAccount(idUser)">Delete account</a></p> -->
 </div>
-
-
-
-
-
-
-<!-- TODO: atirni, h ez a private access, es hogy a token-t ne adjam ki!!!
-Csak: alias, email, my-pixelart lista -->
-
-<!-- <div class="container" *ngIf="currentUser; else loggedOut">
-    <header class="jumbotron">
-      <h3>
-        <strong>{{ currentUser.alias }}</strong> Profile
-      </h3>
-    </header>
-    <p>
-      <strong>Token:</strong>
-      {{ currentUser.accessToken.substring(0, 20) }} ...
-      {{ currentUser.accessToken.substr(currentUser.accessToken.length - 20) }}
-    </p>
-    <p>
-      <strong>Email:</strong>
-      {{ currentUser.email }}
-    </p>
-    <strong>Roles:</strong>
-    <ul>
-      <li *ngFor="let role of currentUser.roles">
-        {{ role }}
-      </li>
-    </ul>
-  </div>
-  <ng-template #loggedOut>
-    Please login.
-  </ng-template> -->

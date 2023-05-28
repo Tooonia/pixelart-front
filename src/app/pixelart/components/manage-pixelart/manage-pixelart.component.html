@@ -1,37 +1,69 @@
- <!-- TODO: sign-up.component.html -->
- <!-- Eventually inside a <div> -->
+<!-- TODO: sign-up.component.html -->
+<!-- Eventually inside a <div> -->
 <mat-card>
     <!-- <mat-card-title class="d-flex"> -->
-        <!-- TODO: internationalisation -->
-        <!-- <p>Title</p> -->
+    <!-- TODO: internationalisation -->
+    <!-- <p>Title</p> -->
     <!-- </mat-card-title> -->
 
     <!-- TODO: step1-project.component.ts for blob image change!!!
     + submission-project.component.html -->
 
-    <mat-card-content class="d-flex">
-        <form 
-            [formGroup]="managePixelartForm"
-            (ngSubmit)="saveAction()">
+    <mat-card-content>
+        <!-- With *ngIf="pixelartItem" inside <form>, the placeholder name is printed out ?! -->
+        <!-- TODO: even without *ngIf="managePixelartForm", and canvas inside the form, or puting the canvas outside the form -->
+        <form [formGroup]="managePixelartForm" (ngSubmit)="saveAction()">
             <!-- class="manage-pixelart-container" -->
-            <div class="d-flex"> 
-                <mat-form-field appearance="standard">
-                    <!-- TODO: internationalisation -->
-                    <mat-label>Title</mat-label>
-                    <!-- TODO: text validation, handle special characters!!! For security! -->
-                    <input type="text" matInput placeholder="Title of pixelart"
-                    formControlName="name" autocomplete="off" required>
-                </mat-form-field>
+            <div class="d-flex">
+                <div class="gridSizeSettingContainer" #gridSizeSettingContainer>
+                    <!-- <p>{{pixelartItem?.name}}</p> -->
+                    <!-- MUKODIK, itt az ertek! -->
+                    <h2>Choose Grid Size</h2>
+                    <!-- TODO: kell ngSubmit ide?  -->
+                    <form id="sizePicker" [formGroup]="manageCanvasForm" (ngSubmit)="onValidateCanvasSize()">
+                        Grid Width:
+                        <input type="number" formControlName="width" id="inputWeight" name="width" min="1" value="1">
+                        Grid Height:
+                        <input type="number" formControlName="height" id="inputHeight" name="height" min="1" value="1">
+                        <button type="button" (click)="onValidateCanvasSize()">Create Canvas</button>
+                    </form>
+                </div>
+                <div class="pixelDrawingBlockContainer" #pixelDrawingBlockContainer>
+                    <div>X: {{mousePosition.x}} | y: {{mousePosition.y}}</div>
+                    <div class="canvasDiv" #canvasDiv>
+                        <!-- ON CANVAS:  width="50"
+            height="50" -->
+                        <!-- sources:
+                https://pauljadam.com/demos/canvas.html
+                https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
+                        <canvas id="pixelCanvas" #myCanvas aria-label="Canvas with the pixels to paint" role="img">
+                        </canvas>
+                    </div>
+                    <div>
+                        <!-- <h2>Pick A Color</h2> -->
+                        <label for="colorPicker" class="labelForColorPicker">Pick a Color:</label>
+                        <input type="color" format="'rgb'" id="colorPicker" #myPickedColor>
+                    </div>
+                    <div>
+                        <mat-form-field appearance="standard">
+                            <!-- TODO: internationalisation -->
+                            <mat-label>Title</mat-label>
+                            <!-- TODO: text validation, handle special characters!!! For security! -->
+                            <!-- TODO: [(ngModel)]="pixelartItem" to add here?  -->
+                            <input type="text" matInput placeholder="Title of pixelart" formControlName="name"
+                                autocomplete="off" required>
+                        </mat-form-field>
+                    </div>
+                </div>
             </div>
         </form>
     </mat-card-content>
 
     <mat-card-actions class="d-flex">
-        <button (click)="cancelAction()">Cancel</button>
-        <button 
-            type="submit"
-            (click)="saveAction()"
-            [disabled]="!isValid">Save</button>
+        <button type="button" (click)="cancelAction()">Cancel</button>
+        <!-- TODO: ide mar nem kell szerintem click="saveAction()" -->
+        <!-- [disabled]="!managePixelartForm.valid" -->
+        <!-- [disabled]="!editMode && name !== null" a name-et nem ismeri fel, meg #name-mel sem az input element-en -->
+        <button type="submit" (click)="saveAction()">Save</button>
     </mat-card-actions>
 </mat-card>
-

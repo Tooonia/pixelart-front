@@ -3,7 +3,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
+import { UserGetItem } from 'src/app/pixelart/model/user-get-item';
 
 @Component({
   selector: 'app-my-profile',
@@ -11,13 +14,10 @@ import { UserService } from 'src/app/core/services/user.service';
   styleUrls: ['./my-profile.component.scss']
 })
 export class MyProfileComponent implements OnInit {
-  
-  @Input() idUser!: number;
+
   isSignedin = false;
-
-	signedinUser: string = '';
-
-	greeting: any[] = [];
+  signedinUser! : UserGetItem;
+  // signedinUser! : UserPrivateItemModel;
 
   private basePath = 'http://localhost:8085/api';
 
@@ -26,29 +26,45 @@ export class MyProfileComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private authService: AuthService,
-    private userService: UserService) {}
+    private userService: UserService,
+    private pixelartService: PixelartService) {}
 
 	ngOnInit() {
 		this.isSignedin = this.authService.isUserSignedin();
-		this.signedinUser = this.authService.getSignedinUser();
-
-		if(!this.authService.isUserSignedin()) {
+    if(!this.authService.isUserSignedin()) {
 			this.router.navigateByUrl('/signin');
 		}
+		// this.signedinUserEmail = this.authService.getSignedinUser();
+    // this.signedinUser = this.authService.getUserInfo();
 
-		// if(this.isSignedin) {
-		// 	this.greetingService.getByUserRole().subscribe((result: string) => this.greeting.push(result), () => console.log('/user - You are not authorize'));
-		// 	this.greetingService.getByAdminRole().subscribe((result: string) => this.greeting.push(result), () => console.log('/admin - You are not authorized'));
-		// 	this.greetingService.getByUserOrAdminRole().subscribe((result: string) => this.greeting.push(result), () => console.log('/userOrAdmin - You are not authorized'));
-		// 	this.greetingService.getByAnonymousRole().subscribe((result: string) => this.greeting.push(result), () => console.log('/anonymous - You are not authorized'));
-		// }
+    // this.userService.getPrivateUserProfile();
+
+    // this.signedinUser = this.userService.getPrivateUserProfile();
+
+    //3rd solution with models!!! Works.
+    // Volt egyy error:az alias-ra azt mondja, h "can not read properties of undefined (reading alias)"
+    // Mikor beirtam egy ?-et a signedInUser moge, eltunt. TODO: atnezni!!!
+      this.userService.getPrivateUserProfile().subscribe(data => {
+        this.signedinUser = data;
+
+        console.log(this.signedinUser.pixelarts);//TODO: Wrong print out in console: pixelarts do not have user property!!!
+        // console.log(this.signedinUser.id);
+        console.log(this.signedinUser);
+        // console.log(this.signedinUser.user_email);
+      }  )
 	}
-  
-  signout(): void {
-    this.authService.signOut();
-    window.location.reload();
 
+  goToMyPortfolio() : void {
+    this.router.navigate(['/pixelart/my-pixelart'])
   }
+
+  // TODO: egyelore nem hasznalom!
+  // signout(): void {
+  //   this.authService.signOut();
+  //   window.location.reload();
+
+  // }
+
   // deleteAccount(idUser: number): void {
   //   // idUser = 25;
   //   this.userService.deleteAccount(idUser).subscribe((resp) => {
@@ -59,14 +75,10 @@ export class MyProfileComponent implements OnInit {
   //   // this.router.navigate(['/pixelart/catalog'])
   // }
 
-  
-  
-  
+
   // 1st solution-hoz
   // currentUser: any;
-  
   // constructor(private token: TokenStorageService) { }
-
   // ngOnInit(): void {
   //   // this.currentUser = this.token.getUser();
   // }

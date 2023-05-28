@@ -4,7 +4,6 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { PixelartItem } from '../../model/pixelart-item';
-import { PixelartModel } from '../../model/pixelart-model';
 
 //TODO: Normally, this will be our home.component.
 // In any case: when Save button is clicked, it should ask to login if not yet!!! And after that login
@@ -58,6 +57,7 @@ export class CreateComponent implements OnInit {
     this.router.navigate(['/pixelart/catalog'])
   }
 
+  // TODO: in the argument of the method, it should be (event : Event) if we have that in .html
   public onSaveCreatePixelart(createdPixelartItem: PixelartItem): void {
     console.log("Received new pixelartItem: ", createdPixelartItem);
     // TODO: needs a user message to pop out: You have to be signed in!

@@ -5,25 +5,32 @@
         <div>Details</div>
         <!-- <div *ngIf="film?.length"> -->
             <!-- TODO: Replace it with "close" button -->
-        <div (click)="closePixelartDetails()">X</div>
+        <div style="cursor: pointer;" (click)="closePixelartDetails()">X</div>
         <div>
-            <!-- TODO: Use <app-manage-pixelart> component instead. See how to name buttons! -->
-            <mat-card >
+            <!-- TODO: Use <app-pixelart-card> component instead. See how to name buttons! -->
+            <mat-card>
+            <!-- (clickedItem)= "pixelartToDisplay"> -->
+            <!-- [pixelartToDisplay]="clickedItem"> -->
+            <!-- (selectedPixelartItem)="pixelartToDisplay"> -->
+
+            <!-- Error in console: Cannot read properties of undefined, but it prints out details correctly! -->
+            <!-- Source of solution: https://stackoverflow.com/questions/53857932/typeerror-cannot-read-property-of-undefined-but-site-works-accurately-angul -->
+            <!-- Other solution:  -->
+                        <!-- <mat-card-content *ngIf="pixelartToDisplay">
+                            <mat-card-title>
+                                {{ pixelartToDisplay.name }} -->
                 <mat-card-content>
                     <mat-card-title>
                         <!-- If pixelartItem set to private in the .ts, then it only works
                             with a get pixelartName() method, what we call then like this here: -->
                               <!-- {{ pixelartItemName }} -->
-                             <!-- TODO: in console, error: Cannot read properties of undefined, but it prints out details correctly! ??? -->
-                        {{ pixelartItem.name }}
-
+                        {{ pixelartToDisplay?.name }}
                     </mat-card-title>
 
-                    <mat-card-actions>
-                        <!-- TODO: buttons only visible if pixelart of the authenticated user!!! *ngIf?
-                        otherwise: only close details button to show!!! -->
-                        <button mat-button (click)="editPixelart(pixelartItem)">Edit art</button>
-                        <button mat-button (click)="deletePixelart(pixelartItem)">Delete art</button>
+                    <mat-card-actions *ngIf="isSignedin && allowToUpdate">
+                        <!-- Maybe: (click)="editPixelart(pixelartItem)=$event" and geting that value to the changed name ?-->
+                        <button mat-button (click)="editPixelart()">Edit art</button>
+                        <button mat-button (click)="deletePixelart()">Delete art</button>
                     </mat-card-actions>
                 </mat-card-content>
             </mat-card>

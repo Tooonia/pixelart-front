@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { PixelartSimpleItem } from 'src/app/pixelart/model/pixelart-simple-item';
 
 /**
  * Class responsible to call the server side REST API
@@ -12,14 +13,11 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class PixelartService {
-
+  pixelartSelected = new EventEmitter<PixelartItem>();
+  pixelartClickedForDetail = new Subject<number>();
   private basePath = 'http://localhost:8085/api';
 
   constructor(private http: HttpClient) { }
-
-public refreshCollection(): void {
-
-}
 
 /**
  * GET all pixelart (catalog)
@@ -27,6 +25,7 @@ public refreshCollection(): void {
  */
   public findAll(): Observable<PixelartItem[]> {
     // Url from the Back
+    console.log('findAll method : ' + this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-catalog`));  // THIS IS object Object also!
     return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-catalog`);
   }
 
@@ -36,19 +35,39 @@ public refreshCollection(): void {
  * @returns
  */
   public getById(id: number): Observable<PixelartItem> {
-    return this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`);
+    console.log('Hello, getById does not work ' + this.http.get<PixelartItem>(`${this.basePath}/pixelart/${id}`));
+    return this.http.get<PixelartItem>((`${this.basePath}/pixelart/${id}`), { responseType: 'json'});
+    // .pipe(
+    //   map((data) => {
+    //     console.log('Ez az uj data: ' + data); // NOT WORKING: Still object Object!!!
+    //     return data;
+    //   }),
+    //   catchError((err, caught) => {
+    //     console.error(err);
+    //     throw err;
+    //   })
+    // );// DOES NOT WORK!!!
   }
 
-// /**
-//  * GET all pixelart from one User
-//  * @param pixelartModel
-//  * @returns
-//  */
-//  This is now in user.service.ts:
-// public getAllPixelArtByUser(id: number): Observable<PixelartItem[]> {
-//   return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-by-user/${id}`)
-// }
-
+/**
+ * GET all pixelart from one User by user id
+ * @param id
+ * @returns
+ */
+  public getAllPixelArtByUser(id: number): Observable<PixelartItem[]> {
+    return this.http.get<PixelartItem[]>(`${this.basePath}/pixelart-by-user/${id}`);
+    // .pipe(
+    //   map((data:any) => new PixelartItemModel[] (
+    //     data.id,
+    //     data.name,
+    //     data.user ? data.user.map((user: any) => new UserPrivateItemModel(
+    //       user.id,
+    //       user.alias,
+    //       user.user_email,
+    //       user.pixelarts
+    //     )) : [] //Megerteni ezt a reszt!
+    //   )));
+  }
 
 /**
  * CREATE pixelart
@@ -61,12 +80,12 @@ public refreshCollection(): void {
   //   catchError(this.handleError('add', pixelartModel))
   // );
   // }
-  public add(pixelartItem: PixelartItem): Observable<PixelartItem> {
-    return this.http.post<PixelartItem>(`${this.basePath}/pixelart-create`, pixelartItem, {
+  public add(pixelartSimpleItem: PixelartSimpleItem): Observable<PixelartSimpleItem> {
+    return this.http.post<PixelartSimpleItem>(`${this.basePath}/pixelart-create`, pixelartSimpleItem, {
       responseType: 'json',
-      // When we had the Bearer token problem previously, we managed to test methods by tiping token value here:
+      // When we had the Bearer token problem previously, we managed to test methods by typing token value here:
       // headers: {
-      //   'Authorization': '***REMOVED***',
+      //   'Authorization': 'Bearer tokenToInsertHereEnDur',
       // }
     });
   }
@@ -87,10 +106,12 @@ public refreshCollection(): void {
    * @param id
    * @returns
    */
-  public deleteById(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.basePath}/pixelart-edit/${id}`, {
+  public deleteById(id: number): Observable<PixelartItem> {
+    return this.http.delete<PixelartItem>(`${this.basePath}/pixelart-edit/${id}`, {
       responseType: 'json',
     });
   }
+
+
 }
 

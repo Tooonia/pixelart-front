@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { CoreModule } from '../core/core.module';
 import { LoginRoutingModule } from './login-routing.module';
 import { MyProfileComponent } from './pages/my-profile/my-profile.component';
+import { PixelartModule } from '../pixelart/pixelart.module';
 
 
 
@@ -20,6 +21,8 @@ import { MyProfileComponent } from './pages/my-profile/my-profile.component';
     SharedModule,
     CoreModule,
     LoginRoutingModule
+    // ,
+    // PixelartModule //Elvileg nem kell ez ide megsem! A model-ek miatt kerult ide, h hozzaferjen!
   ]
 })
 export class LoginModule { }

@@ -1,2 +1,41 @@
-<p>portfolio works!</p>
 <!-- TODO: Maybe doing: ngIf=isConnected, prints then different page title: My Pixelart</p> -->
+<!-- TODO: ide talan az kellene, h egy adott usernek a portfoliojat mutatja, ha meg be vagyunk jelentkezve,
+akkor a sajatunkat, amely rajzait edit/delete-elni is tudjuk. -->
+<div class="container-fluid d-flex">
+  <div fxLayout="row wrap" class="gap d-flex">
+<div>
+    <p *ngIf="!signedinUser?.pixelarts?.length">You don't have any pixelArt yet.</p>
+
+    <!-- TODO: ezt is rendesen atirni angularra! -->
+  <!-- <div *ngFor="let pixelart of pixelarts">
+      <app-pixelart-card></app-pixelart-card> or pixelart-list ???
+  <p>{{ pixelart.name }}</p>
+  </div> -->
+
+    <div *ngIf="signedinUser?.pixelarts?.length">
+      <p>List of you pixelArts:</p>
+  <!-- My pixelarts <<< éventuellement reprendre PortfolioComponent, quand on clique dessus, et
+  un fejlec apparait avec My Pixelarts, + dans l'url: /my-pixelart -->
+<!-- 1st solution with only pixelart titles: -->
+  <!-- <ul *ngFor="let pixelart of signedinUser?.pixelarts"> -->
+      <!-- ici, si je ne respecte pas l'appellation des propriétés de mon code Java,
+      il faudra faire le mapping dans le service, comme c'est le cas actuellement -->
+      <!-- <li>{{ pixelart.name}}</li>
+  </ul> -->
+<!-- TODO: lehet, h ide kell egy FormGroup / FormArray, es annak lesz a neve az index, ahogy n°231!!! same for list!-->
+        <div >
+          <!-- (click)="onGoToDetail(i)" -->
+            <app-pixelart-card
+                *ngFor="let pixelartItem of signedinUser?.pixelarts; let i = index"
+                [pixelartItem]="pixelartItem"
+                >
+
+                <!-- [pixelartItem]="pixelartItem[i]" -->
+
+
+            </app-pixelart-card>
+        </div>
+    </div>
+</div>
+</div>
+</div>
