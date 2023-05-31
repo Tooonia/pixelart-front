@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
 import { catchError, map } from 'rxjs/operators';
 import { PixelartSimpleItem } from 'src/app/pixelart/model/pixelart-simple-item';
+import { PixelartRequestItem } from 'src/app/pixelart/model/pixelart-request-item';
 
 /**
  * Class responsible to call the server side REST API
@@ -71,7 +72,7 @@ export class PixelartService {
 
 /**
  * CREATE pixelart
- * @param pixelartItem //works with pixelartModel as well
+ * @param pixelartSimpleItem //works with pixelartModel as well
  * @returns
  */
   // TODO: Defining handleError() in a separate config.service.ts/http-error-handler.service.ts
@@ -80,8 +81,8 @@ export class PixelartService {
   //   catchError(this.handleError('add', pixelartModel))
   // );
   // }
-  public add(pixelartSimpleItem: PixelartSimpleItem): Observable<PixelartSimpleItem> {
-    return this.http.post<PixelartSimpleItem>(`${this.basePath}/pixelart-create`, pixelartSimpleItem, {
+  public add(pixelartSimpleItem: PixelartRequestItem): Observable<PixelartRequestItem> {
+    return this.http.post<PixelartRequestItem>(`${this.basePath}/pixelart-create`, pixelartSimpleItem, {
       responseType: 'json',
       // When we had the Bearer token problem previously, we managed to test methods by typing token value here:
       // headers: {
@@ -92,11 +93,11 @@ export class PixelartService {
 
 /**
  * UPDATE pixelart by id
- * @param pixelartItem
+ * @param pixelartSimpleItem
  * @returns
  */
-  public update(pixelartToUpdate: PixelartItem): Observable<PixelartItem> {
-    return this.http.put<PixelartItem>(`${this.basePath}/pixelart-edit/${pixelartToUpdate.id}`, pixelartToUpdate, {
+  public update(pixelartToUpdate: PixelartSimpleItem): Observable<PixelartSimpleItem> {
+    return this.http.put<PixelartSimpleItem>(`${this.basePath}/pixelart-edit/${pixelartToUpdate.id}`, pixelartToUpdate, {
       responseType: 'json',
     });
   }

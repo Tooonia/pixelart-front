@@ -8,7 +8,7 @@
         <div style="cursor: pointer;" (click)="closePixelartEditDetails()">X</div>
         <div>
             <app-manage-pixelart
-            [pixelartItem]="pixelartItemToUpdate"
+            [pixelartSimpleItem]="pixelartItemToUpdate"
             (savedAction)="onSaveUpdatePixelart($event)"
             (cancelledAction)="onCancelGoBackToDetails()">
             </app-manage-pixelart>

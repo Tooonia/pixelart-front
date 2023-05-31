@@ -1,5 +1,4 @@
-export interface PixelartSimpleItem {
-    id: number;
+export interface PixelartRequestItem {
     name: string;
     width: number;
     height: number;

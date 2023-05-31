@@ -19,14 +19,16 @@
                     <!-- <p>{{pixelartItem?.name}}</p> -->
                     <!-- MUKODIK, itt az ertek! -->
                     <h2>Choose Grid Size</h2>
-                    <!-- TODO: kell ngSubmit ide?  -->
-                    <form id="sizePicker" [formGroup]="manageCanvasForm" (ngSubmit)="onValidateCanvasSize()">
+                    <!-- TODO: kell ngSubmit ide? FONTOS: nem form-kent kezelni, csak az inputjait formControl-kent?  -->
+                    <!-- <div id="sizePicker" [formGroup]="manageCanvasForm" (ngSubmit)="onValidateCanvasSize()"> -->
+                    <div id="sizePicker">
                         Grid Width:
+                        <!-- TODO: FONTOS: csak pozitiv egesz szamokat engedjen! Form validation!!! -->
                         <input type="number" formControlName="width" id="inputWeight" name="width" min="1" value="1">
                         Grid Height:
                         <input type="number" formControlName="height" id="inputHeight" name="height" min="1" value="1">
                         <button type="button" (click)="onValidateCanvasSize()">Create Canvas</button>
-                    </form>
+                    </div>
                 </div>
                 <div class="pixelDrawingBlockContainer" #pixelDrawingBlockContainer>
                     <div>X: {{mousePosition.x}} | y: {{mousePosition.y}}</div>
@@ -36,6 +38,7 @@
                         <!-- sources:
                 https://pauljadam.com/demos/canvas.html
                 https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
+                <!-- formControlName="pixels" -->
                         <canvas id="pixelCanvas" #myCanvas aria-label="Canvas with the pixels to paint" role="img">
                         </canvas>
                     </div>
@@ -56,14 +59,15 @@
                     </div>
                 </div>
             </div>
+            <mat-card-actions class="d-flex">
+                <button type="button" (click)="cancelAction()">Cancel</button>
+                <!-- TODO: ide mar nem kell szerintem click="saveAction()", GOND: nelkule megsem mukodik!!!-->
+                <!-- [disabled]="!managePixelartForm.valid" -->
+                <!-- [disabled]="!editMode && name !== null" a name-et nem ismeri fel, meg #name-mel sem az input element-en -->
+                <button type="submit" *ngIf="managePixelartForm">Save</button>
+            </mat-card-actions>
         </form>
     </mat-card-content>
 
-    <mat-card-actions class="d-flex">
-        <button type="button" (click)="cancelAction()">Cancel</button>
-        <!-- TODO: ide mar nem kell szerintem click="saveAction()" -->
-        <!-- [disabled]="!managePixelartForm.valid" -->
-        <!-- [disabled]="!editMode && name !== null" a name-et nem ismeri fel, meg #name-mel sem az input element-en -->
-        <button type="submit" (click)="saveAction()">Save</button>
-    </mat-card-actions>
+
 </mat-card>
