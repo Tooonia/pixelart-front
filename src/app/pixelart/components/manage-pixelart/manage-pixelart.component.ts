@@ -6,6 +6,7 @@ import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { map } from 'rxjs/operators';
 import { Point } from '../../model/pixel-coordinates';
 import { Pixel } from '../../model/pixel';
+import { PixelartSimpleItem } from '../../model/pixelart-simple-item';
 //TODO: documention to write for that class!!! Purpose of it?
 
 
@@ -23,9 +24,9 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   // TODO: without in Rudi, public for Jeremy, azt hiszem, a default a public:
   managePixelartForm!: FormGroup;
   manageCanvasForm!: FormGroup;
-  @Input() pixelartItem!: PixelartItem;
-  @Output() savedAction = new EventEmitter<PixelartItem>();
-  @Output() cancelledAction = new EventEmitter<PixelartItem>();
+  @Input() pixelartSimpleItem!: PixelartSimpleItem;
+  @Output() savedAction = new EventEmitter<PixelartSimpleItem>();
+  @Output() cancelledAction = new EventEmitter<PixelartSimpleItem>();
   editMode: boolean = false;
   id!: number;
   context!: CanvasRenderingContext2D | null; //Without "| null" there was an error:
@@ -60,10 +61,10 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.manageCanvasForm = new FormGroup( {
-      'height': new FormControl(0),
-      'width': new FormControl(0)
-    });
+    // this.manageCanvasForm = new FormGroup( {
+    //   'width': new FormControl(0),
+    //   'height': new FormControl(0)
+    // });
 
     // if (this.canvas.nativeElement.getContext('2d', { willReadFrequently: true }) !== null) {
     //   this.context = this.canvas.nativeElement.getContext('2d');
@@ -103,8 +104,12 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
         // title: ['this.pixelartItem.name']
         // id: [''],
        //  name: [''] // Ez volt itt!
-        'name': new FormControl(null) // Ez volt itt!
-
+        'name': new FormControl(''), // Ez volt itt!
+        'width': new FormControl(0),
+        'height': new FormControl(0)
+        // , 'width': new FormControl(null),
+        // 'height': new FormControl(null),
+        // 'pixels': new FormControl(null)
         // id: [this.pixelartItem.id]
       });
       console.log('managePixelartForm: ' + this.managePixelartForm.value); // NEM LATSZIK
@@ -124,15 +129,45 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
         if (this.editMode) {
             this.pixelartService.getById(this.id).subscribe((data: PixelartItem) => {
             // this.pixelartService.getById(this.id).pipe(map((data: PixelartItem) => {
-              this.pixelartItem.name = data.name;
+              this.pixelartSimpleItem.name = data.name;
+              this.pixelartSimpleItem.width = data.width;
+              this.pixelartSimpleItem.height = data.height;
+              this.pixelartSimpleItem.canvas = data.canvas;
+              console.log(data);
+              // console.log('pixels.length ?: ' + this.pixelartItem.pixels.length);
+
+              // TODO: elvileg nem kell ide se az "id", se a "user".
               // this.managePixelartForm.value.name = this.pixelartItem.name;
               this.managePixelartForm.setValue({
-                'name': this.pixelartItem.name
-              })
+                'name': this.pixelartSimpleItem.name,
+                'width': this.pixelartSimpleItem.width,
+                'height': this.pixelartSimpleItem.height
+                // ,
+                // 'width': this.pixelartItem.width,
+                // 'height': this.pixelartItem.height,
+                // 'pixels': this.pixelartItem.pixels
+              });
+              // this.manageCanvasForm.setValue({
+
+              // });
+
+              if (this.canvas.nativeElement.getContext('2d') !== null) {
+                  this.context = this.canvas.nativeElement.getContext('2d');
+
+                  this.onValidateCanvasSize();
+                  // if(this.context) {
+                  //   this.imageData = (this.pixelartItem.pixels, this.pixelartItem.width, this.pixelartItem.height);
+                  //   this.context.putImageData(this.imageData, 0, 0);
+                  // }
+
+
+                }
+
+
               console.log('EZ form name ?' + this.managePixelartForm.value.name);
-              console.log('EZ this.pixelartItem.name ?' + this.pixelartItem.name); //EZ VISZONT MUKODIK! kiirja az eredmeny!!!???
-              console.log('EZ this.pixelartItem.id ?' + this.pixelartItem.id); //object Object csak az eredmeny!!!???
-              console.log('EZ a this.pixelartItem.user : ' + this.pixelartItem.user); //object Object csak az eredmeny!!!???
+              console.log('EZ this.pixelartItem.name ?' + this.pixelartSimpleItem.name); //EZ VISZONT MUKODIK! kiirja az eredmeny!!!???
+              console.log('EZ this.pixelartItem.id ?' + this.pixelartSimpleItem.id); //object Object csak az eredmeny!!!???
+              // console.log('EZ a this.pixelartItem.user : ' + this.pixelartSimpleItem.user); //object Object csak az eredmeny!!!???
               console.log('EZ data.name ?' + data.name);
               console.log('EZ data.id?' + data.id);
 
@@ -321,7 +356,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
 // }
 
   addInteractions() {
-    this.canvas.nativeElement.addEventListener('click', (event) => {
+    this.renderer.listen(this.canvas.nativeElement, 'click', (event) => {
       this.calculateMousePositionInCanvas(event);
       const clickedPixel = this.colorPixel(this.mousePosition);
       console.log('clickedPixel value: ' + clickedPixel);
@@ -348,6 +383,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
       //   this.canvas.nativeElement.offsetTop
       e.offsetX
       , e.offsetY// offsetX and Y values sets the pixel position within the target element (canvas) from its edge.
+      // TODO FONTOS: prevent x/y max width and height coordinate to be valide! 5,2 clicked and added to the
     );
     console.log(e.clientX);
     console.log(e.clientY);
@@ -360,14 +396,68 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   }
 
   public saveAction(): void {
+
+
+
+    if (this.managePixelartForm.valid) {
+      if(this.context) {
+        this.imageData = this.context.getImageData(0,0,this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+      console.log('this.imageData megjelenik?');
+      console.log(this.imageData.data); //HURRAAA!!! Vegre megjelennek az ertekek!!!
+
+    this.pixelartSimpleItem.name = this.managePixelartForm.value.name;
+    console.log(this.managePixelartForm.value.name);
+    // console.log(this.pixelartSimpleItem.name);
+    console.log(this.pixelartSimpleItem);
+    // this.pixelartSimpleItem.width = this.manageCanvasForm.value.width;
+    // this.pixelartSimpleItem.height = this.manageCanvasForm.value.height;
+    this.pixelartSimpleItem.width = this.managePixelartForm.value.width;
+    this.pixelartSimpleItem.height = this.managePixelartForm.value.height;
+
+    this.pixelartSimpleItem.canvas = Array.from(this.imageData.data); //TODO FONTOS: megnezni, h ki lehet-e ezt a value-t jelolni, vagy setValue kell, mint fentebb?
+    console.log('pixelartItem.canvas value at save: ' + this.pixelartSimpleItem.canvas);
     console.log("Current form: ", this.managePixelartForm);
     console.log("Form has been submitted: ", this.managePixelartForm.value);
+    this.savedAction.emit(this.pixelartSimpleItem);
+  }
+  }
+
+
+
+
+    // this.pixelartItem.name = this.managePixelartForm.value.name;
+    // console.log(this.managePixelartForm.value.name);
+    // console.log(this.pixelartItem.name);
+    // console.log(this.pixelartItem);
+    // this.pixelartItem.width = this.manageCanvasForm.value.width;
+    // this.pixelartItem.height = this.manageCanvasForm.value.height;
+    // this.pixelartItem.canvas = Array.from(this.imageData.data); //TODO FONTOS: megnezni, h ki lehet-e ezt a value-t jelolni, vagy setValue kell, mint fentebb?
+    // console.log('pixelartItem.canvas value at save: ' + this.pixelartItem.canvas);
+    // console.log("Current form: ", this.managePixelartForm);
+    // console.log("Form has been submitted: ", this.managePixelartForm.value);
 // Previously, but I think this is not the managePixelartForm that should be sent with emit:
     // this.savedAction.emit(this.managePixelartForm.value);
     // this.pixelartItem = this.managePixelartForm.value;
     // this.savedAction.emit(this.pixelartItem);
-    this.savedAction.emit(this.managePixelartForm.value);
+    // this.imageData = new ImageData(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    // if(this.context) {
+    //   this.imageData = this.context.getImageData(0,0,this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    // console.log('this.imageData megjelenik?');
+    // console.log(this.imageData.data); //HURRAAA!!! Vegre megjelennek az ertekek!!!
+    // this.managePixelartForm.value.width = this.manageCanvasForm.value.width;
+    // this.managePixelartForm.value.height = this.manageCanvasForm.value.height;
+    // this.managePixelartForm.value.pixels = this.imageData; //TODO FONTOS: megnezni, h ki lehet-e ezt a value-t jelolni, vagy setValue kell, mint fentebb?
+    // }
+    // this.savedAction.emit(this.managePixelartForm.value); //TODO FONTOS: megnezni, h egybe kell-e vegyem a ket form-ot
+
+
+
+    // }
+
+    // this.savedAction.emit(this.pixelartItem);
+   //TODO FONTOS: megnezni, h egybe kell-e vegyem a ket form-ot
   }
+
 // reuse-declaration.component.ts, clickCancel()
   public cancelAction(): void {
     // TODO: with route-history.service.ts, to goBackIfPossibleToGoBack()
@@ -377,20 +467,31 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
     // Previously, but I think this is not the managePixelartForm that should be sent with emit:
     // this.cancelledAction.emit(this.managePixelartForm.value)
     // this.pixelartItem = this.managePixelartForm.value; //TODO: amikor forditva voltak az = ket vegen, nem mukodott!!!
-    this.cancelledAction.emit(this.pixelartItem); //TODO: maybe no need to have an eventemitter<PixelItem> on that function?
+    this.cancelledAction.emit(this.pixelartSimpleItem); //TODO: maybe no need to have an eventemitter<PixelItem> on that function?
   }
 
-  onValidateCanvasSize() {
+  onValidateCanvasSize() { //TODO: rendszerezni a benne levo dolgokat, editMode reszt, ...
     // this.canvasHeight = this.manageCanvasForm.value.height;
     // this.canvasWidth = this.manageCanvasForm.value.width;
-    this.canvas.nativeElement.width = this.manageCanvasForm.value.width;
-    this.canvas.nativeElement.height = this.manageCanvasForm.value.height;
+
+    if (this.editMode) {
+      this.canvas.nativeElement.width = this.pixelartSimpleItem.width; // TODO: vagy: this.manageCanvasForm.value.width, as fentebb kijelolve!
+      this.canvas.nativeElement.height = this.pixelartSimpleItem.height;
+    } else {
+        this.canvas.nativeElement.width = this.managePixelartForm.value.width;
+        this.canvas.nativeElement.height = this.managePixelartForm.value.height;
+        this.makeGrid(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    }
+
+
+    // this.renderer.setAttribute(this.canvas.nativeElement, 'height', this.manageCanvasForm.value.height);
+    // this.renderer.setAttribute(this.canvas.nativeElement, 'width', this.manageCanvasForm.value.width);
 
     // this.canvasColor = this.manageCanvasForm.value.color;
     // this.manageCanvasForm.setValue({}, {emitEvent: false});//TODO: nem kellene megis ide valami a server fele?
     this.renderer.setStyle(this.canvas.nativeElement, 'display', 'block');
     // const rectCanvas = this.canvas.nativeElement.getBoundingClientRect();
-    this.makeGrid(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+
     // if (this.containerDivForCanvas.nativeElement.getAttribute('width') !== null) {
       this.scaleToSize =
                       (this.canvas.nativeElement.width >= this.canvas.nativeElement.height ?
@@ -401,9 +502,14 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
           console.log('MathFloor: ' + Math.floor(380/this.canvas.nativeElement.width));
           // console.log('divWidth: ' + this.containerDivForCanvas.nativeElement.offsetWidth);
     // }
-    // this.renderer.setStyle(this.canvas.nativeElement, 'transform', `scale(${ this.scaleToSize })`); // Can have incorrect CSS values applied to them.
-    this.renderer.setStyle(this.canvas.nativeElement, 'scale', this.scaleToSize);
+    this.renderer.setStyle(this.canvas.nativeElement, 'transform', `scale(${ this.scaleToSize })`); // Can have incorrect CSS values applied to them.
+    // this.renderer.setStyle(this.canvas.nativeElement, 'scale', this.scaleToSize);
     console.log('canvas size after resizing: ' + this.canvas.nativeElement.width, this.canvas.nativeElement.height); //20 20 values, ha 20x20as gridet csinaltam, amugy 380x380px.
+    console.log(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    // this.renderer.setProperty(this.canvas.nativeElement, 'height', '380px');
+    // this.renderer.setProperty(this.canvas.nativeElement, 'width', '380px');
+    console.log(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+
     this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'block');
     this.renderer.setStyle(this.containerDivForGridSizeSetting.nativeElement, 'display', 'none');
 
@@ -427,8 +533,25 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
       this.addInteractions();
     }
 
+    if (this.editMode) {
+      this.imageData = new ImageData(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+      for (let i = 0; i < this.imageData.data.length; i += 1) {
+        console.log('data.length az onValidateCanvasban: ' + this.imageData.data.length);
+        if (this.pixelartSimpleItem.canvas[i] <= 255 && this.pixelartSimpleItem.canvas[i] >= 0) {
+          this.imageData.data[i] = this.pixelartSimpleItem.canvas[i];
+        }
+        // this.imageData.data.length === this.pixelartItem.pixels.length &&
+
+        if (this.context) {
+          this.context.putImageData(this.imageData, 0, 0);
+        }
+
+    }
+  } else {
+
 
     this.imageData = new ImageData(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+
     console.log('this.imageData az elejen: ' + this.imageData);
     // console.log('this.imageData.colorSpace az elejen: ' + this.imageData.colorSpace);
     console.log('this.imageData.data az elejen: ' + this.imageData.data);
@@ -436,6 +559,8 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
     console.log('this.imageData.height az elejen: ' + this.imageData.height);
     console.log('this.imageData.width az elejen: ' + this.imageData.width);
     console.log('this.imageData az elejen: ' + this.imageData);
+    console.log('this.imageData az elejen: ' + this.imageData.data.length);
+  }
 //     const blueComponent = this.imageData.data[50 * (this.imageData.width * 4) + 200 * 4 + 2];
 //     console.log('blueComponent: ' + blueComponent);
 //     const numBytes = this.imageData.data.length;
@@ -526,10 +651,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
       this.context.fillStyle = pickedColorToSet;
       console.log('fillStyle value: '+ this.context.fillStyle);
       this.context.fillRect(pixelToColor.x, pixelToColor.y, pixelToColor.width, pixelToColor.height);
-
     }
-
-
     // this.renderer.setStyle(pixelToColor, 'background-color', pickedColorToSet);
     return pixelToColor;
     // this.renderer.listen('myCanvas', 'click',(e:Event)=>{

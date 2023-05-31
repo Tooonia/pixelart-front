@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { PixelartItem } from '../../model/pixelart-item';
+import { PixelartSimpleItem } from '../../model/pixelart-simple-item';
 
 
 // Error message: "mat-form-field must contain a MatFormFieldControl"!!!
@@ -14,7 +15,7 @@ import { PixelartItem } from '../../model/pixelart-item';
 })
 export class UpdateComponent implements OnInit {
 
-  public pixelartItemToUpdate!: PixelartItem;
+  public pixelartItemToUpdate!: PixelartSimpleItem;
 
   constructor(
     private pixelartService: PixelartService,
@@ -34,13 +35,17 @@ export class UpdateComponent implements OnInit {
     })
   }
 
-  public onSaveUpdatePixelart(modifiedPixelartItem: PixelartItem): void {
+  public onSaveUpdatePixelart(modifiedPixelartItem: PixelartSimpleItem): void {
     console.log(modifiedPixelartItem);
     console.log(this.pixelartItemToUpdate.id);
     // On vient de rajouter l'id dans le payload/dans le body de la requête:
-    modifiedPixelartItem.id = this.pixelartItemToUpdate.id;
-    this.pixelartService.update(modifiedPixelartItem).subscribe(() => {
-      this.router.navigate(['pixelart', modifiedPixelartItem.id])
+    // this.pixelartItemToUpdate.id = modifiedPixelartItem.id; // Eredetileg csak ez volt itt, es update worked with, de szerintem kell a tobbi is!
+    this.pixelartItemToUpdate.name = modifiedPixelartItem.name;
+    this.pixelartItemToUpdate.width = modifiedPixelartItem.width;
+    this.pixelartItemToUpdate.height = modifiedPixelartItem.height;
+    this.pixelartItemToUpdate.canvas = modifiedPixelartItem.canvas;
+    this.pixelartService.update(this.pixelartItemToUpdate).subscribe(() => {
+      this.router.navigate(['pixelart', this.pixelartItemToUpdate.id])
     })
   }
 

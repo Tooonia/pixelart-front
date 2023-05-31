@@ -71,7 +71,7 @@ export class PixelartService {
 
 /**
  * CREATE pixelart
- * @param pixelartItem //works with pixelartModel as well
+ * @param pixelartSimpleItem //works with pixelartModel as well
  * @returns
  */
   // TODO: Defining handleError() in a separate config.service.ts/http-error-handler.service.ts
@@ -92,11 +92,11 @@ export class PixelartService {
 
 /**
  * UPDATE pixelart by id
- * @param pixelartItem
+ * @param pixelartSimpleItem
  * @returns
  */
-  public update(pixelartToUpdate: PixelartItem): Observable<PixelartItem> {
-    return this.http.put<PixelartItem>(`${this.basePath}/pixelart-edit/${pixelartToUpdate.id}`, pixelartToUpdate, {
+  public update(pixelartToUpdate: PixelartSimpleItem): Observable<PixelartSimpleItem> {
+    return this.http.put<PixelartSimpleItem>(`${this.basePath}/pixelart-edit/${pixelartToUpdate.id}`, pixelartToUpdate, {
       responseType: 'json',
     });
   }
