@@ -64,7 +64,7 @@
                 <!-- TODO: ide mar nem kell szerintem click="saveAction()", GOND: nelkule megsem mukodik!!!-->
                 <!-- [disabled]="!managePixelartForm.valid" -->
                 <!-- [disabled]="!editMode && name !== null" a name-et nem ismeri fel, meg #name-mel sem az input element-en -->
-                <button type="submit">Save</button>
+                <button type="submit" *ngIf="managePixelartForm">Save</button>
             </mat-card-actions>
         </form>
     </mat-card-content>

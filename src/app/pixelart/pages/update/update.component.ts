@@ -38,12 +38,7 @@ export class UpdateComponent implements OnInit {
   public onSaveUpdatePixelart(modifiedPixelartItem: PixelartSimpleItem): void {
     console.log(modifiedPixelartItem);
     console.log(this.pixelartItemToUpdate.id);
-    // On vient de rajouter l'id dans le payload/dans le body de la requête:
-    // this.pixelartItemToUpdate.id = modifiedPixelartItem.id; // Eredetileg csak ez volt itt, es update worked with, de szerintem kell a tobbi is!
-    this.pixelartItemToUpdate.name = modifiedPixelartItem.name;
-    this.pixelartItemToUpdate.width = modifiedPixelartItem.width;
-    this.pixelartItemToUpdate.height = modifiedPixelartItem.height;
-    this.pixelartItemToUpdate.canvas = modifiedPixelartItem.canvas;
+    this.pixelartItemToUpdate = modifiedPixelartItem; // TODO: FURCSA: e nelkul is mukodik!
     this.pixelartService.update(this.pixelartItemToUpdate).subscribe(() => {
       this.router.navigate(['pixelart', this.pixelartItemToUpdate.id])
     })

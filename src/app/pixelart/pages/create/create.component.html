@@ -21,8 +21,8 @@
             (cancelledAction)="onCancelGoBackToCatalog()">
             </app-manage-pixelart> -->
             <app-manage-pixelart
-            [pixelartSimpleItem]="pixelartItemToCreate"
-            (savedAction)="onSaveCreatePixelart($event)"
+            [pixelarRequestItem]="pixelartItemToCreate"
+            (savedActionForCreate)="onSaveCreatePixelart($event)"
             (cancelledAction)="onCancelGoBackToCatalog()">
             </app-manage-pixelart>
         </div>

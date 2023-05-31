@@ -5,6 +5,7 @@ import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { PixelartItem } from '../../model/pixelart-item';
 import { PixelartSimpleItem } from '../../model/pixelart-simple-item';
+import { PixelartRequestItem } from '../../model/pixelart-request-item';
 
 //TODO: Normally, this will be our home.component.
 // In any case: when Save button is clicked, it should ask to login if not yet!!! And after that login
@@ -18,7 +19,12 @@ import { PixelartSimpleItem } from '../../model/pixelart-simple-item';
 export class CreateComponent implements OnInit {
   // public pixelartItemToCreate = new PixelartItem();
   // public pixelartItem!: PixelartItem;
-  public pixelartItemToCreate!: PixelartSimpleItem;
+  public pixelartItemToCreate: PixelartRequestItem = {
+    'name': '',
+    'width': 0,
+    'height': 0,
+    'canvas': ([])
+  };
   // public newPixelartModel = new PixelartModel();
   // public pixelartItemToCreate = new PixelartcreateModel();
   // newPixelartModel = {} as PixelartModel;
@@ -45,9 +51,7 @@ export class CreateComponent implements OnInit {
 		// 	this.router.navigateByUrl('/signin');
 		// }
 
-
-			// this.router.navigateByUrl('/pixelart/create-pixelart');
-
+		// this.router.navigateByUrl('/pixelart/create-pixelart');
   }
 
   public closeCreateNewPixelart(): void {
@@ -59,29 +63,27 @@ export class CreateComponent implements OnInit {
   }
 
   // TODO: in the argument of the method, it should be (event : Event) if we have that in .html
-  public onSaveCreatePixelart(createdPixelartItem: PixelartSimpleItem): void {
+  public onSaveCreatePixelart(createdPixelartItem: PixelartRequestItem): void {
     console.log("Received new pixelartItem: ", createdPixelartItem);
     // TODO: needs a user message to pop out: You have to be signed in!
     // Ideal process: when Save button clicked, and user is not signed in, navigating to Signin, where user
     // can also process Signup, and the once loged in, the program goes back to the pixelart to be saved, so
     // at the process of the creation. Changes are saved in the browser (?)
-    // this.pixelartItemToCreate = createdPixelartItem; //TODO: nem koherens az update method-dal! Mit veszek a method-ba add()-hez?
-    this.pixelartItemToCreate.name = createdPixelartItem.name;
-    this.pixelartItemToCreate.width = createdPixelartItem.width;
-    this.pixelartItemToCreate.height = createdPixelartItem.height;
-    this.pixelartItemToCreate.canvas = createdPixelartItem.canvas;
-    this.pixelartService.add(this.pixelartItemToCreate).subscribe(() => {
-      // When navigating, the catalog is shown as updated
-      this.router.navigate(['/pixelart/catalog'])
-    })
-
-    // PROBA:
-    // this.pixelartService.add(this.pixelartItemToCreate).subscribe({
-    //   next: data => {
-    //     setTimeout(() => {
-    //       this.router.navigate(['/pixelart/catalog']);
-    //     }, 2000);
-    //   }
-    // })
-  }
+    this.pixelartItemToCreate = createdPixelartItem; //TODO: nem koherens az update method-dal! Mit veszek a method-ba add()-hez?
+    // this.pixelartItemToCreate.name = createdPixelartItem.name;
+    // this.pixelartItemToCreate.width = createdPixelartItem.width;
+    // this.pixelartItemToCreate.height = createdPixelartItem.height;
+    // this.pixelartItemToCreate.canvas = createdPixelartItem.canvas;
+    this.pixelartService.add(this.pixelartItemToCreate).subscribe(() =>
+          this.router.navigate(['/pixelart/catalog'])
+       );}
+  //   this.pixelartService.add(this.pixelartItemToCreate).subscribe({
+  //     next: data => {
+  //       setTimeout(() => {
+  //         // window.location.reload();
+  //         this.router.navigate(['/pixelart/catalog'])
+  //       }, 2000);},
+  //       error: err => {
+  //         console.log(err);
+  // }});}
 }

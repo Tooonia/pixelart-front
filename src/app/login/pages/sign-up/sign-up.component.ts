@@ -180,7 +180,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.signupSubscription.unsubscribe();
-    this.userSubscription?.unsubscribe();
+    this.userSubscription?.unsubscribe(); //TODO: miert van itt '?' ?
     // if(this.userSubscription instanceof Subscriber) {
     //   this.userSubscription.unsubscribe();
     // } //WORKS ALSO.

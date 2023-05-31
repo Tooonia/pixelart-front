@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { Point } from '../../model/pixel-coordinates';
 import { Pixel } from '../../model/pixel';
 import { PixelartSimpleItem } from '../../model/pixelart-simple-item';
+import { PixelartRequestItem } from '../../model/pixelart-request-item';
 //TODO: documention to write for that class!!! Purpose of it?
 
 
@@ -25,7 +26,9 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   managePixelartForm!: FormGroup;
   manageCanvasForm!: FormGroup;
   @Input() pixelartSimpleItem!: PixelartSimpleItem;
+  @Input() pixelarRequestItem!: PixelartRequestItem;
   @Output() savedAction = new EventEmitter<PixelartSimpleItem>();
+  @Output() savedActionForCreate = new EventEmitter<PixelartRequestItem>();
   @Output() cancelledAction = new EventEmitter<PixelartSimpleItem>();
   editMode: boolean = false;
   id!: number;
@@ -270,6 +273,12 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
         // this.colorPixel();
         // this.createUserEvents();
         // this.addInteractions();
+        this.pixelarRequestItem = {
+          'name': '',
+          'width': 0,
+          'height': 0,
+          'canvas': ([])
+        }
       }
 
     // this.canvas.nativeElement.addEventListener('click', this.colorPixel.bind(this));
@@ -396,29 +405,31 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   }
 
   public saveAction(): void {
-
-
-
     if (this.managePixelartForm.valid) {
       if(this.context) {
         this.imageData = this.context.getImageData(0,0,this.canvas.nativeElement.width, this.canvas.nativeElement.height);
       console.log('this.imageData megjelenik?');
       console.log(this.imageData.data); //HURRAAA!!! Vegre megjelennek az ertekek!!!
 
-    this.pixelartSimpleItem.name = this.managePixelartForm.value.name;
-    console.log(this.managePixelartForm.value.name);
-    // console.log(this.pixelartSimpleItem.name);
-    console.log(this.pixelartSimpleItem);
-    // this.pixelartSimpleItem.width = this.manageCanvasForm.value.width;
-    // this.pixelartSimpleItem.height = this.manageCanvasForm.value.height;
-    this.pixelartSimpleItem.width = this.managePixelartForm.value.width;
-    this.pixelartSimpleItem.height = this.managePixelartForm.value.height;
+    if (this.editMode) {
+      this.pixelartSimpleItem.name = this.managePixelartForm.value.name;
+      this.pixelartSimpleItem.width = this.managePixelartForm.value.width;
+      this.pixelartSimpleItem.height = this.managePixelartForm.value.height;
+      this.pixelartSimpleItem.canvas = Array.from(this.imageData.data); //TODO FONTOS: megnezni, h ki lehet-e ezt a value-t jelolni, vagy setValue kell, mint fentebb?
+      this.savedAction.emit(this.pixelartSimpleItem);
+    } else {
+        this.pixelarRequestItem.name = this.managePixelartForm.value.name;
+        this.pixelarRequestItem.width = this.managePixelartForm.value.width;
+        this.pixelarRequestItem.height = this.managePixelartForm.value.height;
+        this.pixelarRequestItem.canvas = Array.from(this.imageData.data); //TODO FONTOS: megnezni, h ki lehet-e ezt a value-t jelolni, vagy setValue kell, mint fentebb?
+        this.savedActionForCreate.next(this.pixelarRequestItem);
+    }
 
-    this.pixelartSimpleItem.canvas = Array.from(this.imageData.data); //TODO FONTOS: megnezni, h ki lehet-e ezt a value-t jelolni, vagy setValue kell, mint fentebb?
-    console.log('pixelartItem.canvas value at save: ' + this.pixelartSimpleItem.canvas);
-    console.log("Current form: ", this.managePixelartForm);
-    console.log("Form has been submitted: ", this.managePixelartForm.value);
-    this.savedAction.emit(this.pixelartSimpleItem);
+    //     console.log('pixelartItem.canvas value at save: ' + this.pixelartSimpleItem.canvas);
+    // console.log("Current form: ", this.managePixelartForm);
+    // console.log("Form has been submitted: ", this.managePixelartForm.value);
+    // this.savedAction.emit(this.pixelartSimpleItem);
+
   }
   }
 
