@@ -9,13 +9,24 @@ Elvileg ez pont igy tortenik: az EventEmitter a pixelartService-ben van, itt ped
                 <mat-card-content>
                     <!-- TODO: Ide kell valami, ha selected (amikor gombok: Update & Delete),
             vagy ha csak meg akarom jeleniteni az adatait -->
-                    <div>
+                    <div class="d-flex">
                         <!-- This class is supposed to display only the pixelart image, and used for list-container only
             TODO: or see how is it possible to display only parts when is used for 'List', and when used for 'Details' -->
                         {{pixelartItem.name}}
                         <!-- {{pixelartItem.name}} by {{pixelartItem.user}} -->
                     </div>
+                    <div class="canvasDiv" #canvasDiv>
+                        <!-- ON CANVAS:  width="50"
+            height="50" -->
+                        <!-- sources:
+                https://pauljadam.com/demos/canvas.html
+                https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
+                <!-- formControlName="pixels" -->
+                        <canvas id="pixelCanvas" #myCanvas aria-label="Canvas with the pixels to paint" role="img">
+                        </canvas>
+                    </div>
                 </mat-card-content>
+                <!-- TODO: ide kell a cim es a pixelart rajz!!! how do I create the canvas from the saved pixel reference numbers? -->
 
             </mat-card>
         </div>
