@@ -1,3 +1,26 @@
 // .container > mat-card {
 //     width: 200px;
 // }
+// TODO: ugyanaz, mint a manage-pixelart.component.scss-ben mutualiser!!! 
+#pixelCanvas {
+    margin: auto;
+    // width: 200px; //Without these 2 dimension settings, the canvas stays at its sizes set in the HTML on canvas element.
+    // height: 200px;
+    // transform: scale(10);
+    // padding: 50px;
+    image-rendering: pixelated; //Renders the colored pixels really net, not blurred.
+    // border: 1px solid grey; // Somehow a little "double-border" with the border of the parent div, but missing border lines without.
+    // TODO: If transform scale is set, then the 1px border is huge, also scaled up!
+    cursor: pointer;
+}
+
+.canvasDiv {
+    border: 1px solid darkgrey;
+    width: 400px;
+    // width: fit-content;
+    height: 400px;
+    // height: fit-content;
+    align-content: center;
+    display: flex;
+    flex-wrap: wrap;
+}

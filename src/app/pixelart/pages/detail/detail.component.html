@@ -24,8 +24,19 @@
                         <!-- If pixelartItem set to private in the .ts, then it only works
                             with a get pixelartName() method, what we call then like this here: -->
                               <!-- {{ pixelartItemName }} -->
-                        {{ pixelartToDisplay?.name }}
+                        {{ pixelartToDisplay.name }}
                     </mat-card-title>
+                    <!-- <div class="canvasDiv" #canvasDiv> -->
+                        <!-- If set like that within that div, only the pixel color references are printed out to the screen!!! -->
+                        <!-- {{ pixelartToDisplay?.canvas}}
+                        ALSO: I am repeting the code from manage-pixelart.html!!! -->
+                        <!-- <canvas id="pixelCanvas" #myCanvas aria-label="Canvas with the pixels to paint" role="img"></canvas> -->
+                    <!-- </div> -->
+
+                    <app-pixelart-card
+                        [pixelartItem]="pixelartToDisplay"
+                        [index]="pixelartToDisplay.id">
+                    </app-pixelart-card>
 
                     <mat-card-actions *ngIf="isSignedin && allowToUpdate">
                         <!-- Maybe: (click)="editPixelart(pixelartItem)=$event" and geting that value to the changed name ?-->

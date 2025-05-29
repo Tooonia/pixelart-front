@@ -53,6 +53,13 @@ pixelartToDisplay! : PixelartItem;
 
         this.pixelartService.getById(this.id).subscribe((data: PixelartItem) => {
             this.pixelartToDisplay = data;
+            // this.pixelartToDisplay.id = data.id;
+            // this.pixelartToDisplay.name = data.name;
+            // this.pixelartToDisplay.width = data.id;
+            // this.pixelartToDisplay.height = data.id;
+            // this.pixelartToDisplay.canvas = data.canvas;
+            // this.pixelartToDisplay.user = data.user;
+
             console.log('EZ A DETAIL : ' +this.pixelartToDisplay); //object Object ez is!!! NEM MUKODIK!!!
             // console.log(this.isSignedin);
             // console.log(this.authService.getSignedinUser());
