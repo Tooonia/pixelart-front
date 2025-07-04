@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Route, Router } from '@angular/router';
 import { PixelartItem } from '../../model/pixelart-item';
 import { PixelartService } from 'src/app/core/services/pixelart.service';
@@ -23,8 +23,8 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   @ViewChild('gridSizeSettingContainer', {static: true}) containerDivForGridSizeSetting!: ElementRef;
   @ViewChild('canvasDiv', {static: true}) containerDivForCanvas!: ElementRef;
   // TODO: without in Rudi, public for Jeremy, azt hiszem, a default a public:
-  managePixelartForm!: FormGroup;
-  manageCanvasForm!: FormGroup;
+  managePixelartForm!: UntypedFormGroup;
+  manageCanvasForm!: UntypedFormGroup;
   @Input() pixelartSimpleItem!: PixelartSimpleItem;
   @Input() pixelarRequestItem!: PixelartRequestItem;
   @Output() savedAction = new EventEmitter<PixelartSimpleItem>();
@@ -50,7 +50,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   pixelsClicked: Pixel[] = [];
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private route:  ActivatedRoute,
     private pixelartService: PixelartService,
@@ -102,14 +102,14 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
     // console.log('Initialization elott : ' + this.managePixelartForm.value); // NEM LATSZIK
       // console.log('Initialization elott : ' + this.pixelartItem.name); // NEM LATSZIK
       // this.managePixelartForm = this.formBuilder.group( { // NEM LATSZIK
-      this.managePixelartForm = new FormGroup( {
+      this.managePixelartForm = new UntypedFormGroup( {
 
         // title: ['this.pixelartItem.name']
         // id: [''],
        //  name: [''] // Ez volt itt!
-        'name': new FormControl(''), // Ez volt itt!
-        'width': new FormControl(0),
-        'height': new FormControl(0)
+        'name': new UntypedFormControl(''), // Ez volt itt!
+        'width': new UntypedFormControl(0),
+        'height': new UntypedFormControl(0)
         // , 'width': new FormControl(null),
         // 'height': new FormControl(null),
         // 'pixels': new FormControl(null)
