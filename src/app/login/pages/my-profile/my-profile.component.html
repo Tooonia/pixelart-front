@@ -2,8 +2,8 @@
 <div *ngIf="isSignedin" >
   <!-- TODO: ngFor kell ide? ngFor="signedinUser" works without as well-->
 	<p>My profile</p>
-  <p>My alias : {{ signedinUser?.alias }}</p>
-  <p>My email : {{ signedinUser?.userEmail }}</p>
+  <p>My alias : {{ signedinUser.alias }}</p>
+  <p>My email : {{ signedinUser.userEmail }}</p>
   <button (click)="goToMyPortfolio()">See my pixelarts</button>
 
     <!-- "Manage user account" button to insert here!
