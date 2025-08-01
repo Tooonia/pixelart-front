@@ -1,8 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
-import {MatCardModule} from '@angular/material/card';
+import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
 import {NgxNavbarModule} from 'ngx-bootstrap-navbar';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 
