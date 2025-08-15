@@ -75,19 +75,19 @@
 				"serve": {
 					"builder": "@angular-devkit/build-angular:dev-server",
 					"configurations": {
-						"production": {
-							"browserTarget": "pixelart-front:build:production"
+            "production": {
+              "buildTarget": "pixelart-front:build:production"
 						},
-						"development": {
-							"browserTarget": "pixelart-front:build:development"
+            "development": {
+              "buildTarget": "pixelart-front:build:development"
 						}
 					},
 					"defaultConfiguration": "development"
 				},
 				"extract-i18n": {
 					"builder": "@angular-devkit/build-angular:extract-i18n",
-					"options": {
-						"browserTarget": "pixelart-front:build"
+          "options": {
+            "buildTarget": "pixelart-front:build"
 					}
 				},
 				"test": {
