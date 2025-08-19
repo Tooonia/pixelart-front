@@ -7,7 +7,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CoreModule } from './core/core.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptorService } from './core/helpers/auth-interceptor.service'
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
@@ -26,8 +25,7 @@ import { NG_ASYNC_VALIDATORS } from '@angular/forms';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatToolbarModule,
-    CoreModule,
-    NgbModule
+    CoreModule
   ],
   providers: [
     httpInterceptorProviders
