@@ -1,8 +1,34 @@
-// TODO: From list-container.component, but not good!!!:
-// .gap {
-//     gap: 16px;
-// }
+.portfolio-page {
+    padding: 20px 0;
+}
 
-// .container-fluid {
-//     justify-content: center;
-// }
+.portfolio-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+    .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .portfolio-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .portfolio-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
