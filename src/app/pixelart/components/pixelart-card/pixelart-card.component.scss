@@ -1,26 +1,49 @@
-// .container > mat-card {
-//     width: 200px;
-// }
 // TODO: ugyanaz, mint a manage-pixelart.component.scss-ben mutualiser!!! 
-#pixelCanvas {
-    margin: auto;
-    // width: 200px; //Without these 2 dimension settings, the canvas stays at its sizes set in the HTML on canvas element.
-    // height: 200px;
-    // transform: scale(10);
-    // padding: 50px;
-    image-rendering: pixelated; //Renders the colored pixels really net, not blurred.
-    // border: 1px solid grey; // Somehow a little "double-border" with the border of the parent div, but missing border lines without.
-    // TODO: If transform scale is set, then the 1px border is huge, also scaled up!
-    cursor: pointer;
+.pixelart-card {
+    width: 100%;
 }
 
-.canvasDiv {
-    border: 1px solid darkgrey;
-    width: 400px;
-    // width: fit-content;
-    height: 400px;
-    // height: fit-content;
-    align-content: center;
+.card {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    height: 100%;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card-content {
+    padding: 1rem;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.canvas-container {
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+#pixelCanvas {
+    margin: auto;
+    image-rendering: pixelated;
+    cursor: pointer;
+    max-width: 100%;
+    max-height: 100%;
 }
