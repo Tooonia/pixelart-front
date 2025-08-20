@@ -44,6 +44,7 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, {
     // Angular 17 recommended configuration
     preloadingStrategy: PreloadAllModules,
+    // It allows that the child routes of loadComponent routes inherit data from their parent
     paramsInheritanceStrategy: 'always',
     // Angular 17: Enable new router features
     enableTracing: false, // Set to true for debugging
