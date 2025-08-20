@@ -1,67 +1,65 @@
-<!-- Elvileg automatikusan d-flex -->
-<!-- TODO: href and routerLink is often used together! Why? <a class="navbar-brand" href="#" routerLink="home">PixelArt</a> -->
+<header class="header">
+  <nav class="header-nav">
+    <div class="header-container">
+      <div class="header-brand">
+        <a class="brand-link" routerLink="home">
+          <img src="https://s5.postimg.cc/dile2165z/Flower_Image.png" alt="Logo" width="30" height="24" class="brand-logo">
+          <span class="brand-text">PixelArt</span>
+        </a>
+      </div>
 
-<!-- Wrapping everything inside a <div class="container"> would add extra space around -->
+      <!-- Hamburger menu button for mobile -->
+      <button class="hamburger-menu" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen" aria-label="Toggle navigation menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
 
-<!-- 'navbar-expand-sm' sets the navbar to collapse on xs screen size. -->
-<nav class="navbar navbar-expand-sm bg-light"
-  aria-label="navbar-desktop">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerPixelartMenu"
-      aria-controls="navbarTogglerPixelartMenu" aria-expanded="false" aria-label="Toggle navigation" #toggleButton>
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <!-- Neha header-en belul a button es a logoprofile -->
-    <div class="navbar-header">
-      <a class="navbar-brand" routerLink="home">
-        <img src="https://s5.postimg.cc/dile2165z/Flower_Image.png" alt="Logo" width="30" height="24"
-          class="d-inline-block align-text-top">
-        PixelArt</a>
-    </div>
+      <!-- Mobile menu overlay -->
+      <div class="mobile-menu-overlay" [class.show]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
 
-    <!-- ms-auto on the navbar-nav "ul" element here sets the nav elements to the right in the navbar-->
-    <!-- order-xs-first need to be declared: since Bootstrap has the "mobile first" approch, everything scales up when setting screeen sizes,
-          so 'order-sm-2' sets the order from sm screen size to up. -->
-    <div class="collapse navbar-collapse order-xs-first order-3 order-sm-2" id="navbarTogglerPixelartMenu" #menu>
-      <ul class="nav navbar-nav ms-auto">
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="pixelart/catalog">Catalog</a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="pixelart/create-pixelart">Create</a>
-        </li>
-        <!-- [routerLinkActiveOptions]="{exact: true}" ensures that only the exact URL will be set for active, not together with the child routes (as the default behaviour) -->
-        <li class="nav-item" *ngIf="!isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-          <a class="nav-link" routerLink="login/sign-up">Sign Up</a>
-        </li>
-      </ul>
-    </div>
-
-    <ul class="nav navbar-nav mb-auto order-xs-first order-2 order-sm-3">
-      <li class="nav-item" *ngIf="!isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-        <a class="nav-link" routerLink="login">Login</a>
-      </li>
-      <!-- 'd-flex' and 'align-items-center' aligns the position of the icon and the little dropdown triangle -->
-      <li class="nav-item dropdown " *ngIf="isLoggedIn">
-        <div class="nav-link dropdown-toggle d-flex align-items-center p-2" role="button"
-          data-bs-toggle="dropdown" aria-expanded="false">
-          <mat-icon class="ms-auto ">account_circle</mat-icon>
-        </div>
-        <!-- 'dropdown-menu-end' positions the dropdown menu to the right -->
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li class="dropdown-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-            <a class="nav-link" routerLink="login/my-profile">My profile</a>
+      <!-- Navigation menu -->
+      <div class="header-menu" [class.show]="isMobileMenuOpen">
+        <ul class="nav-menu">
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="pixelart/catalog" (click)="closeMobileMenu()">Catalog</a>
           </li>
-          <li class="dropdown-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-            <a class="nav-link" routerLink="pixelart/my-pixelart">My
-              pixelarts</a>
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="pixelart/create-pixelart" (click)="closeMobileMenu()">Create</a>
           </li>
-          <li class="dropdown-item">
-            <a class="nav-link" (click)="logout()">Sign out</a>
+          <li class="nav-item" *ngIf="!isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link" routerLink="login/sign-up" (click)="closeMobileMenu()">Sign Up</a>
+          </li>
+          <li class="nav-item mobile-only" *ngIf="!isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link" routerLink="login" (click)="closeMobileMenu()">Login</a>
           </li>
         </ul>
-      </li>
-    </ul>
+      </div>
 
-  </div>
-</nav>
+      <!-- Desktop auth menu -->
+      <div class="header-auth desktop-only">
+        <ul class="auth-menu">
+          <li class="nav-item" *ngIf="!isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link" routerLink="login">Login</a>
+          </li>
+          <li class="nav-item dropdown" *ngIf="isLoggedIn">
+            <div class="dropdown-toggle" role="button" (click)="toggleDropdown()" #dropdownToggle>
+              <mat-icon>account_circle</mat-icon>
+            </div>
+            <ul class="dropdown-menu" [class.show]="isDropdownOpen">
+              <li class="dropdown-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="dropdown-link" routerLink="login/my-profile">My profile</a>
+              </li>
+              <li class="dropdown-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="dropdown-link" routerLink="pixelart/my-pixelart">My pixelarts</a>
+              </li>
+              <li class="dropdown-item">
+                <a class="dropdown-link" (click)="logout()">Sign out</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
