@@ -23,11 +23,6 @@ const routes: Routes = [
     // canActivate: [AuthGuard]
   },
   {
-    path: 'login', //TODO: not necessary!!!
-    component: LoginComponent,
-    // canActivate: [AuthGuard]
-  },
-  {
     // Wildcard Path
     path: '**',
     redirectTo: '/login'
