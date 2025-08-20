@@ -1,18 +1,17 @@
 <!-- submission-project.component, project-submission.service.ts -->
-<div class="detail-container pl-0 pr-0 container-fluid d-flex">
-    <div class="header-metadata ml">
+<div class="update-container">
+    <div class="update-header">
         <!-- TODO: this text in {{}} for internationalisation -->
-        <div>Edit Details</div>
-        <!-- <div *ngIf="film?.length"> -->
-            <!-- TODO: Replace it with "close" button -->
-        <div style="cursor: pointer;" (click)="closePixelartEditDetails()">X</div>
-        <div>
-            <app-manage-pixelart
-            [pixelartSimpleItem]="pixelartItemToUpdate"
-            (savedAction)="onSaveUpdatePixelart($event)"
-            (cancelledAction)="onCancelGoBackToDetails()">
-            </app-manage-pixelart>
-        </div>
+        <div class="update-title">Edit Details</div>
+        <!-- TODO: Replace it with "close" button -->
+        <div class="close-button" (click)="closePixelartEditDetails()">X</div>
+    </div>
+    <div class="update-content">
+        <app-manage-pixelart
+        [pixelartSimpleItem]="pixelartItemToUpdate"
+        (savedAction)="onSaveUpdatePixelart($event)"
+        (cancelledAction)="onCancelGoBackToDetails()">
+        </app-manage-pixelart>
     </div>
 </div>
 
