@@ -1,51 +1,33 @@
 <!-- data-set / pages / detail.component -->
-<div class="detail-container pl-0 pr-0 container-fluid d-flex">
-    <div class="header-metadata ml">
+<div class="detail-container">
+    <div class="detail-header">
         <!-- TODO: this text in {{}} for internationalisation -->
-        <div>Details</div>
-        <!-- <div *ngIf="film?.length"> -->
-            <!-- TODO: Replace it with "close" button -->
-        <div style="cursor: pointer;" (click)="closePixelartDetails()">X</div>
-        <div>
-            <!-- TODO: Use <app-pixelart-card> component instead. See how to name buttons! -->
-            <mat-card>
-            <!-- (clickedItem)= "pixelartToDisplay"> -->
-            <!-- [pixelartToDisplay]="clickedItem"> -->
-            <!-- (selectedPixelartItem)="pixelartToDisplay"> -->
+                    <!-- Error in console: Cannot read properties of undefined, but it prints out details correctly! -->
+                    <!-- Source of solution: https://stackoverflow.com/questions/53857932/typeerror-cannot-read-property-of-undefined-but-site-works-accurately-angul -->
+        <!-- ALSO: I am repeting the code from manage-pixelart.html!!! -->
+        <div class="detail-title">Details</div>
+        <!-- TODO: Replace it with "close" button -->
+        <div class="close-button" (click)="closePixelartDetails()">X</div>
+    <div class="detail-content">
+        <!-- TODO: Use <app-pixelart-card> component instead. See how to name buttons! -->
+        <mat-card>
+            <mat-card-content>
+                <mat-card-title>
+                    {{ pixelartToDisplay.name }}
+                </mat-card-title>
 
-            <!-- Error in console: Cannot read properties of undefined, but it prints out details correctly! -->
-            <!-- Source of solution: https://stackoverflow.com/questions/53857932/typeerror-cannot-read-property-of-undefined-but-site-works-accurately-angul -->
-            <!-- Other solution:  -->
-                        <!-- <mat-card-content *ngIf="pixelartToDisplay">
-                            <mat-card-title>
-                                {{ pixelartToDisplay.name }} -->
-                <mat-card-content>
-                    <mat-card-title>
-                        <!-- If pixelartItem set to private in the .ts, then it only works
-                            with a get pixelartName() method, what we call then like this here: -->
-                              <!-- {{ pixelartItemName }} -->
-                        {{ pixelartToDisplay.name }}
-                    </mat-card-title>
-                    <!-- <div class="canvasDiv" #canvasDiv> -->
-                        <!-- If set like that within that div, only the pixel color references are printed out to the screen!!! -->
-                        <!-- {{ pixelartToDisplay?.canvas}}
-                        ALSO: I am repeting the code from manage-pixelart.html!!! -->
-                        <!-- <canvas id="pixelCanvas" #myCanvas aria-label="Canvas with the pixels to paint" role="img"></canvas> -->
-                    <!-- </div> -->
+                <app-pixelart-card
+                    [pixelartItem]="pixelartToDisplay"
+                    [index]="pixelartToDisplay.id">
+                </app-pixelart-card>
 
-                    <app-pixelart-card
-                        [pixelartItem]="pixelartToDisplay"
-                        [index]="pixelartToDisplay.id">
-                    </app-pixelart-card>
-
-                    <mat-card-actions *ngIf="isSignedin && allowToUpdate">
-                        <!-- Maybe: (click)="editPixelart(pixelartItem)=$event" and geting that value to the changed name ?-->
-                        <button mat-button (click)="editPixelart()">Edit art</button>
-                        <button mat-button (click)="deletePixelart()">Delete art</button>
-                    </mat-card-actions>
-                </mat-card-content>
-            </mat-card>
-        </div>
+                <mat-card-actions *ngIf="isSignedin && allowToUpdate">
+                    <button mat-button (click)="editPixelart()">Edit art</button>
+                    <button mat-button (click)="deletePixelart()">Delete art</button>
+                </mat-card-actions>
+            </mat-card-content>
+        </mat-card>
+    </div>
     </div>
 </div>
 
