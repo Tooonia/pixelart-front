@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
     this.isLoggedIn = this.authService.isUserSignedin();
 
 		if(this.isLoggedIn) {
-			this.router.navigateByUrl('/login/my-profile');//TODO: KELL IDE? az app-routing login > loadChildren miatt nem '/my-profile' itt!
+			this.router.navigateByUrl('/pixelart/login/my-profile');//TODO: KELL IDE? az app-routing login > loadChildren miatt nem '/my-profile' itt!
 		}
 
     // 1st solution

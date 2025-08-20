@@ -25,7 +25,7 @@ const routes: Routes = [
   {
     // Wildcard Path
     path: '**',
-    redirectTo: '/login'
+    redirectTo: ''
     // canActivate: [AuthGuard]
    }
 ]

@@ -25,8 +25,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
   isSignUpFailed = false;
   aliasExists = false;
   emailExists = false;
-  signupSubscription! : Subscription;
-  userSubscription!: Subscription;
+  signupSubscription: Subscription | undefined;
+  userSubscription: Subscription | undefined;
   errorMessage = '';
 
   users!: UserGetItem[];
@@ -40,7 +40,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
     this.isLoggedIn = this.authService.isUserSignedin();
 
 		if(this.isLoggedIn) {
-			this.router.navigateByUrl('/login/my-profile');//TODO: KELL IDE? az app-routing login > loadChildren miatt nem '/my-profile' itt!
+			this.router.navigateByUrl('/pixelart/login/my-profile');//TODO: KELL IDE? az app-routing login > loadChildren miatt nem '/my-profile' itt!
 		}
 
     // if(this.isSignupSuccessful) {
@@ -66,7 +66,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           // window.location.reload();
           if(this.isSignupSuccessful) {
-          this.router.navigateByUrl('/login');
+          this.router.navigateByUrl('/pixelart/login');
           }
         }, 2000);
 
@@ -87,18 +87,18 @@ export class SignUpComponent implements OnInit, OnDestroy {
         // }
 
 
-        // AMI EDDIG VOLT ITT:
-        // setTimeout(() => {
         this.isSignUpFailed = true;
+        // Unsubscribe from any existing user subscription before creating a new one
+        if (this.userSubscription) {
+          this.userSubscription.unsubscribe();
+        }
         this.userSubscription = this.userService.getAllUsers().subscribe((users: UserGetItem[]) => {
           for (let i = 0; i < users.length; i++) {
           if (users[i].alias === this.signupForm.value.alias) {
             this.aliasExists = true;
-              // this.errorMessage.push('alias');
           }
           if(users[i].userEmail === this.signupForm.value.email) {
             this.emailExists = true;
-            // this.errorMessage.push(' and email')
           }
           }
         if(this.aliasExists && this.emailExists) {
@@ -110,11 +110,9 @@ export class SignUpComponent implements OnInit, OnDestroy {
         } else {
             this.errorMessage = 'Something went wrong. Please try again later.';
         }
-        // this.signupSubscription.unsubscribe();
         console.log(err);
         console.log(this.signupForm);
       });
-        // }, 1000);
         this.aliasExists = false;
         this.emailExists = false;
       }});
@@ -179,10 +177,11 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    this.signupSubscription.unsubscribe();
-    this.userSubscription?.unsubscribe(); //TODO: miert van itt '?' ?
-    // if(this.userSubscription instanceof Subscriber) {
-    //   this.userSubscription.unsubscribe();
-    // } //WORKS ALSO.
+    if (this.signupSubscription) {
+      this.signupSubscription.unsubscribe();
+    }
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 }

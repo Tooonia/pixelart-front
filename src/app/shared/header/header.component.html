@@ -28,14 +28,14 @@
             <a class="nav-link" routerLink="pixelart/create-pixelart" (click)="closeMobileMenu()">Create</a>
           </li>
           <li class="nav-item" *ngIf="!isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-            <a class="nav-link" routerLink="login/sign-up" (click)="closeMobileMenu()">Sign Up</a>
+            <a class="nav-link" routerLink="pixelart/login/sign-up" (click)="closeMobileMenu()">Sign Up</a>
           </li>
           <li class="nav-item mobile-only" *ngIf="!isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-            <a class="nav-link" routerLink="login" (click)="closeMobileMenu()">Login</a>
+            <a class="nav-link" routerLink="pixelart/login" (click)="closeMobileMenu()">Login</a>
           </li>
           <!-- Profile options for logged-in users in mobile menu -->
           <li class="nav-item mobile-only" *ngIf="isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-            <a class="nav-link" routerLink="login/my-profile" (click)="closeMobileMenu()">My Profile</a>
+            <a class="nav-link" routerLink="pixelart/login/my-profile" (click)="closeMobileMenu()">My Profile</a>
           </li>
           <li class="nav-item mobile-only" *ngIf="isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
             <a class="nav-link" routerLink="pixelart/my-pixelart" (click)="closeMobileMenu()">My Pixelarts</a>
@@ -50,7 +50,7 @@
       <div class="header-auth desktop-only">
         <ul class="auth-menu">
           <li class="nav-item" *ngIf="!isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-            <a class="nav-link" routerLink="login">Login</a>
+            <a class="nav-link" routerLink="pixelart/login">Login</a>
           </li>
           <li class="nav-item dropdown" *ngIf="isLoggedIn">
             <div class="dropdown-toggle" role="button" (click)="toggleDropdown()" #dropdownToggle>
@@ -58,7 +58,7 @@
             </div>
             <ul class="dropdown-menu" [class.show]="isDropdownOpen">
               <li class="dropdown-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="dropdown-link" routerLink="login/my-profile">My profile</a>
+                <a class="dropdown-link" routerLink="pixelart/login/my-profile">My profile</a>
               </li>
               <li class="dropdown-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="dropdown-link" routerLink="pixelart/my-pixelart">My pixelarts</a>

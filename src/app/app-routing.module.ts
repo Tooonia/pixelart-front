@@ -20,18 +20,19 @@ const routes: Routes = [
     // canActivate: [AuthGuard]
   },
   {
+    path: 'pixelart/login',
+    loadChildren: () => import('./login/login.module')
+        .then(m => m.LoginModule),
+    // canActivate: [AuthGuard]
+  },
+  {
     //  path: 'create-pixelart',
     path: 'pixelart',
     loadChildren: () => import('./pixelart/pixelart.module')
         .then(m => m.PixelartModule),
     // canActivate: [AuthGuard]
   },
-  {
-    path: 'login',
-    loadChildren: () => import('./login/login.module')
-        .then(m => m.LoginModule),
-    // canActivate: [AuthGuard]
-  },
+
   {
     // Wildcard Path TODO: ide megsem ez kell, mert ez mindig igaz lenne, ugye?
     path: '**',
