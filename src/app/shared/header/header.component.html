@@ -33,6 +33,16 @@
           <li class="nav-item mobile-only" *ngIf="!isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
             <a class="nav-link" routerLink="login" (click)="closeMobileMenu()">Login</a>
           </li>
+          <!-- Profile options for logged-in users in mobile menu -->
+          <li class="nav-item mobile-only" *ngIf="isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link" routerLink="login/my-profile" (click)="closeMobileMenu()">My Profile</a>
+          </li>
+          <li class="nav-item mobile-only" *ngIf="isLoggedIn" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link" routerLink="pixelart/my-pixelart" (click)="closeMobileMenu()">My Pixelarts</a>
+          </li>
+          <li class="nav-item mobile-only" *ngIf="isLoggedIn">
+            <a class="nav-link" (click)="logout(); closeMobileMenu()">Sign Out</a>
+          </li>
         </ul>
       </div>
 
