@@ -36,7 +36,7 @@ Welcome to PixelArt Frontend! 🎨 This is an Angular 17 application for creatin
 Before you start, make sure you have these installed:
 
 - **Node.js**: 18.20.8 (use `nvm use` to switch automatically)
-- **npm**: 10.8.2 or later
+- **npm**: 8.19.4
 - **Angular CLI**: 17.3.17
 
 ## Quick Start
