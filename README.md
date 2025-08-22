@@ -5,15 +5,15 @@ Welcome to PixelArt Frontend! 🎨 This is an Angular 17 application for creatin
 ## ✨ Features
 
 ### 🎨 Core Functionality
-- **User Authentication**: Secure login and registration system with JWT tokens
 - **Pixel Art Creation**: Interactive canvas for creating pixel art
-- **User Profiles**: Personal profile management and settings
 - **Art Gallery**: Browse and view pixel art creations
+- **User Authentication**: Secure login and registration system with JWT tokens
+- **User Profiles**: Personal profile management and settings
 - **Responsive Design**: Mobile-first design that works on all devices
 
 ### 🔧 Technical Features
 - **Real-time Canvas**: Live preview and immediate updates
-- **File Management**: Save, load, and export pixel art projects
+- **File Management**: Save, load, modify, delete pixel art projects (CRUD)
 - **Performance Optimized**: Fast loading with lazy-loaded modules
 - **Error Handling**: User-friendly error messages and validation
 
@@ -35,9 +35,9 @@ Welcome to PixelArt Frontend! 🎨 This is an Angular 17 application for creatin
 
 Before you start, make sure you have these installed:
 
+- **Angular CLI**: 17.3.17
 - **Node.js**: 18.20.8 (use `nvm use` to switch automatically)
 - **npm**: 8.19.4
-- **Angular CLI**: 17.3.17
 
 ## Quick Start
 
