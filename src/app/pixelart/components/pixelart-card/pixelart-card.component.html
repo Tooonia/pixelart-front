@@ -1,34 +1,20 @@
-<!-- TODO: is it correct here, the click event?
-Do I need the @Output EventEmitter on click as in data-set-card.component?
-Elvileg ez pont igy tortenik: az EventEmitter a pixelartService-ben van, itt pedig .emit(this.pixelartItem)-->
-<div class="container">
-    <div fxLayout="row wrap">
-        <div fxFlex="25%">
-            <mat-card style="cursor: pointer;" (click)="goToDetail(index)">
-                <!-- <mat-card-content *ngIf="pixelartItem"> -->
-                <mat-card-content>
-                    <!-- TODO: Ide kell valami, ha selected (amikor gombok: Update & Delete),
-            vagy ha csak meg akarom jeleniteni az adatait -->
-                    <div class="d-flex">
-                        <!-- This class is supposed to display only the pixelart image, and used for list-container only
-            TODO: or see how is it possible to display only parts when is used for 'List', and when used for 'Details' -->
-                        {{pixelartItem.name}}
-                        <!-- {{pixelartItem.name}} by {{pixelartItem.user}} -->
-                    </div>
-                    <div class="canvasDiv" #canvasDiv>
-                        <!-- ON CANVAS:  width="50"
-            height="50" -->
-                        <!-- sources:
-                https://pauljadam.com/demos/canvas.html
-                https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
-                <!-- formControlName="pixels" -->
-                        <canvas id="pixelCanvas" #myCanvas aria-label="Canvas with the pixels to paint" role="img">
-                        </canvas>
-                    </div>
-                </mat-card-content>
-                <!-- TODO: ide kell a cim es a pixelart rajz!!! how do I create the canvas from the saved pixel reference numbers? -->
-
-            </mat-card>
-        </div>
-    </div>
+<div class="pixelart-card">
+    <mat-card class="card" (click)="goToDetail(index)">
+        <mat-card-content class="card-content">
+                                <!-- TODO: Ide kell valami, ha selected (amikor gombok: Update & Delete),
+                                vagy ha csak meg akarom jeleniteni az adatait -->
+            <div class="card-title">
+                                  <!-- This class is supposed to display only the pixelart image, and used for list-container only
+                                TODO: or see how is it possible to display only parts when is used for 'List', and when used for 'Details' -->
+                {{pixelartItem.name}}
+            </div>
+            <div class="canvas-container" #canvasDiv>
+                                <!-- ON CANVAS:  width="50" height="50" -->
+                                <!-- sources:  https://pauljadam.com/demos/canvas.html
+                                        https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage -->
+                <canvas id="pixelCanvas" #myCanvas aria-label="Canvas with the pixels to paint" role="img">
+                </canvas>
+            </div>
+        </mat-card-content>
+    </mat-card>
 </div>
