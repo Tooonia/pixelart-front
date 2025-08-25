@@ -10,7 +10,6 @@ import { PixelartRoutingModule } from './pixelart-routing.module';
 import { UpdateComponent } from './pages/update/update.component';
 import { ManagePixelartComponent } from './components/manage-pixelart/manage-pixelart.component';
 import { CreateComponent } from './pages/create/create.component';
-import { HomeComponent } from './pages/home/home.component';
 import { PortfolioComponent } from './pages/portfolio/portfolio.component';
 
 
@@ -23,7 +22,6 @@ import { PortfolioComponent } from './pages/portfolio/portfolio.component';
     UpdateComponent,
     ManagePixelartComponent,
     CreateComponent,
-    HomeComponent,
     PortfolioComponent
   ],
   imports: [

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './pixelart/pages/home/home.component';
 
 const routes: Routes = [
   {
@@ -8,15 +7,6 @@ const routes: Routes = [
     path: '',
     redirectTo: 'pixelart',
     pathMatch: 'full',
-    // canActivate: [AuthGuard]
-  },
-  {
-    // Path Canvas TODO: esetleg kulonvenni a pixelart folder-bol!
-    path: 'home',
-    // loadChildren: () => import('./pixelart/pixelart.module')
-    //      .then(m => m.PixelartModule),
-    component: HomeComponent
-    // ,
     // canActivate: [AuthGuard]
   },
   {
