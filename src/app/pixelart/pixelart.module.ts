@@ -4,13 +4,16 @@ import { ListComponent } from './pages/list/list.component';
 import { DetailComponent } from './pages/detail/detail.component';
 import { ListContainerComponent } from './components/list-container/list-container.component';
 import { PixelartCardComponent } from './components/pixelart-card/pixelart-card.component';
-import { SharedModule } from '../shared/shared.module';
 import { CoreModule } from '../core/core.module';
 import { PixelartRoutingModule } from './pixelart-routing.module';
 import { UpdateComponent } from './pages/update/update.component';
 import { ManagePixelartComponent } from './components/manage-pixelart/manage-pixelart.component';
 import { CreateComponent } from './pages/create/create.component';
 import { PortfolioComponent } from './pages/portfolio/portfolio.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -26,9 +29,13 @@ import { PortfolioComponent } from './pages/portfolio/portfolio.component';
   ],
   imports: [
     CommonModule,
-    SharedModule,
     CoreModule,
-    PixelartRoutingModule
+    PixelartRoutingModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [
     ListContainerComponent,
