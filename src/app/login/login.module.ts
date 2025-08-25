@@ -5,9 +5,7 @@ import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { CoreModule } from '../core/core.module';
 import { LoginRoutingModule } from './login-routing.module';
 import { MyProfileComponent } from './pages/my-profile/my-profile.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -21,10 +19,7 @@ import { MatInputModule } from '@angular/material/input';
     CommonModule,
     CoreModule,
     LoginRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule
+    FormsModule
   ]
 })
 export class LoginModule { }
