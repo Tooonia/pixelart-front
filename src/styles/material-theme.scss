@@ -1,0 +1,41 @@
+@use '@angular/material' as mat;
+
+// Include the common styles for Angular Material
+@include mat.core();
+
+// Define a custom theme with reduced color palette
+$primary-palette: mat.define-palette(mat.$indigo-palette, 500, 100, 900);
+$accent-palette: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$warn-palette: mat.define-palette(mat.$red-palette);
+
+// Create the theme object
+$theme: mat.define-light-theme((
+  color: (
+    primary: $primary-palette,
+    accent: $accent-palette,
+    warn: $warn-palette,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0
+));
+
+// Apply the theme to only the components we actually use
+@include mat.all-component-themes($theme);
+
+// Custom overrides for better performance
+.mat-mdc-card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.mat-mdc-button {
+  text-transform: none !important;
+}
+
+// Reduce animation complexity for better performance
+.mat-mdc-form-field {
+  .mat-mdc-form-field-focus-overlay {
+    transition: opacity 0.15s ease-in-out;
+  }
+}
+
+
