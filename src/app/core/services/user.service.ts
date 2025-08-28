@@ -95,7 +95,7 @@ public getAllUsers(): Observable<UserGetItem[]> {
   }
 
   /**
-   * //TODO: GET public content, list of Users for give it a try << works! But not logical to have it on 'home' page!
+   * //TODO: GET public content, list of Users for give it a try << works!
    */
    public getPublicContent(): Observable<any> {
     return this.http.get<any>((`${this.basePath}/users`), { responseType: 'json'});
