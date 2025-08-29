@@ -1,17 +1,13 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { JwtRequestItem } from 'src/app/pixelart/model/jwt-request-item';
 import { JwtResponseItem } from 'src/app/pixelart/model/jwt-response-item';
 import { RequestSignupItem } from 'src/app/pixelart/model/request-signup-item';
 
-// 1st solution
-const AUTH_API = 'http://localhost:8085/api';
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-};
 const TOKEN_KEY = 'auth-token';
 
 @Injectable({
@@ -19,19 +15,16 @@ const TOKEN_KEY = 'auth-token';
 })
 export class AuthService {
 
-  private baseUrl = 'http://localhost:8085/api';
+  private baseUrl = environment.apiUrl;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient
   ) {}
 
   signin(request: JwtRequestItem): Observable<JwtResponseItem> {
     return this.http
-      .post<any>(this.baseUrl + '/authenticate', request, {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-      })
+      .post<JwtResponseItem>(`${this.baseUrl}/authenticate`, request)
       .pipe(
         map((resp) => {
           sessionStorage.setItem('user', request.email);
@@ -41,40 +34,20 @@ export class AuthService {
       );
   }
 
-  // This method is used in the 2nd solution within sign-up.component.ts
-  // signup(requestSignup: RequestSignupItem): Observable<any> {
-  //   return this.http
-  //     .post<any>(this.baseUrl + '/signup', requestSignup, {
-  //       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-  //       responseType: 'text' as 'json',
-  //     })
-  //     .pipe(
-  //       map((resp) => {
-  //         return resp;
-  //       })
-  //     );
-  // }
+
 
   // 3rd method finally works, used in the 1st solution within sign-up.component.ts
   // we need to specify the name of parameters as written in the Back-end code (=JsonProperty names)
   // register(alias: string, email: string, password: string): Observable<any> {
   register(signupRequest: RequestSignupItem): Observable<any> {
     return this.http.post(
-      AUTH_API + '/signup',
+      `${this.baseUrl}/signup`,
       {
         alias: signupRequest.alias,
         userEmail: signupRequest.userEmail,
-        userPassword: signupRequest.userPassword,
-      },
-      httpOptions
-    )
-    // TODO: see the meaning of that part, as it works with or without that following code snippet:
-    // .pipe(
-    //   map((resp) => {
-    //     return resp;
-    //   })
-    // )
-    ;
+        userPassword: signupRequest.userPassword
+      }
+    );
   }
 
   // signout() {

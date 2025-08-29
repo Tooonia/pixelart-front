@@ -1,11 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
 import { UserGetItem } from 'src/app/pixelart/model/user-get-item';
 
 @Component({
@@ -17,41 +13,23 @@ export class MyProfileComponent implements OnInit {
 
   isSignedin = false;
   signedinUser! : UserGetItem;
-  // signedinUser! : UserPrivateItemModel;
-
-  private basePath = 'http://localhost:8085/api';
 
 	constructor(
-    private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient,
     private authService: AuthService,
-    private userService: UserService,
-    private pixelartService: PixelartService) {}
+    private userService: UserService) {}
 
 	ngOnInit() {
 		this.isSignedin = this.authService.isUserSignedin();
     if(!this.authService.isUserSignedin()) {
 			this.router.navigateByUrl('/signin');
 		}
-		// this.signedinUserEmail = this.authService.getSignedinUser();
-    // this.signedinUser = this.authService.getUserInfo();
 
-    // this.userService.getPrivateUserProfile();
-
-    // this.signedinUser = this.userService.getPrivateUserProfile();
-
-    //3rd solution with models!!! Works.
-    // Volt egyy error:az alias-ra azt mondja, h "can not read properties of undefined (reading alias)"
-    // Mikor beirtam egy ?-et a signedInUser moge, eltunt. TODO: atnezni!!!
-      this.userService.getPrivateUserProfile().subscribe(data => {
-        this.signedinUser = data;
-
-        console.log(this.signedinUser.pixelarts);//TODO: Wrong print out in console: pixelarts do not have user property!!!
-        // console.log(this.signedinUser.id);
-        console.log(this.signedinUser);
-        // console.log(this.signedinUser.user_email);
-      }  )
+    this.userService.getPrivateUserProfile().subscribe(data => {
+      this.signedinUser = data;
+      console.log(this.signedinUser.pixelarts); //TODO: Wrong print out in console: pixelarts do not have user property!!!
+      console.log(this.signedinUser);
+    })
 	}
 
   goToMyPortfolio() : void {
@@ -74,13 +52,4 @@ export class MyProfileComponent implements OnInit {
   //   // window.location.reload();
   //   // this.router.navigate(['/pixelart/catalog'])
   // }
-
-
-  // 1st solution-hoz
-  // currentUser: any;
-  // constructor(private token: TokenStorageService) { }
-  // ngOnInit(): void {
-  //   // this.currentUser = this.token.getUser();
-  // }
-
 }
