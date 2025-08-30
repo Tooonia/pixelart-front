@@ -82,11 +82,23 @@ export class LoginComponent implements OnInit {
         }, 1500);
       },
       error: err => {
-        if (err != null && err.message != null && err.status === 401) {
-        this.errorMessage = 'The authentication credentials are invalid.';//TODO: Handle other error cases!
-        // console.log(err);
-        // console.log(err.message);
-        } this.isLoginFailed = true;
+        console.error('Login error:', err);
+        this.isLoginFailed = true;
+
+        // Handle different types of errors
+        if (err && err.message) {
+          // Custom error message from our service
+          this.errorMessage = err.message;
+        } else if (err && err.status === 401) {
+          // HTTP 401 error
+          this.errorMessage = 'The authentication credentials are invalid.';
+        } else if (err && err.status === 0) {
+          // Network error or timeout
+          this.errorMessage = 'Network error. Please check your connection.';
+        } else {
+          // Generic error
+          this.errorMessage = 'Login failed. Please try again.';
+        }
       }
     });
     // console.log(this.loginForm); //works here!

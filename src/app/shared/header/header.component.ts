@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
   @ViewChild('dropdownToggle') dropdownToggle!: ElementRef;
   title = 'pixelart-front';
   alias!: string;
-  email!: string;
+  email: string | null = null;
   isLoggedIn = false;
   username?: string;
   isDropdownOpen = false;
