@@ -1,10 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { PixelartService } from 'src/app/core/services/pixelart.service';
-import { UserService } from 'src/app/core/services/user.service';
-import { PixelartItem } from '../../model/pixelart-item';
-import { PixelartSimpleItem } from '../../model/pixelart-simple-item';
 import { PixelartRequestItem } from '../../model/pixelart-request-item';
 
 //TODO: Normally, this will be our home.component.
@@ -17,17 +13,12 @@ import { PixelartRequestItem } from '../../model/pixelart-request-item';
   styleUrls: ['./create.component.scss']
 })
 export class CreateComponent implements OnInit {
-  // public pixelartItemToCreate = new PixelartItem();
-  // public pixelartItem!: PixelartItem;
   public pixelartItemToCreate: PixelartRequestItem = {
     'name': '',
     'width': 0,
     'height': 0,
     'canvas': ([])
   };
-  // public newPixelartModel = new PixelartModel();
-  // public pixelartItemToCreate = new PixelartcreateModel();
-  // newPixelartModel = {} as PixelartModel;
   content?: string;
 
   isSignedin = false;
@@ -36,22 +27,11 @@ export class CreateComponent implements OnInit {
 
   constructor(
     private pixelartService: PixelartService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private userService: UserService,
-    private http: HttpClient
-
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    // this.isSignedin = this.tokenStorageService.isUserSignedin();
-		// this.signedinUser = this.tokenStorageService.getUser();
 
-		// if(!this.tokenStorageService.isUserSignedin()) {
-		// 	this.router.navigateByUrl('/signin');
-		// }
-
-		// this.router.navigateByUrl('/pixelart/create-pixelart');
   }
 
   public closeCreateNewPixelart(): void {
@@ -69,21 +49,8 @@ export class CreateComponent implements OnInit {
     // Ideal process: when Save button clicked, and user is not signed in, navigating to Signin, where user
     // can also process Signup, and the once loged in, the program goes back to the pixelart to be saved, so
     // at the process of the creation. Changes are saved in the browser (?)
-    this.pixelartItemToCreate = createdPixelartItem; //TODO: nem koherens az update method-dal! Mit veszek a method-ba add()-hez?
-    // this.pixelartItemToCreate.name = createdPixelartItem.name;
-    // this.pixelartItemToCreate.width = createdPixelartItem.width;
-    // this.pixelartItemToCreate.height = createdPixelartItem.height;
-    // this.pixelartItemToCreate.canvas = createdPixelartItem.canvas;
+    this.pixelartItemToCreate = createdPixelartItem;
     this.pixelartService.add(this.pixelartItemToCreate).subscribe(() =>
           this.router.navigate(['/pixelart/catalog'])
        );}
-  //   this.pixelartService.add(this.pixelartItemToCreate).subscribe({
-  //     next: data => {
-  //       setTimeout(() => {
-  //         // window.location.reload();
-  //         this.router.navigate(['/pixelart/catalog'])
-  //       }, 2000);},
-  //       error: err => {
-  //         console.log(err);
-  // }});}
 }

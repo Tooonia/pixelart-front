@@ -1,14 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { timeout, catchError } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
 import { UserGetItem } from 'src/app/pixelart/model/user-get-item';
 import { AuthService } from './auth.service';
-
 // TODO: Review all methods and interfaces!!!
-
-const REQUEST_TIMEOUT = 15000; // 15 seconds
+import { ApiService } from './api.service';
 
 // Define response types for better typing
 interface PublicContentResponse {
@@ -27,115 +23,72 @@ interface UserBoardResponse {
 })
 export class UserService {
 
-  private basePath = environment.apiUrl;
-
   constructor(
-    private http: HttpClient,
+    private apiService: ApiService,
     private authService: AuthService) { }
 
   /**
    * GET all users with public profile
    */
   public getAllUsers(): Observable<UserGetItem[]> {
-    return this.http.get<UserGetItem[]>(`${this.basePath}/users`).pipe(
-      timeout(REQUEST_TIMEOUT),
-      catchError((error) => {
-        console.error('Get all users error:', error);
-        return throwError(() => new Error('Failed to load users. Please try again.'));
-      })
-    );
+    console.log('UserService: Fetching all users');
+    return this.apiService.get<UserGetItem[]>('/users');
   }
 
   /**
    * GET public user profile
    */
   public getUserProfile(id: number): Observable<UserGetItem> {
-    return this.http.get<UserGetItem>(`${this.basePath}/user/${id}`).pipe(
-      timeout(REQUEST_TIMEOUT),
-      catchError((error) => {
-        console.error('Get user profile error:', error);
-        return throwError(() => new Error('Failed to load user profile. Please try again.'));
-      })
-    );
+    console.log('UserService: Fetching user profile for ID:', id);
+    return this.apiService.get<UserGetItem>(`/user/${id}`);
   }
 
   /**
    * GET private user profile on /my-profile of the connected user by user id
    */
   public getPrivateUserProfileById(id: number): Observable<UserGetItem> {
-    return this.http.get<UserGetItem>(`${this.basePath}/my-profile/${id}`).pipe(
-      timeout(REQUEST_TIMEOUT),
-      catchError((error) => {
-        console.error('Get private user profile error:', error);
-        return throwError(() => new Error('Failed to load private profile. Please try again.'));
-      })
-    );
+    console.log('UserService: Fetching private user profile for ID:', id);
+    return this.apiService.get<UserGetItem>(`/my-profile/${id}`);
   }
 
   /**
-   * GET public user profile by email << DOES NOT WORK YET; TODO: vajon kell ide a params: email?
+   * GET public user profile by email
    */
   public getUserProfileByEmail(email: string): Observable<UserGetItem> {
-    return this.http.get<UserGetItem>(`${this.basePath}/me`, { params: {email} }).pipe(
-      timeout(REQUEST_TIMEOUT),
-      catchError((error) => {
-        console.error('Get user profile by email error:', error);
-        return throwError(() => new Error('Failed to load user profile. Please try again.'));
-      })
-    );
+    console.log('UserService: Fetching user profile by email:', email);
+    const params = new HttpParams().set('email', email);
+    return this.apiService.get<UserGetItem>('/me', params);
   }
 
   /**
    * GET private profile of connected user
    */
   public getPrivateUserProfile(): Observable<UserGetItem> {
-    return this.http.get<UserGetItem>(`${this.basePath}/user/me`).pipe(
-      timeout(REQUEST_TIMEOUT),
-      catchError((error) => {
-        console.error('Get private user profile error:', error);
-        return throwError(() => new Error('Failed to load your profile. Please try again.'));
-      })
-    );
+    console.log('UserService: Fetching current user private profile');
+    return this.apiService.get<UserGetItem>('/user/me');
   }
 
   /**
    * GET public content, list of Users
    */
   public getPublicContent(): Observable<PublicContentResponse> {
-    return this.http.get<PublicContentResponse>(`${this.basePath}/users`).pipe(
-      timeout(REQUEST_TIMEOUT),
-      catchError((error) => {
-        console.error('Get public content error:', error);
-        return throwError(() => new Error('Failed to load public content. Please try again.'));
-      })
-    );
+    console.log('UserService: Fetching public content');
+    return this.apiService.get<PublicContentResponse>('/users');
   }
 
   /**
-   * POST a pixelart
+   * GET user board
    */
-  // public createPixelart()
-
   public getUserBoard(): Observable<UserBoardResponse> {
-    return this.http.get<UserBoardResponse>(`${this.basePath}/pixelart-create`).pipe(
-      timeout(REQUEST_TIMEOUT),
-      catchError((error) => {
-        console.error('Get user board error:', error);
-        return throwError(() => new Error('Failed to load user board. Please try again.'));
-      })
-    );
+    console.log('UserService: Fetching user board');
+    return this.apiService.get<UserBoardResponse>('/pixelart-create');
   }
 
   /**
    * DELETE user account
    */
   public deleteAccount(id: number): Observable<UserGetItem> {
-    return this.http.delete<UserGetItem>(`${this.basePath}/my-profile/${id}`).pipe(
-      timeout(REQUEST_TIMEOUT),
-      catchError((error) => {
-        console.error('Delete account error:', error);
-        return throwError(() => new Error('Failed to delete account. Please try again.'));
-      })
-    );
+    console.log('UserService: Deleting user account for ID:', id);
+    return this.apiService.delete<UserGetItem>(`/my-profile/${id}`);
   }
 }

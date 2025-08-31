@@ -89,10 +89,10 @@ export class LoginComponent implements OnInit {
         if (err && err.message) {
           // Custom error message from our service
           this.errorMessage = err.message;
-        } else if (err && err.status === 401) {
+        } else if (err && (err as any).status === 401) {
           // HTTP 401 error
           this.errorMessage = 'The authentication credentials are invalid.';
-        } else if (err && err.status === 0) {
+        } else if (err && (err as any).status === 0) {
           // Network error or timeout
           this.errorMessage = 'Network error. Please check your connection.';
         } else {
