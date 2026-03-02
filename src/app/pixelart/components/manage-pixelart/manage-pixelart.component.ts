@@ -31,6 +31,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   @Output() savedActionForCreate = new EventEmitter<PixelartRequestItem>();
   @Output() cancelledAction = new EventEmitter<PixelartSimpleItem>();
   editMode: boolean = false;
+  gridValidationMode: boolean = true;
   id!: number;
   context!: CanvasRenderingContext2D | null; //Without "| null" there was an error:
   // Type 'CanvasRenderingContext2D | null' is not assignable to type 'CanvasRenderingContext2D'.
@@ -174,7 +175,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
               console.log('EZ data.name ?' + data.name);
               console.log('EZ data.id?' + data.id);
 
-              this.renderer.setStyle(this.containerDivForGridSizeSetting.nativeElement, 'display', 'none');
+              // this.renderer.setStyle(this.containerDivForGridSizeSetting.nativeElement, 'display', 'none');
               this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'block');
               // TODO: rendering is nagyon darabos!!! Az elejen megjelenik az is, aminek nem kellene!!! setTimout?
             // .pipe(
@@ -192,6 +193,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
         })
       } else {
         this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'none');
+        this.gridValidationMode = true;
       }
       // console.log('Initialization elott : ' + this.managePixelartForm.value); // NEM LATSZIK
       // console.log('Initialization elott : ' + this.pixelartItem.name); // NEM LATSZIK
@@ -522,7 +524,8 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
     console.log(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
 
     this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'block');
-    this.renderer.setStyle(this.containerDivForGridSizeSetting.nativeElement, 'display', 'none');
+    // this.renderer.setStyle(this.containerDivForGridSizeSetting.nativeElement, 'display', 'none');
+    this.gridValidationMode = false;
 
     if (this.canvas.nativeElement.getContext('2d', { willReadFrequently: true }) !== null) {
       this.context = this.canvas.nativeElement.getContext('2d');

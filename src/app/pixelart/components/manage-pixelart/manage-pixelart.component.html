@@ -15,7 +15,7 @@
         <form [formGroup]="managePixelartForm" (ngSubmit)="saveAction()">
             <!-- class="manage-pixelart-container" -->
             <div class="d-flex">
-                <div class="gridSizeSettingContainer" #gridSizeSettingContainer>
+                <div class="gridSizeSettingContainer" #gridSizeSettingContainer *ngIf="gridValidationMode">
                     <!-- <p>{{pixelartItem?.name}}</p> -->
                     <!-- MUKODIK, itt az ertek! -->
                     <h2>Choose Grid Size</h2>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             </div>
-            <mat-card-actions class="d-flex">
+            <mat-card-actions class="d-flex" *ngIf="!gridValidationMode">
                 <button type="button" (click)="cancelAction()">Cancel</button>
                 <!-- TODO: ide mar nem kell szerintem click="saveAction()", GOND: nelkule megsem mukodik!!!-->
                 <!-- [disabled]="!managePixelartForm.valid" -->

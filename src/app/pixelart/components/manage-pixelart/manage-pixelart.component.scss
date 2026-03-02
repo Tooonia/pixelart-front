@@ -2,6 +2,21 @@
 #sizePicker {
     width: 200px;
     height: 200px;
+
+    input {
+        width: stretch;
+        margin-bottom: 10px;
+    }
+
+    input:last-of-type {
+        margin-bottom: 30px;
+    }
+
+    button  {
+        display: block;
+        margin: auto;
+    }
+
 }
 
 #pixelCanvas {
