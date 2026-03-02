@@ -1,6 +1,6 @@
 <!-- TODO: sign-up.component.html -->
 <!-- Eventually inside a <div> -->
-<mat-card>
+<mat-card class="card-container">
     <!-- <mat-card-title class="d-flex"> -->
     <!-- TODO: internationalisation -->
     <!-- <p>Title</p> -->
@@ -22,10 +22,10 @@
                     <!-- TODO: kell ngSubmit ide? FONTOS: nem form-kent kezelni, csak az inputjait formControl-kent?  -->
                     <!-- <div id="sizePicker" [formGroup]="manageCanvasForm" (ngSubmit)="onValidateCanvasSize()"> -->
                     <div id="sizePicker">
-                        Grid Width:
+                        <p>Grid Width:</p>
                         <!-- TODO: FONTOS: csak pozitiv egesz szamokat engedjen! Form validation!!! -->
                         <input type="number" formControlName="width" id="inputWeight" name="width" min="1" value="1">
-                        Grid Height:
+                        <p>Grid Height:</p>
                         <input type="number" formControlName="height" id="inputHeight" name="height" min="1" value="1">
                         <button type="button" (click)="onValidateCanvasSize()">Create Canvas</button>
                     </div>

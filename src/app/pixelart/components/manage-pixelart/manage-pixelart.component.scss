@@ -1,3 +1,17 @@
+.card-container {
+    border-radius: 10px;
+    width: fit-content;
+    margin: auto;
+}
+
+
+.gridSizeSettingContainer {
+    h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0 0 1rem 0;
+        justify-self: center;
+    }
+}
 
 #sizePicker {
     width: 200px;
@@ -6,15 +20,32 @@
     input {
         width: stretch;
         margin-bottom: 10px;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        width: 150px;
+        margin: auto;
+        display: block;
     }
 
     input:last-of-type {
         margin-bottom: 30px;
     }
 
+    label {
+        font-weight: 500;
+    }
+
+    p {
+        margin: 10px 0 2px 15px;
+    }
+
     button  {
         display: block;
         margin: auto;
+        border-radius: 5px;
+        border: 1px solid #929292;
     }
 
 }
