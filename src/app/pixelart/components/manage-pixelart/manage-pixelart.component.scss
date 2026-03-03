@@ -50,6 +50,38 @@
 
 }
 
+.pixelDrawingBlockContainer {
+    display: none;
+    width: 100%;
+    // max-width: 800px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.canvasDiv {
+    border: 1px solid darkgrey;
+    // TODO: fix size? In px?
+    width: 400px;
+    // width: fit-content;
+    height: 400px;
+    // height: fit-content;
+    margin: 0 auto 1.5rem;
+    // align-content: center;
+    display: flex;
+    // flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    // TODO: do I need this @media setting on parent divs too?
+    @media (max-width: 768px) {
+        width: 90vw;
+        height: 90vw;
+        max-width: 400px;
+        max-height: 400px;
+    }
+}
+
 #pixelCanvas {
     margin: auto;
     // width: 200px; //Without these 2 dimension settings, the canvas stays at its sizes set in the HTML on canvas element.
@@ -60,21 +92,42 @@
     // border: 1px solid grey; // Somehow a little "double-border" with the border of the parent div, but missing border lines without.
     // TODO: If transform scale is set, then the 1px border is huge, also scaled up!
     cursor: pointer;
+    // Prevent page scroll while drawing
+    touch-action: none;
+    // Remove transform origin issues
+    transform-origin: center center;
 }
 
-.canvasDiv {
-    border: 1px solid darkgrey;
-    width: 400px;
-    // width: fit-content;
-    height: 400px;
-    // height: fit-content;
-    align-content: center;
-    display: flex;
-    flex-wrap: wrap;
+.color-picker-section {
+    margin-bottom: 1.5rem;
+    justify-items: center;
+
+    .labelForColorPicker {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+
+    #colorPicker {
+        // TODO: change the width eventually
+        width: 50px;
+        height: 50px;
+        border: 2px solid #ddd;
+        display: block;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: border-color 0.2s;
+
+        &:hover {
+          border-color: #22ee8f;
+        }
+    }
 }
 
-.pixelDrawingBlockContainer {
-    display: none;
-    width: 100%;
-    height: 100%;
+.mat-form-field {
+    width: stretch;
+}
+
+.mat-card-actions {
+    justify-content: space-evenly;
 }

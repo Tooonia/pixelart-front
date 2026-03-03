@@ -42,13 +42,13 @@
                         <canvas id="pixelCanvas" #myCanvas aria-label="Canvas with the pixels to paint" role="img">
                         </canvas>
                     </div>
-                    <div>
+                    <div class="color-picker-section">
                         <!-- <h2>Pick A Color</h2> -->
                         <label for="colorPicker" class="labelForColorPicker">Pick a Color:</label>
                         <input type="color" format="'rgb'" id="colorPicker" #myPickedColor>
                     </div>
                     <div>
-                        <mat-form-field appearance="outline">
+                        <mat-form-field class="mat-form-field" appearance="outline">
                             <!-- TODO: internationalisation -->
                             <mat-label>Title</mat-label>
                             <!-- TODO: text validation, handle special characters!!! For security! -->
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             </div>
-            <mat-card-actions class="d-flex" *ngIf="!gridValidationMode">
+            <mat-card-actions class="mat-card-actions d-flex" *ngIf="!gridValidationMode">
                 <button type="button" (click)="cancelAction()">Cancel</button>
                 <!-- TODO: ide mar nem kell szerintem click="saveAction()", GOND: nelkule megsem mukodik!!!-->
                 <!-- [disabled]="!managePixelartForm.valid" -->
