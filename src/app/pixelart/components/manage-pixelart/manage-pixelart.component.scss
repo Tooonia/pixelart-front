@@ -63,7 +63,7 @@
 }
 
 .canvasDiv {
-    border: 1px solid darkgrey;
+
     // TODO: fix size? In px?
     width: 400px;
     // width: fit-content;
@@ -88,6 +88,7 @@
 
 #pixelCanvas {
     margin: auto;
+    border: 1px solid darkgrey;
     // width: 200px; //Without these 2 dimension settings, the canvas stays at its sizes set in the HTML on canvas element.
     // height: 200px;
     // transform: scale(10);
@@ -98,8 +99,6 @@
     cursor: pointer;
     // Prevent page scroll while drawing
     touch-action: none;
-    // Remove transform origin issues
-    transform-origin: center center;
 }
 
 .color-picker-section {

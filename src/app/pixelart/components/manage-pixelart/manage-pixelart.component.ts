@@ -238,32 +238,48 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
       this.makeGrid(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     }
 
-    // Show the canvas
-    this.renderer.setStyle(this.canvas.nativeElement, 'display', 'block');
-
-    // FIX: Calculate scale to fit in 380px container
-    // while maintaining aspect ratio
-    const containerSize = 380; // Match the .canvasDiv size
-    const canvasWidth = this.canvas.nativeElement.width;
-    const canvasHeight = this.canvas.nativeElement.height;
-
-    // Calculate scale to fit container
-    const scaleX = containerSize / canvasWidth;
-    const scaleY = containerSize / canvasHeight;
-
-    // Use the smaller scale to ensure it fits
-    this.scaleToSize = Math.min(scaleX, scaleY);
-
-    // Apply scale using CSS transform
-    // IMPORTANT: This is just for visual display
-    this.renderer.setStyle(
-      this.canvas.nativeElement,
-      'transform',
-      `scale(${this.scaleToSize})`
-    );
-
     this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'block');
     this.gridValidationMode = false;
+
+    // Use setTimeout to wait for DOM to update before measuring
+    setTimeout(() => {
+      // RESPONSIVE SCALE CALCULATION
+      // Get the container size dynamically
+      const containerSize = this.containerDivForCanvas.nativeElement;
+      const containerRect = containerSize.getBoundingClientRect();
+
+      // Use 95% of container to leave some padding
+      const availableSize = Math.min(containerRect.width, containerRect.height) * 0.95;
+
+      console.log('Container size:', containerRect.width, 'x', containerRect.height);
+      console.log('Available size for canvas:', availableSize);
+      console.log('Canvas dimensions:', this.canvas.nativeElement.width, 'x', this.canvas.nativeElement.height);
+
+      // Calculate scale to fit container
+      const scaleX = availableSize / this.canvas.nativeElement.width;
+      const scaleY = availableSize / this.canvas.nativeElement.height;
+
+      // Use the smaller scale to ensure it fits
+      this.scaleToSize = Math.min(scaleX, scaleY);
+
+      // Calculate final display dimensions (keeping aspect ratio)
+      const displayWidth = this.canvas.nativeElement.width * this.scaleToSize;
+      const displayHeight = this.canvas.nativeElement.height * this.scaleToSize;
+
+      // FIX: Set CSS dimensions instead of transform scale
+      // This ensures proper layout flow
+      this.renderer.setStyle(this.canvas.nativeElement, 'width', `${displayWidth}px`);
+      this.renderer.setStyle(this.canvas.nativeElement, 'height', `${displayHeight}px`);
+
+      // Remove any transform scale (we don't need it anymore)
+      this.renderer.setStyle(this.canvas.nativeElement, 'transform', 'none');
+
+      // Show the canvas
+      this.renderer.setStyle(this.canvas.nativeElement, 'display', 'block');
+
+      // Force change detection
+      this.cdRef.detectChanges();
+    }, 0);
 
     if (this.canvas.nativeElement.getContext('2d') !== null) {
       this.context = this.canvas.nativeElement.getContext('2d');
@@ -320,7 +336,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
 
   colorPixel(point: Point): Pixel {
     let pickedColorToSet = this.pickedColor.nativeElement.value;
-    let pixelToColor = new Pixel(point.x, point.y, 1, 1);
+    let pixelToColor = new Pixel((point.x - 1), (point.y - 1), 1, 1);
 
     if (this.context) {
       this.context.fillStyle = pickedColorToSet;
@@ -330,10 +346,8 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   }
 
   /**
- * Get accurate canvas coordinates accounting for:
- * - Canvas position on page
- * - CSS transform scale
- * - Touch vs mouse events
+ * Get accurate canvas coordinates accounting for CSS size vs pixel size
+ * Returns 1-indexed coordinates (1,1 to width,height)
  */
   private getCanvasCoordinates(event: MouseEvent | TouchEvent): Point {
     const canvas = this.canvas.nativeElement;
@@ -356,7 +370,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
       clientY = event.clientY;
     }
 
-    // Get position relative to canvas (accounts for page scroll and canvas position)
+    // Get position relative to canvas
     const x = clientX - rect.left;
     const y = clientY - rect.top;
 
@@ -376,10 +390,14 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
       return new Point(-100, -100);
     }
 
+    // Convert to 1-indexed for display (1,1 to width,height)
+    const displayX = canvasX + 1;
+    const displayY = canvasY + 1;
+
     console.log('Display coords:', x, y);
     console.log('Scale:', scaleX, scaleY);
     console.log('Canvas coords:', canvasX, canvasY);
 
-    return new Point(canvasX, canvasY);
+    return new Point(displayX, displayY);
   }
 }
