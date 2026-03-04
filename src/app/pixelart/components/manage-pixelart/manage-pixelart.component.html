@@ -55,6 +55,9 @@
                             <!-- TODO: [(ngModel)]="pixelartItem" to add here?  -->
                             <input type="text" matInput placeholder="Title of pixelart" formControlName="name"
                                 autocomplete="off" required>
+                                <mat-error *ngIf="managePixelartForm.get('name')?.hasError('required')">
+                                    Title is required
+                                </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
