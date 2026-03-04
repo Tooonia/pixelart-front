@@ -239,7 +239,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy
 
     // Use setTimeout to wait for DOM to update before measuring
     setTimeout(() => {
-      this.recalculateCanvasSize();
+      this.calculateCanvasSize();
     }, 0);
 
     // Initialize canvas context
@@ -286,14 +286,14 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy
 
     // Debounce resize - wait 150ms after user stops resizing
     this.resizeTimeout = setTimeout(() => {
-      this.recalculateCanvasSize();
+      this.calculateCanvasSize();
     }, 150);
   }
 
   /**
    * Recalculate and apply canvas display size based on current container size
    */
-  private recalculateCanvasSize(): void {
+  private calculateCanvasSize(): void {
       // RESPONSIVE SCALE CALCULATION
       // Get the container size dynamically
       const containerSize = this.containerDivForCanvas.nativeElement;
