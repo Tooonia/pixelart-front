@@ -57,27 +57,19 @@
 .pixelDrawingBlockContainer {
     display: none;
     width: 100%;
-    // max-width: 800px;
     height: 100%;
     margin: 0 auto;
 }
 
 .canvasDiv {
-
-    // TODO: fix size? In px?
     width: 400px;
-    // width: fit-content;
     height: 400px;
-    // height: fit-content;
     margin: 0 auto 1.5rem;
-    // align-content: center;
     display: flex;
-    // flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     overflow: hidden;
 
-    // TODO: do I need this @media setting on parent divs too?
     @media (max-width: 768px) {
         width: 90vw;
         height: 90vw;
@@ -89,16 +81,10 @@
 #pixelCanvas {
     margin: auto;
     border: 1px solid darkgrey;
-    // width: 200px; //Without these 2 dimension settings, the canvas stays at its sizes set in the HTML on canvas element.
-    // height: 200px;
-    // transform: scale(10);
-    // padding: 50px;
     image-rendering: pixelated; //Renders the colored pixels really net, not blurred.
-    // border: 1px solid grey; // Somehow a little "double-border" with the border of the parent div, but missing border lines without.
-    // TODO: If transform scale is set, then the 1px border is huge, also scaled up!
     cursor: pointer;
-    // Prevent page scroll while drawing
-    touch-action: none;
+    touch-action: none; // Prevent page scroll while drawing
+    transition: width 0.1s ease, height 0.1s ease; // Smooth resize transition
 }
 
 .color-picker-section {

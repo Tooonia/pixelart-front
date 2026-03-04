@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Route, Router } from '@angular/router';
 import { PixelartItem } from '../../model/pixelart-item';
@@ -16,7 +16,7 @@ import { PixelartRequestItem } from '../../model/pixelart-request-item';
   templateUrl: './manage-pixelart.component.html',
   styleUrls: ['./manage-pixelart.component.scss']
 })
-export class ManagePixelartComponent implements OnInit, AfterViewInit {
+export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('myCanvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('myPickedColor', { static: true }) pickedColor!: ElementRef;
   @ViewChild('pixelDrawingBlockContainer', { static: true }) containerDivForDrawingBlock!: ElementRef;
@@ -32,8 +32,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   editMode: boolean = false;
   gridValidationMode: boolean = true;
   id!: number;
-  context!: CanvasRenderingContext2D | null; //Without "| null" there was an error:
-  // Type 'CanvasRenderingContext2D | null' is not assignable to type 'CanvasRenderingContext2D'.
+  context!: CanvasRenderingContext2D | null;
   canvasHeight: number = 0;
   canvasWidth: number = 0;
   canvasColor: string = '';
@@ -45,9 +44,9 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
   paint: boolean = false;
   clickedX: number[] = [];
   clickedY: number[] = [];
-  private clickDrag: boolean[] = [];
   mousePosition = new Point(-100, -100);
   pixelsClicked: Pixel[] = [];
+  private resizeTimeout: any;
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -65,7 +64,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.managePixelartForm = new UntypedFormGroup({
-      'name': new UntypedFormControl(''), // Ez volt itt!
+      'name': new UntypedFormControl(''),
       'width': new UntypedFormControl(0),
       'height': new UntypedFormControl(0)
     });
@@ -96,13 +95,11 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
             }
 
             this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'block');
-            // TODO: rendering is nagyon darabos!!! Az elejen megjelenik az is, aminek nem kellene!!! setTimout?
           })
         } else {
           this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'none');
           this.gridValidationMode = true;
         }
-
       });
   }
 
@@ -203,13 +200,13 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
           this.pixelartSimpleItem.name = this.managePixelartForm.value.name;
           this.pixelartSimpleItem.width = this.managePixelartForm.value.width;
           this.pixelartSimpleItem.height = this.managePixelartForm.value.height;
-          this.pixelartSimpleItem.canvas = Array.from(this.imageData.data); //TODO FONTOS: megnezni, h ki lehet-e ezt a value-t jelolni, vagy setValue kell, mint fentebb?
+          this.pixelartSimpleItem.canvas = Array.from(this.imageData.data);
           this.savedAction.emit(this.pixelartSimpleItem);
         } else {
           this.pixelarRequestItem.name = this.managePixelartForm.value.name;
           this.pixelarRequestItem.width = this.managePixelartForm.value.width;
           this.pixelarRequestItem.height = this.managePixelartForm.value.height;
-          this.pixelarRequestItem.canvas = Array.from(this.imageData.data); //TODO FONTOS: megnezni, h ki lehet-e ezt a value-t jelolni, vagy setValue kell, mint fentebb?
+          this.pixelarRequestItem.canvas = Array.from(this.imageData.data);
           this.savedActionForCreate.next(this.pixelarRequestItem);
         }
       }
@@ -220,11 +217,10 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
     this.cancelledAction.emit(this.pixelartSimpleItem); //TODO: maybe no need to have an eventemitter<PixelItem> on that function?
   }
 
-  onValidateCanvasSize() { //TODO: rendszerezni a benne levo dolgokat, editMode reszt, ...
-
+  onValidateCanvasSize() {
     // Set canvas actual pixel dimensions
     if (this.editMode) {
-      this.canvas.nativeElement.width = this.pixelartSimpleItem.width; // TODO: vagy: this.manageCanvasForm.value.width, as fentebb kijelolve!
+      this.canvas.nativeElement.width = this.pixelartSimpleItem.width;
       this.canvas.nativeElement.height = this.pixelartSimpleItem.height;
     } else {
       this.canvas.nativeElement.width = this.managePixelartForm.value.width;
@@ -281,11 +277,13 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
       this.cdRef.detectChanges();
     }, 0);
 
+    // Initialize canvas context
     if (this.canvas.nativeElement.getContext('2d') !== null) {
       this.context = this.canvas.nativeElement.getContext('2d');
       this.addInteractions();
     }
 
+    // Load existing pixel art if in edit mode
     if (this.editMode) {
       this.imageData = new ImageData(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
       for (let i = 0; i < this.imageData.data.length; i += 1) {
@@ -300,6 +298,72 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
     } else {
       this.imageData = new ImageData(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     }
+  }
+
+    /**
+   * Handle window resize - recalculate canvas display size
+   * Uses debouncing to avoid too many calculations
+   */
+  @HostListener('window:resize', ['$event'])
+  onWindowResize(event?: Event): void {
+    // Only resize if canvas is visible and has been created
+    if (!this.canvas ||
+        !this.canvas.nativeElement ||
+        this.gridValidationMode ||
+        !this.canvas.nativeElement.width) {
+      return;
+    }
+
+    // Clear previous timeout
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
+
+    // Debounce resize - wait 150ms after user stops resizing
+    this.resizeTimeout = setTimeout(() => {
+      this.recalculateCanvasSize();
+    }, 150);
+  }
+
+  /**
+   * Recalculate and apply canvas display size based on current container size
+   */
+  private recalculateCanvasSize(): void {
+    // Get current canvas pixel dimensions (these never change)
+    const width = this.canvas.nativeElement.width;
+    const height = this.canvas.nativeElement.height;
+
+    // Get current container size
+    const container = this.containerDivForCanvas.nativeElement;
+    const containerRect = container.getBoundingClientRect();
+
+    console.log('Recalculating canvas size');
+    console.log('Container size:', containerRect.width, 'x', containerRect.height);
+    console.log('Canvas pixel dimensions:', width, 'x', height);
+
+    // Calculate display size to fit container
+    const availableSize = Math.min(containerRect.width, containerRect.height) * 0.95;
+
+    // Calculate scale
+    const scaleX = availableSize / width;
+    const scaleY = availableSize / height;
+    const scale = Math.min(scaleX, scaleY);
+
+    // Calculate display dimensions
+    const displayWidth = width * scale;
+    const displayHeight = height * scale;
+
+    console.log('New display size:', displayWidth, 'x', displayHeight);
+
+    // Apply new CSS dimensions
+    this.renderer.setStyle(this.canvas.nativeElement, 'width', `${displayWidth}px`);
+    this.renderer.setStyle(this.canvas.nativeElement, 'height', `${displayHeight}px`);
+
+    // Update stored scale for coordinate conversion
+    this.scaleToSize = scale;
+
+    // Force change detection
+    this.cdRef.detectChanges();
   }
 
   makeGrid(width: number, height: number) {
@@ -399,5 +463,12 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
     console.log('Canvas coords:', canvasX, canvasY);
 
     return new Point(displayX, displayY);
+  }
+
+  ngOnDestroy(): void {
+    // Clean up resize timeout
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
   }
 }
