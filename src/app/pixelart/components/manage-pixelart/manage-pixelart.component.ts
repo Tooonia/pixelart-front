@@ -229,6 +229,12 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit {
     } else {
       this.canvas.nativeElement.width = this.managePixelartForm.value.width;
       this.canvas.nativeElement.height = this.managePixelartForm.value.height;
+
+      // Validate dimensions
+      if (this.canvas.nativeElement.width < 1 || this.canvas.nativeElement.height < 1 || this.canvas.nativeElement.width > 128 || this.canvas.nativeElement.height > 128) {
+        alert('Grid size must be between 1 and 128');
+        return;
+      }
       this.makeGrid(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     }
 
