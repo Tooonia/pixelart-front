@@ -239,42 +239,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy
 
     // Use setTimeout to wait for DOM to update before measuring
     setTimeout(() => {
-      // RESPONSIVE SCALE CALCULATION
-      // Get the container size dynamically
-      const containerSize = this.containerDivForCanvas.nativeElement;
-      const containerRect = containerSize.getBoundingClientRect();
-
-      // Use 95% of container to leave some padding
-      const availableSize = Math.min(containerRect.width, containerRect.height) * 0.95;
-
-      console.log('Container size:', containerRect.width, 'x', containerRect.height);
-      console.log('Available size for canvas:', availableSize);
-      console.log('Canvas dimensions:', this.canvas.nativeElement.width, 'x', this.canvas.nativeElement.height);
-
-      // Calculate scale to fit container
-      const scaleX = availableSize / this.canvas.nativeElement.width;
-      const scaleY = availableSize / this.canvas.nativeElement.height;
-
-      // Use the smaller scale to ensure it fits
-      this.scaleToSize = Math.min(scaleX, scaleY);
-
-      // Calculate final display dimensions (keeping aspect ratio)
-      const displayWidth = this.canvas.nativeElement.width * this.scaleToSize;
-      const displayHeight = this.canvas.nativeElement.height * this.scaleToSize;
-
-      // FIX: Set CSS dimensions instead of transform scale
-      // This ensures proper layout flow
-      this.renderer.setStyle(this.canvas.nativeElement, 'width', `${displayWidth}px`);
-      this.renderer.setStyle(this.canvas.nativeElement, 'height', `${displayHeight}px`);
-
-      // Remove any transform scale (we don't need it anymore)
-      this.renderer.setStyle(this.canvas.nativeElement, 'transform', 'none');
-
-      // Show the canvas
-      this.renderer.setStyle(this.canvas.nativeElement, 'display', 'block');
-
-      // Force change detection
-      this.cdRef.detectChanges();
+      this.recalculateCanvasSize();
     }, 0);
 
     // Initialize canvas context
@@ -329,41 +294,40 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy
    * Recalculate and apply canvas display size based on current container size
    */
   private recalculateCanvasSize(): void {
-    // Get current canvas pixel dimensions (these never change)
-    const width = this.canvas.nativeElement.width;
-    const height = this.canvas.nativeElement.height;
+      // RESPONSIVE SCALE CALCULATION
+      // Get the container size dynamically
+      const containerSize = this.containerDivForCanvas.nativeElement;
+      const containerRect = containerSize.getBoundingClientRect();
 
-    // Get current container size
-    const container = this.containerDivForCanvas.nativeElement;
-    const containerRect = container.getBoundingClientRect();
+      // Calculate display size to fit container and
+      // use 95% of container to leave some padding
+      const availableSize = Math.min(containerRect.width, containerRect.height) * 0.95;
 
-    console.log('Recalculating canvas size');
-    console.log('Container size:', containerRect.width, 'x', containerRect.height);
-    console.log('Canvas pixel dimensions:', width, 'x', height);
+      console.log('Container size:', containerRect.width, 'x', containerRect.height);
+      console.log('Available size for canvas:', availableSize);
+      console.log('Canvas dimensions:', this.canvas.nativeElement.width, 'x', this.canvas.nativeElement.height);
 
-    // Calculate display size to fit container
-    const availableSize = Math.min(containerRect.width, containerRect.height) * 0.95;
+      // Calculate scale to fit container
+      const scaleX = availableSize / this.canvas.nativeElement.width;
+      const scaleY = availableSize / this.canvas.nativeElement.height;
 
-    // Calculate scale
-    const scaleX = availableSize / width;
-    const scaleY = availableSize / height;
-    const scale = Math.min(scaleX, scaleY);
+      // Use the smaller scale to ensure it fits
+      this.scaleToSize = Math.min(scaleX, scaleY);
 
-    // Calculate display dimensions
-    const displayWidth = width * scale;
-    const displayHeight = height * scale;
+      // Calculate final display dimensions (keeping aspect ratio)
+      const displayWidth = this.canvas.nativeElement.width * this.scaleToSize;
+      const displayHeight = this.canvas.nativeElement.height * this.scaleToSize;
 
-    console.log('New display size:', displayWidth, 'x', displayHeight);
+      // FIX: Set CSS dimensions instead of transform scale
+      // This ensures proper layout flow
+      this.renderer.setStyle(this.canvas.nativeElement, 'width', `${displayWidth}px`);
+      this.renderer.setStyle(this.canvas.nativeElement, 'height', `${displayHeight}px`);
 
-    // Apply new CSS dimensions
-    this.renderer.setStyle(this.canvas.nativeElement, 'width', `${displayWidth}px`);
-    this.renderer.setStyle(this.canvas.nativeElement, 'height', `${displayHeight}px`);
+      // Show the canvas
+      this.renderer.setStyle(this.canvas.nativeElement, 'display', 'block');
 
-    // Update stored scale for coordinate conversion
-    this.scaleToSize = scale;
-
-    // Force change detection
-    this.cdRef.detectChanges();
+      // Force change detection
+      this.cdRef.detectChanges();
   }
 
   makeGrid(width: number, height: number) {
