@@ -22,11 +22,31 @@
                     <!-- TODO: kell ngSubmit ide? FONTOS: nem form-kent kezelni, csak az inputjait formControl-kent?  -->
                     <!-- <div id="sizePicker" [formGroup]="manageCanvasForm" (ngSubmit)="onValidateCanvasSize()"> -->
                     <div id="sizePicker">
-                        <p>Grid Width:</p>
+                        <p>Grid Width (max 128):</p>
                         <!-- TODO: FONTOS: csak pozitiv egesz szamokat engedjen! Form validation!!! -->
-                        <input type="number" formControlName="width" id="inputWeight" name="width" min="1" value="1">
-                        <p>Grid Height:</p>
-                        <input type="number" formControlName="height" id="inputHeight" name="height" min="1" value="1">
+                        <input
+                            type="number"
+                            formControlName="width"
+                            id="inputWidth"
+                            name="width"
+                            min="1"
+                            max="128"
+                            value="1"
+                            pattern="[1-9][0-9]*"
+                            (input)="validateIntegerInput($event, 'width')"
+                            (keypress)="preventInvalidChars($event)">
+                        <p>Grid Height (max 128):</p>
+                        <input
+                            type="number"
+                            formControlName="height"
+                            id="inputHeight"
+                            name="height"
+                            min="1"
+                            max="128"
+                            value="1"
+                            pattern="[1-9][0-9]*"
+                            (input)="validateIntegerInput($event, 'height')"
+                            (keypress)="preventInvalidChars($event)">
                         <button type="button" (click)="onValidateCanvasSize()">Create Canvas</button>
                     </div>
                 </div>

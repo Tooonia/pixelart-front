@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Route, Router } from '@angular/router';
 import { PixelartItem } from '../../model/pixelart-item';
 import { PixelartService } from 'src/app/core/services/pixelart.service';
@@ -64,9 +64,23 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy
 
   ngOnInit(): void {
     this.managePixelartForm = new UntypedFormGroup({
-      'name': new UntypedFormControl(''),
-      'width': new UntypedFormControl(0),
-      'height': new UntypedFormControl(0)
+      'name': new UntypedFormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(100)
+      ]),
+      'width': new UntypedFormControl(16, [
+        Validators.required,
+        Validators.min(1),
+        Validators.max(128),
+        Validators.pattern(/^[1-9][0-9]*$/) // No leading zeros
+      ]),
+      'height': new UntypedFormControl(16, [
+        Validators.required,
+        Validators.min(1),
+        Validators.max(128),
+        Validators.pattern(/^[1-9][0-9]*$/) // No leading zeros
+      ])
     });
 
     this.route.params.subscribe(
@@ -371,6 +385,81 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy
       this.context.fillRect(pixelToColor.x, pixelToColor.y, pixelToColor.width, pixelToColor.height);
     }
     return pixelToColor;
+  }
+
+  /**
+   * Prevent non-numeric characters except backspace, delete, arrow keys
+   */
+  preventInvalidChars(event: KeyboardEvent): boolean {
+    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+    const key = event.key;
+
+    // Allow control keys
+    if (allowedKeys.includes(key)) {
+      return true;
+    }
+
+    // Prevent decimal point
+    if (key === '.' || key === ',') {
+      event.preventDefault();
+      return false;
+    }
+
+    // Prevent minus sign
+    if (key === '-') {
+      event.preventDefault();
+      return false;
+    }
+
+    // Only allow digits
+    if (!/^\d$/.test(key)) {
+      event.preventDefault();
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Validate and clean integer input
+   * Removes leading zeros and ensures valid range
+   */
+  validateIntegerInput(event: any, fieldName: string): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value;
+
+    // Remove any non-digit characters
+    value = value.replace(/[^\d]/g, '');
+
+    // Remove leading zeros
+    if (value.length > 1 && value.startsWith('0')) {
+      value = value.replace(/^0+/, '');
+    }
+
+    // If empty after cleaning, set to empty string
+    if (value === '') {
+      this.managePixelartForm.get(fieldName)?.setValue('', { emitEvent: false });
+      input.value = '';
+      return;
+    }
+
+    // Parse as integer
+    let numValue = parseInt(value, 10);
+
+    // Enforce min/max
+    if (numValue < 1) {
+      numValue = 1;
+      value = '1';
+    } else if (numValue > 128) {
+      numValue = 128;
+      value = '128';
+    }
+
+    // Update form control
+    this.managePixelartForm.get(fieldName)?.setValue(numValue, { emitEvent: false });
+
+    // Update input display
+    input.value = value;
   }
 
   /**
