@@ -5,6 +5,7 @@ import {httpInterceptorProviders} from "../http-interceptors";
 import { UserService } from './services/user.service';
 import { AuthService } from './services/auth.service';
 import { EmailAliasValidatorDirective } from './helpers/email-alias-validator.directive';
+import { CanvasService } from './services/canvas.service';
 
 // TODO: see if needs to be completed or not!!!
 @NgModule({
@@ -21,7 +22,8 @@ import { EmailAliasValidatorDirective } from './helpers/email-alias-validator.di
     httpInterceptorProviders,
     PixelartService,
     UserService,
-    AuthService
+    AuthService,
+    CanvasService
   ]
 })
 export class CoreModule { }
