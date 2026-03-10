@@ -47,9 +47,4 @@ export class UpdateComponent implements OnInit {
   public onCancelGoBackToDetails(): void {
     this.router.navigate(['/pixelart/' + this.pixelartItemToUpdate.id])
   }
-
-  public closePixelartEditDetails(): void {
-    this.router.navigate(['/pixelart/' + this.pixelartItemToUpdate.id])
-  }
-
 }

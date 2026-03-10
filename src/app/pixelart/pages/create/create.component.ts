@@ -54,10 +54,6 @@ export class CreateComponent implements OnInit {
 		// this.router.navigateByUrl('/pixelart/create-pixelart');
   }
 
-  public closeCreateNewPixelart(): void {
-    this.router.navigate(['/pixelart/catalog'])
-  }
-
   public onCancelGoBackToCatalog(): void {
     this.router.navigate(['/pixelart/catalog'])
   }
