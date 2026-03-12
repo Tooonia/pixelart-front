@@ -79,6 +79,8 @@
 }
 
 #pixelCanvas {
+    max-width: 100%;
+    height: auto;
     margin: auto;
     border: 1px solid darkgrey;
     image-rendering: pixelated; //Renders the colored pixels really net, not blurred.

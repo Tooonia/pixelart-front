@@ -1,7 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: OpenSans, sans-serif; background-color: #CCEFC2;}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    // Prevents horizontal shifting:
+    overflow-x: hidden;
+}
+body {
+    margin: 0;
+    font-family: OpenSans, sans-serif;
+    background-color: #CCEFC2;
+}
 
 /* Custom utility classes */
 .active {
@@ -11,10 +25,7 @@ body { margin: 0; font-family: OpenSans, sans-serif; background-color: #CCEFC2;}
 /* Custom container styles */
 .container-fluid {
     width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
+    margin: auto;
 }
 
 /* Custom flexbox utilities */
@@ -82,4 +93,3 @@ body { margin: 0; font-family: OpenSans, sans-serif; background-color: #CCEFC2;}
     background-color: #0b5ed7;
     border-color: #0a58ca;
 }
-
