@@ -50,6 +50,15 @@ export class PixelartService {
     // );// DOES NOT WORK!!!
   }
 
+  /**
+ * GET one simple pixelart (without user) by id
+ * @param id
+ * @returns
+ */
+  public getSimplePixelartById(id: number): Observable<PixelartSimpleItem> {
+    return this.http.get<PixelartSimpleItem>(`${this.basePath}/pixelart-simple/${id}`);
+  }
+
 /**
  * GET all pixelart from one User by user id
  * @param id
