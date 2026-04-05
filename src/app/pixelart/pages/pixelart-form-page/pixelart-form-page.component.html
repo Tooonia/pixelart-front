@@ -1,0 +1,21 @@
+<div class="form-page-container">
+    <div class="form-page-header">
+        <div class="form-page-title">{{ isEditMode ? 'Edit Pixelart' : 'Create New Pixelart' }}</div>
+    </div>
+
+    <app-manage-pixelart
+        *ngIf="isEditMode && pixelartToEdit"
+        [editMode]="true"
+        [pixelartSimpleItem]="pixelartToEdit"
+        (savedAction)="onSave($event)"
+        (cancelledAction)="onCancel()">
+    </app-manage-pixelart>
+
+    <app-manage-pixelart
+        *ngIf="!isEditMode"
+        [editMode]="false"
+        [pixelartRequestItem]="emptyPixelart"
+        (savedActionForCreate)="onSave($event)"
+        (cancelledAction)="onCancel()">
+    </app-manage-pixelart>
+</div>

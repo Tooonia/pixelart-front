@@ -10,7 +10,7 @@
         <div class="close-button" (click)="closePixelartDetails()">X</div>
     <div class="detail-content">
         <!-- TODO: Use <app-pixelart-card> component instead. See how to name buttons! -->
-        <mat-card>
+        <mat-card *ngIf="pixelartToDisplay">
             <mat-card-content>
                 <mat-card-title>
                     {{ pixelartToDisplay.name }}
@@ -30,4 +30,3 @@
     </div>
     </div>
 </div>
-

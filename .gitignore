@@ -44,3 +44,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Archives (do not commit; can exceed GitHub limits)
+*.zip

@@ -1,34 +1,62 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params } from '@angular/router';
-import { PixelartItem } from '../../model/pixelart-item';
-import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { Point } from '../../model/pixel-coordinates';
 import { Pixel } from '../../model/pixel';
 import { PixelartSimpleItem } from '../../model/pixelart-simple-item';
 import { PixelartRequestItem } from '../../model/pixelart-request-item';
 import { CanvasService } from 'src/app/core/services/canvas.service';
 
+/**
+ * ManagePixelartComponent
+ *
+ * A reusable canvas-based form component for both creating and editing a pixelart item.
+ * It is a pure "presentational + interaction" component: it receives all data via @Input
+ * and communicates results back to the parent via @Output. It does NOT fetch data or
+ * navigate — those responsibilities belong to the parent page component (PixelartFormPageComponent).
+ *
+ * Usage (edit mode):
+ *   <app-manage-pixelart
+ *     [editMode]="true"
+ *     [pixelartSimpleItem]="itemToEdit"
+ *     (savedAction)="onSave($event)"
+ *     (cancelledAction)="onCancel()">
+ *   </app-manage-pixelart>
+ *
+ * Usage (create mode):
+ *   <app-manage-pixelart
+ *     [editMode]="false"
+ *     [pixelartRequestItem]="emptyItem"
+ *     (savedActionForCreate)="onSave($event)"
+ *     (cancelledAction)="onCancel()">
+ *   </app-manage-pixelart>
+ */
 
 @Component({
   selector: 'app-manage-pixelart',
   templateUrl: './manage-pixelart.component.html',
   styleUrls: ['./manage-pixelart.component.scss']
 })
-export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('myCanvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('myPickedColor', { static: true }) pickedColor!: ElementRef;
-  @ViewChild('pixelDrawingBlockContainer', { static: true }) containerDivForDrawingBlock!: ElementRef;
+export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+  @ViewChild('myCanvas', { static: false }) canvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('myPickedColor', { static: false }) pickedColor!: ElementRef;
+  @ViewChild('canvasDiv', { static: false }) containerDivForCanvas!: ElementRef;
   @ViewChild('gridSizeSettingContainer', { static: true }) containerDivForGridSizeSetting!: ElementRef;
-  @ViewChild('canvasDiv', { static: true }) containerDivForCanvas!: ElementRef;
+  @ViewChild('pixelDrawingBlockContainer', { static: false }) containerDivForDrawingBlock!: ElementRef;
+  /** Set to true when editing an existing pixelart, false when creating a new one. */
+  @Input() editMode: boolean = false;
+  /** Populated by the parent in edit mode. The component will pre-fill the form and canvas from this. */
+  @Input() pixelartSimpleItem!: PixelartSimpleItem;
+  /** Populated by the parent in create mode (can be an empty PixelartRequestItem shell). */
+  @Input() pixelartRequestItem!: PixelartRequestItem;
+  /** Emitted when the user saves in edit mode. */
+  @Output() savedAction = new EventEmitter<PixelartSimpleItem>();
+  /** Emitted when the user saves in create mode. */
+  @Output() savedActionForCreate = new EventEmitter<PixelartRequestItem>();
+  /** Emitted when the user cancels (both modes). The parent decides where to navigate. */
+  @Output() cancelledAction = new EventEmitter<PixelartSimpleItem>();
+
   managePixelartForm!: UntypedFormGroup;
   manageCanvasForm!: UntypedFormGroup;
-  @Input() pixelartSimpleItem!: PixelartSimpleItem;
-  @Input() pixelarRequestItem!: PixelartRequestItem;
-  @Output() savedAction = new EventEmitter<PixelartSimpleItem>();
-  @Output() savedActionForCreate = new EventEmitter<PixelartRequestItem>();
-  @Output() cancelledAction = new EventEmitter<PixelartSimpleItem>();
-  editMode: boolean = false;
   gridValidationMode: boolean = true;
   id!: number;
   context!: CanvasRenderingContext2D | null;
@@ -48,8 +76,6 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy
   private canvasCleanup?: () => void;
 
   constructor(
-    private route: ActivatedRoute,
-    private pixelartService: PixelartService,
     private renderer: Renderer2,
     private cdRef: ChangeDetectorRef,
     private canvasService: CanvasService
@@ -60,6 +86,7 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy
     return this.managePixelartForm.valid;
   }
 
+  // Lifecycle
   ngOnInit(): void {
     this.managePixelartForm = new UntypedFormGroup({
       'name': new UntypedFormControl('', [
@@ -81,50 +108,43 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy
       ])
     });
 
-    this.route.params.subscribe(
-      (params: Params) => {
-        this.id = +params['id'];
-        this.editMode = params['id'] != null;
-        if (this.editMode) {
-          this.pixelartService.getById(this.id).subscribe((data: PixelartItem) => {
-            // this.pixelartService.getById(this.id).pipe(map((data: PixelartItem) => {
-            this.pixelartSimpleItem.name = data.name;
-            this.pixelartSimpleItem.width = data.width;
-            this.pixelartSimpleItem.height = data.height;
-            this.pixelartSimpleItem.canvas = data.canvas;
-
-            // TODO: elvileg nem kell ide se az "id", se a "user".
-            this.managePixelartForm.setValue({
-              'name': this.pixelartSimpleItem.name,
-              'width': this.pixelartSimpleItem.width,
-              'height': this.pixelartSimpleItem.height
-            });
-
-            if (this.canvas.nativeElement.getContext('2d') !== null) {
-              this.context = this.canvas.nativeElement.getContext('2d');
-
-              this.onValidateCanvasSize();
-            }
-
-            this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'block');
-          })
-        } else {
-          this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'none');
-          this.gridValidationMode = true;
-        }
+    if (this.editMode) {
+      this.managePixelartForm.setValue({
+        'name': this.pixelartSimpleItem.name,
+        'width': this.pixelartSimpleItem.width,
+        'height': this.pixelartSimpleItem.height
       });
+      this.onValidateCanvasSize();
+    }
+  }
+
+  /**
+   * When the parent swaps the item (e.g. route param change) without destroying this instance,
+   * sync the form and canvas. First input bind runs before ngOnInit; initial edit load uses ngOnInit.
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!this.editMode || !changes['pixelartSimpleItem'] || !this.pixelartSimpleItem) {
+      return;
+    }
+    if (!this.managePixelartForm) {
+      return;
+    }
+    this.managePixelartForm.setValue({
+      name: this.pixelartSimpleItem.name,
+      width: this.pixelartSimpleItem.width,
+      height: this.pixelartSimpleItem.height
+    });
+    this.onValidateCanvasSize();
   }
 
   ngAfterViewInit(): void {
     this.cdRef.detectChanges();
-    if (this.canvas.nativeElement.getContext('2d', { willReadFrequently: true }) !== null) {
-      this.context = this.canvas.nativeElement.getContext('2d');
-      this.pixelarRequestItem = {
-        'name': '',
-        'width': 0,
-        'height': 0,
-        'canvas': ([])
-      }
+
+    this.pixelartRequestItem = {
+      'name': '',
+      'width': 0,
+      'height': 0,
+      'canvas': ([])
     }
   }
 
@@ -207,19 +227,19 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy
       // Get pixel data using Canvas Service
       const canvasData = this.canvasService.getCanvasPixelData(this.canvas.nativeElement);
 
-        if (this.editMode) {
-          this.pixelartSimpleItem.name = this.managePixelartForm.value.name;
-          this.pixelartSimpleItem.width = this.managePixelartForm.value.width;
-          this.pixelartSimpleItem.height = this.managePixelartForm.value.height;
-          this.pixelartSimpleItem.canvas = canvasData;
-          this.savedAction.emit(this.pixelartSimpleItem);
-        } else {
-          this.pixelarRequestItem.name = this.managePixelartForm.value.name;
-          this.pixelarRequestItem.width = this.managePixelartForm.value.width;
-          this.pixelarRequestItem.height = this.managePixelartForm.value.height;
-          this.pixelarRequestItem.canvas = canvasData;
-          this.savedActionForCreate.next(this.pixelarRequestItem);
-        }
+      if (this.editMode) {
+        this.pixelartSimpleItem.name = this.managePixelartForm.value.name;
+        this.pixelartSimpleItem.width = this.managePixelartForm.value.width;
+        this.pixelartSimpleItem.height = this.managePixelartForm.value.height;
+        this.pixelartSimpleItem.canvas = canvasData;
+        this.savedAction.emit(this.pixelartSimpleItem);
+      } else {
+        this.pixelartRequestItem.name = this.managePixelartForm.value.name;
+        this.pixelartRequestItem.width = this.managePixelartForm.value.width;
+        this.pixelartRequestItem.height = this.managePixelartForm.value.height;
+        this.pixelartRequestItem.canvas = canvasData;
+        this.savedActionForCreate.emit(this.pixelartRequestItem);
+      }
     }
   }
 
@@ -247,55 +267,62 @@ export class ManagePixelartComponent implements OnInit, AfterViewInit, OnDestroy
       }
     }
 
-    // Show containers FIRST before measuring
-    this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'block');
     this.gridValidationMode = false;
+    this.cdRef.detectChanges();
 
-    // Set canvas pixel dimensions, needed for grid creation
-    this.canvas.nativeElement.width = width;
-    this.canvas.nativeElement.height = height;
-
-    // Initialize canvas context
-    if (this.canvas.nativeElement.getContext('2d') !== null) {
-      this.context = this.canvas.nativeElement.getContext('2d');
-    }
-
-    // Use setTimeout to wait for DOM to render
+    // Use setTimeout to wait for DOM to render (canvas *ngIf after gridValidationMode is false)
     setTimeout(() => {
-      // Use Canvas Service with AUTO-RESIZE enabled
-    const result = this.canvasService.setupCanvas(
-      this.canvas.nativeElement,
-      {
-        width,
-        height,
-        containerElement: this.containerDivForCanvas.nativeElement,
-        pixelData: this.editMode ? this.pixelartSimpleItem.canvas : undefined,
-        enableAutoResize: true
+      if (this.canvasCleanup) {
+        this.canvasCleanup();
+        this.canvasCleanup = undefined;
       }
-    );
+      if (this.canvas && this.containerDivForCanvas) {
+        // Show containers FIRST before measuring
+        // this.renderer.setStyle(this.containerDivForDrawingBlock.nativeElement, 'display', 'block');
 
-      // Store the scale and context results
-      this.scaleToSize = result.scale;
-      this.context = result.context;
+        // Set canvas pixel dimensions, needed for grid creation
+        this.canvas.nativeElement.width = width;
+        this.canvas.nativeElement.height = height;
 
-      // Store cleanup function for later
-      if (result.cleanup) {
-        this.canvasCleanup = result.cleanup;
-      }
+        // Initialize canvas context
+        if (this.canvas.nativeElement.getContext('2d') !== null) {
+          this.context = this.canvas.nativeElement.getContext('2d');
+        }
 
-          // Create grid if not in edit mode
-      if (!this.editMode && this.context) {
-        this.canvasService.createCheckerboardGrid(
+        // Use Canvas Service with AUTO-RESIZE enabled
+        const result = this.canvasService.setupCanvas(
           this.canvas.nativeElement,
-          this.context
+          {
+            width,
+            height,
+            containerElement: this.containerDivForCanvas.nativeElement,
+            pixelData: this.editMode ? this.pixelartSimpleItem.canvas : undefined,
+            enableAutoResize: true
+          }
         );
+
+        // Store the scale and context results
+        this.scaleToSize = result.scale;
+        this.context = result.context;
+
+        // Store cleanup function for later
+        if (result.cleanup) {
+          this.canvasCleanup = result.cleanup;
+        }
+
+        // Create grid if not in edit mode
+        if (!this.editMode && this.context) {
+          this.canvasService.createCheckerboardGrid(
+            this.canvas.nativeElement,
+            this.context
+          );
+        }
+
+        // Add interactions
+        this.addInteractions();
+      } else {
+        return;
       }
-
-      // Add interactions
-      this.addInteractions();
-
-      // Force change detection
-      this.cdRef.detectChanges();
     }, 0);
   }
 

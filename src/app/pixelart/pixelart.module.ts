@@ -7,11 +7,10 @@ import { PixelartCardComponent } from './components/pixelart-card/pixelart-card.
 import { SharedModule } from '../shared/shared.module';
 import { CoreModule } from '../core/core.module';
 import { PixelartRoutingModule } from './pixelart-routing.module';
-import { UpdateComponent } from './pages/update/update.component';
 import { ManagePixelartComponent } from './components/manage-pixelart/manage-pixelart.component';
-import { CreateComponent } from './pages/create/create.component';
 import { HomeComponent } from './pages/home/home.component';
 import { PortfolioComponent } from './pages/portfolio/portfolio.component';
+import { PixelartFormPageComponent } from './pages/pixelart-form-page/pixelart-form-page.component';
 
 
 @NgModule({
@@ -20,11 +19,10 @@ import { PortfolioComponent } from './pages/portfolio/portfolio.component';
     ListComponent,
     ListContainerComponent,
     PixelartCardComponent,
-    UpdateComponent,
     ManagePixelartComponent,
-    CreateComponent,
     HomeComponent,
-    PortfolioComponent
+    PortfolioComponent,
+    PixelartFormPageComponent
   ],
   imports: [
     CommonModule,
