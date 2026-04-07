@@ -4,6 +4,13 @@ import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { PixelartSimpleItem } from '../../model/pixelart-simple-item';
 import { PixelartRequestItem } from '../../model/pixelart-request-item';
 
+/**
+ * PixelartFormPageComponent
+ *
+ * The parent component of ManagePixelartComponent, doing fetching data,
+ * doing editPixelArt / createPixelArt page rendering and page-level routing.
+ */
+
 @Component({
   selector: 'app-pixelart-form-page',
   templateUrl: './pixelart-form-page.component.html',

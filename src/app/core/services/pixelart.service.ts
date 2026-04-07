@@ -121,7 +121,4 @@ export class PixelartService {
       responseType: 'json',
     });
   }
-
-
 }
-

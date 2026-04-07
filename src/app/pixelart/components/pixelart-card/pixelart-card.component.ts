@@ -1,6 +1,5 @@
-import { Component, Input, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { PixelartItem } from '../../model/pixelart-item';
 import { CanvasService } from 'src/app/core/services/canvas.service';
 
@@ -25,9 +24,7 @@ export class PixelartCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     // GET pixelart by id on '/pixelart/id' works without these 2:
-    private pixelartService: PixelartService,
     private router: Router,
-    private renderer: Renderer2,
     private canvasService: CanvasService
   ) { }
 
