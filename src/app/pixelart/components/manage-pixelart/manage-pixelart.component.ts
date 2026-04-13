@@ -92,7 +92,8 @@ export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit
       'name': new UntypedFormControl('', [
         Validators.required,
         Validators.minLength(1),
-        Validators.maxLength(100)
+        Validators.maxLength(100),
+        Validators.pattern(/^[^<>"'&]*$/)
       ]),
       'width': new UntypedFormControl(16, [
         Validators.required,

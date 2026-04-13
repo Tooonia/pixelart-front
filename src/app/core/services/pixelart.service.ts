@@ -2,9 +2,9 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
-import { catchError, map } from 'rxjs/operators';
 import { PixelartSimpleItem } from 'src/app/pixelart/model/pixelart-simple-item';
 import { PixelartRequestItem } from 'src/app/pixelart/model/pixelart-request-item';
+import { environment } from 'src/environments/environment';
 
 /**
  * Class responsible to call the server side REST API
@@ -16,7 +16,7 @@ import { PixelartRequestItem } from 'src/app/pixelart/model/pixelart-request-ite
 export class PixelartService {
   pixelartSelected = new EventEmitter<PixelartItem>();
   pixelartClickedForDetail = new Subject<number>();
-  private basePath = 'http://localhost:8085/api';
+  private basePath = `${environment.apiUrl}`
 
   constructor(private http: HttpClient) { }
 

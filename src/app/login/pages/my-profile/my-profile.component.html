@@ -1,5 +1,6 @@
-<!-- 2nd solution -->
-<div *ngIf="isSignedin" >
+<!-- This *ngIf setting prevents the template from attempting to
+ red .alias before the HTTP response arrives. -->
+<div *ngIf="isSignedin && signedinUser" >
   <!-- TODO: ngFor kell ide? ngFor="signedinUser" works without as well-->
 	<p>My profile</p>
   <p>My alias : {{ signedinUser.alias }}</p>

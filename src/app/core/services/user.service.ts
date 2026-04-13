@@ -4,9 +4,10 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserGetItem } from 'src/app/pixelart/model/user-get-item';
 import { AuthService } from './auth.service';
+import { environment } from 'src/environments/environment';
 
 // A class member can not have a "const" keyword, that is why this declaration is here.
-// const API_URL = 'http://localhost:8085/api';
+// const API_URL = `${environment.apiUrl}`;
 // Other way to do: with private variable, inside the class, like basePath.
 
 // const signedinUser: UserGetItem = {
@@ -22,7 +23,7 @@ import { AuthService } from './auth.service';
 })
 export class UserService {
 
-  private basePath = 'http://localhost:8085/api';
+  private basePath = `${environment.apiUrl}`;
 
   constructor(
     private http: HttpClient,

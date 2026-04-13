@@ -12,11 +12,19 @@ export class HeaderComponent implements OnInit {
   @ViewChild('dropdownToggle') dropdownToggle!: ElementRef;
   title = 'pixelart-front';
   alias!: string;
-  email!: string;
-  isLoggedIn = false;
+  // email: string | null = null;
+  // isLoggedIn = false;
   username?: string;
   isDropdownOpen = false;
   isMobileMenuOpen = false;
+
+  get isLoggedIn(): boolean {
+    return this.authService.isUserSignedin();
+  }
+
+  get email(): string | null {
+    return this.authService.getSignedinUser();
+  }
 
   constructor(private authService: AuthService,
               private renderer: Renderer2,
@@ -39,7 +47,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     //'!!' returns a boolean value, true-ish if value is not 'null' or 'undefined'.
-    this.isLoggedIn = !!this.authService.getToken();
+    // this.isLoggedIn = !!this.authService.getToken();
     // if (this.isLoggedIn) {
     //   const user = this.tokenStorageService.getUser();
     //   // const user = this.tokenStorageService.getUser();
@@ -47,7 +55,7 @@ export class HeaderComponent implements OnInit {
     //   // this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
     //   // this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
     //   this.username = user.alias;
-    this.email = this.authService.getSignedinUser();
+    // this.email = this.authService.getSignedinUser();
     // console.log('In header the email: ' + this.email); //WORKS!
     //   this.email = user.email;
     // }
@@ -55,7 +63,7 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.authService.signOut();
-    this.isLoggedIn = false;
+    // this.isLoggedIn = false;
   }
 
   toggleDropdown(): void {

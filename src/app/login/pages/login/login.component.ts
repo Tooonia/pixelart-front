@@ -1,21 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { JwtRequestItem } from 'src/app/pixelart/model/jwt-request-item';
-import { UserService } from 'src/app/core/services/user.service';
-import { UserGetItem } from 'src/app/pixelart/model/user-get-item';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   // By using @ViewChild() to access the form, we can have access to it even earlier than of submitting it.
   @ViewChild('f', { static: false }) loginForm!: NgForm;
-// 1st solution
-  // form!: JwtRequest;
+
   form:  JwtRequestItem = {
     email: '',
     password: ''
@@ -23,16 +20,11 @@ export class LoginComponent implements OnInit {
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
-  // alias!: string;
-  // email!: string;
-  // connectedUser!: UserGetItem;
-
-  // isSignedin = false;
+  private redirectTimer?: ReturnType<typeof setTimeout>;
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private userService: UserService) { }
+    private router: Router) { }
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isUserSignedin();
@@ -41,55 +33,34 @@ export class LoginComponent implements OnInit {
 			this.router.navigateByUrl('/pixelart/login/my-profile');//TODO: KELL IDE? az app-routing login > loadChildren miatt nem '/my-profile' itt!
 		}
 
-    // 1st solution
-    // if (this.tokenStorage.getToken()) {
-    //   this.isLoggedIn = true;
-    // }
   }
   onSubmit(): void {
     // const { email, password } = this.form; //appeler jwtRequest
     this.form.email = this.loginForm.value.email;
     this.form.password = this.loginForm.value.password;
-    this.authService.signin(this.form).subscribe({
-    // this.authService.login(this.form).subscribe({
-      next: data => { // appeler jwtResponse
-        this.authService.saveToken(data.jwtToken); //TODO: do I need saveUser here?
+
+    this.authService.signIn(this.form).subscribe({
+      next: () => { // appeler jwtResponse
         this.isLoginFailed = false;
+        // isLoggedIn = true renders the login success banner instantly:
         this.isLoggedIn = true;
-        // this.email = this.form.email; //THIS WORKS
-        // this.email = this.authService.getSignedinUser(); //THIS WORKS
-        // THE FOLLOWING DOES NOT WORK:
-        // this.userService.getUserProfileByEmail(this.form.email).subscribe({
-        //   next: data => {
-        // this.userService.getPrivateUserProfile().subscribe(data => {
-          // THE FOLLOWING DOES NOT WORK:
-        // this.userService.getUserProfileByEmail(this.form.email).subscribe(data => {
-        //     this.connectedUser.id = data.id;
-        //     this.connectedUser.alias = data.alias;
-        //     this.connectedUser.user_email = data.user_email;
-        //     this.connectedUser.pixelarts = data.pixelarts;
-        //     console.log(data);
-        //   }
-        // );
-        // this.userService.getUserProfileByEmail(this.form.email).subscribe(data => {
-        // // this.userService.getPrivateUserProfile().subscribe(data => {
-        //     this.connectedUser = data;
-        //     console.log(data);
-        //   }
-        // );
+        // TODO: Maybe here the "intelligent" routing when signIn while saving a pixelart drawing!!!,
+        // so to navigate back to the current drawing.
+        // setTimeout 1500 keeps the logged in message on the screen for
+        // 1,5 sec before navigating away to the my-profile page:
         setTimeout(() => {
-          this.reloadPage();
+          this.router.navigate(['/pixelart/login/my-profile']);
         }, 1500);
       },
       error: err => {
         if (err != null && err.message != null && err.status === 401) {
         this.errorMessage = 'The authentication credentials are invalid.';//TODO: Handle other error cases!
-        // console.log(err);
-        // console.log(err.message);
-        } this.isLoginFailed = true;
+        } else {
+          this.errorMessage = 'An unexpected error occurred. Please try again.';
+        }
+        this.isLoginFailed = true;
       }
     });
-    // console.log(this.loginForm); //works here!
   }
 
   reloadPage(): void {
@@ -97,7 +68,11 @@ export class LoginComponent implements OnInit {
     window.location.reload();
   }
 
-
+  // Clearing the setTimeout timer ensures that even if the user navigates away
+  // before the 1,5 sec timer ends, the setTimeout callback will not fire and navigate.
+  ngOnDestroy(): void {
+    clearTimeout(this.redirectTimer);
+  }
 //  4th solution
 //  form:FormGroup;
 

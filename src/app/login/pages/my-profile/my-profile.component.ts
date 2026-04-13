@@ -1,11 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { PixelartItem } from 'src/app/pixelart/model/pixelart-item';
 import { UserGetItem } from 'src/app/pixelart/model/user-get-item';
 
 @Component({
@@ -17,22 +13,17 @@ export class MyProfileComponent implements OnInit {
 
   isSignedin = false;
   signedinUser! : UserGetItem;
-  // signedinUser! : UserPrivateItemModel;
-
-  private basePath = 'http://localhost:8085/api';
 
 	constructor(
-    private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient,
     private authService: AuthService,
-    private userService: UserService,
-    private pixelartService: PixelartService) {}
+    private userService: UserService) {}
 
 	ngOnInit() {
 		this.isSignedin = this.authService.isUserSignedin();
     if(!this.authService.isUserSignedin()) {
-			this.router.navigateByUrl('/signin');
+			this.router.navigateByUrl('/pixelart/login');
+      return;
 		}
 		// this.signedinUserEmail = this.authService.getSignedinUser();
     // this.signedinUser = this.authService.getUserInfo();

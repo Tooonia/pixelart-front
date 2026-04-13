@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { PixelartService } from 'src/app/core/services/pixelart.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { PixelartItem } from '../../model/pixelart-item';
-import { PixelartSimpleItem } from '../../model/pixelart-simple-item';
 import { UserGetItem } from '../../model/user-get-item';
 
 @Component({
@@ -37,8 +36,9 @@ export class PortfolioComponent implements OnInit {
 
   ngOnInit(): void {
     this.isSignedin = this.authService.isUserSignedin();
-    if(!this.authService.isUserSignedin()) {
-			this.router.navigateByUrl('/signin');
+    if (!this.isSignedin) {
+      this.router.navigateByUrl('/pixelart/login');
+      return;
 		}
     // 2nd solution: with this, current user data is written correctly in console!!!
     // TODO: this works! But buhera!!! Es inkabb a user.service.ts-ben kellene ezt csinalni!
@@ -63,9 +63,9 @@ export class PortfolioComponent implements OnInit {
     // Mikor beirtam egy ?-et a signedInUser moge, eltunt. TODO: atnezni!!!
       this.userService.getPrivateUserProfile().subscribe(data => {
         this.signedinUser = data;
-        this.pixelartService.getAllPixelArtByUser(this.signedinUser.id).subscribe((data: PixelartItem[]) => {
-          this.pixelarts = data;
-          console.log(this.pixelarts);
+        this.pixelartService.getAllPixelArtByUser(this.signedinUser.id).subscribe((pixelarts: PixelartItem[]) => {
+          this.signedinUser.pixelarts = pixelarts;
+          // console.log(this.pixelarts);
       })
       // console.log(this.pixelarts);
       // console.log(this.signedinUser.id);

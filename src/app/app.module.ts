@@ -7,10 +7,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CoreModule } from './core/core.module';
-import { AuthInterceptorService } from './core/helpers/auth-interceptor.service'
+// import { AuthInterceptorService } from './core/helpers/auth-interceptor.service'
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import {HTTP_INTERCEPTORS} from "@angular/common/http";
-import {NoopInterceptor} from "./http-interceptors/noop-interceptor";
+// import {HTTP_INTERCEPTORS} from "@angular/common/http";
+// import {NoopInterceptor} from "./http-interceptors/noop-interceptor";
 import {httpInterceptorProviders} from "./http-interceptors";
 import { EmailAliasValidatorDirective } from './core/helpers/email-alias-validator.directive';
 import { NG_ASYNC_VALIDATORS } from '@angular/forms';

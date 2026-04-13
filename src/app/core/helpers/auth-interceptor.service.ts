@@ -9,22 +9,25 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 const TOKEN_HEADER_KEY = 'Authorization'; // for Spring Boot back-end
 
 /**
  * Class adding authentification information to every client request
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AuthInterceptorService implements HttpInterceptor {
-  constructor(private authservice: AuthService) {
-  }
+  constructor(
+    private authservice: AuthService,
+    private router: Router
+  ) {}
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    let token = this.authservice.getToken();
+    const token = this.authservice.getToken();
     if (token) {
       var request = req.clone({
         headers: req.headers.set(TOKEN_HEADER_KEY, `Bearer ${token}`),
@@ -38,9 +41,11 @@ export class AuthInterceptorService implements HttpInterceptor {
       return next.handle(request).pipe(
         catchError((err) => {
           if (err instanceof HttpErrorResponse && err.status === 401) {
-            this.authservice.signOut();
+            this.authservice.clearToken();
+            // Or: navigation to '/pixelart/catalog'
+            // this.router.navigate(['/login']);
           }
-          return throwError(err);
+          return throwError(() => err);
         })
       );
     }

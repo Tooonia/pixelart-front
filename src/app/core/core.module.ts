@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PixelartService } from './services/pixelart.service';
-import {httpInterceptorProviders} from "../http-interceptors";
+// import {httpInterceptorProviders} from "../http-interceptors";
 import { UserService } from './services/user.service';
 import { AuthService } from './services/auth.service';
 import { EmailAliasValidatorDirective } from './helpers/email-alias-validator.directive';
@@ -19,10 +19,10 @@ import { CanvasService } from './services/canvas.service';
     EmailAliasValidatorDirective
   ],
   providers: [
-    httpInterceptorProviders,
+    // httpInterceptorProviders,
     PixelartService,
     UserService,
-    AuthService,
+    // AuthService,
     CanvasService
   ]
 })
