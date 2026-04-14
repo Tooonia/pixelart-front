@@ -1,134 +1,85 @@
 # PixelArt Frontend
 
-Welcome to PixelArt Frontend! 🎨 This is an Angular 17 application for creating and sharing pixel art.
+A resposive Angular 17 single-page application for creating, editing, and sharing pixel art, built as a full-stack showcase project with a Spring Boot/PostgreSQL backend.
 
-## ✨ Features
+## Architecture and Design
 
-### 🎨 Core Functionality
-- **Pixel Art Creation**: Interactive canvas for creating pixel art
-- **Art Gallery**: Browse and view pixel art creations
-- **User Authentication**: Secure login and registration system with JWT tokens
-- **User Profiles**: Personal profile management and settings
-- **Responsive Design**: Mobile-first design that works on all devices
+The application is structured around three NgModule feature modules with lazy loading to optimize initial bundle size, each with a clear boundary of responsibility:
 
-### 🔧 Technical Features
-- **Real-time Canvas**: Live preview and immediate updates
-- **File Management**: Save, load, modify, delete pixel art projects (CRUD)
-- **Performance Optimized**: Fast loading with lazy-loaded modules
-- **Error Handling**: User-friendly error messages and validation
+- **LoginModule** — authentication flow (sign-in, sign-up, private profile)
+- **PixelartModule** — all pixelart features (catalog, detail, create, edit, portfolio)
+- **CoreModule** — shared services, HTTP interceptor, async validators
 
-## 🛠️ Development Competencies
+### - **Smart & Presentational Components**:
+To maximize code reuse, a strict separation between data-aware "Pages" and stateless "Components" was implemented.
+- **Pages**: (e.g., `PixelartFormPageComponent`) handle route parameters, data fetching, and side effects.
+- **Components**: (e.g., `ManagePixelartComponent`) focus purely on UI and Canvas interactions. This allows the same editor engine to drive both "Create" and "Edit" flows without logic duplication.
 
-### Frontend Architecture
-- **Angular 17**: Modern Angular framework with standalone components
-- **TypeScript**: Strongly typed development for better code quality
-- **RxJS**: Reactive programming for state management and HTTP requests
-- **Angular Material**: Consistent UI components and design system
+### - **Canvas Logic Abstraction**:
+Rather than cluttering components with low-level DOM logic, all Canvas API operations—including pixel-grid rendering, `ResizeObserver` scaling, and RGBA serialization—are encapsulated within a dedicated `CanvasService`.
 
-### Code Quality & Testing
-- **Modular Architecture**: Well-organized component and service structure
-- **HTTP Interceptors**: Centralized authentication and error handling
-- **Lazy Loading**: Optimized module loading for better performance
-- **Environment Configuration**: Flexible deployment for different environments
+### - **Security Implementation**:
+- **XSS Mitigation**: JWTs are stored in-memory within the `AuthService` private state rather than `localStorage`.
+- **Auth Flow**: An `HttpInterceptor` handles automatic Bearer token injection and watches for `401 Unauthorized` responses to trigger graceful session timeouts.
+- **JWT Validation**: Client-side expiry checks are performed by decoding the JWT payload, preventing unnecessary API calls when a session has ended.
+
+## Features
+
+**- Interactive Canvas**: Resizable drawing area with real-time grid scaling.
+**- Public Gallery**: Browse and view pixel art details without an account.
+**- User Portfolio**: Private dashboard for managing personal creations.
+**- Dynamic UI**: Conditional Edit/Delete actions based on ownership and auth status.
+**- Smart Forms**: Real-time duplicate detection for emails and aliases via async validators.
 
 ## Prerequisites
 
-Before you start, make sure you have these installed:
+- **Node.js**: 18.x or 20.x
+- **Angular CLI**: 17.3.x (`npm install -g @angular/cli@17.3.17`)
+- **npm**: 8.x or 9.x
+- **Backend**: Spring Boot PixelArt API running on `http://localhost:8085`
 
-- **Angular CLI**: 17.3.17
-- **Node.js**: 18.20.8 (use `nvm use` to switch automatically)
-- **npm**: 8.19.4
-
-## Quick Start
-
-Here's how to get up and running quickly:
+## Quick start
 
 ```bash
-# Clone and install
 git clone <repository-url>
 cd pixelart-front
 npm install
-
-# Start development server
 npm start
-# or
-ng serve
 ```
 
-Then open your browser and navigate to `http://localhost:4200/` 🚀
+Navigate to `http://localhost:4200/`.
 
-## Development
+## Available commands
 
-### Available Commands
 ```bash
-npm start          # Start dev server
-ng serve           # Alternative way to start dev server
-npm run build      # Build for production
-npm test           # Run unit tests
+npm start          # Development server
+npm run build      # Production build → dist/pixelart-front/
+npm test           # Unit tests (Karma + Jasmine)
 npm run watch      # Build in watch mode
 ```
 
-### Project Structure
-```
-src/app/
-├── core/          # Services, interceptors
-├── shared/        # Header, footer components
-├── login/         # Authentication (login, signup, profile)
-├── pixelart/      # Main app features (catalog, create, detail)
-└── http-interceptors/  # HTTP request handling
-```
+## Project structure
 
-## API Configuration
+- `src/app/core/`: Singleton services, interceptors, and global guards.
+- `src/app/shared/`: Dumb components used across multiple modules.
+- `src/app/pixelart/`: The core business logic, organized into `pages/` (smart) and `components/` (presentational).
 
-The app connects to a backend API at `http://localhost:8085/api`
+## API configuration
 
-You can configure the endpoints in:
-- `src/environments/environment.ts` (for development)
-- `src/environments/environment.prod.ts` (for production)
+Base URL is defined once in environment files — no hardcoded URLs in service classes:
 
-## Key Dependencies
-
-- **Angular**: 17.3.12
-- **Angular Material**: 17.3.10
-- **RxJS**: 7.8.2
-- **TypeScript**: 5.4.5
-
-## Building
-
-```bash
-# Development build
-ng build
-
-# Production build
-ng build --configuration production
+```typescript
+// src/environments/environment.ts
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8085/api'
+};
 ```
 
-Your built files will be in `dist/pixelart-front/`
 
-## Testing
+## Roadmap & Ongoing Work
 
-```bash
-npm test
-```
-
-Run your tests with the `ng test` command. The test environment is already configured and ready to go! 🧪
-
-## Common Issues
-
-Don't worry if you run into these - here are quick fixes:
-
-1. **Node version**: Use `nvm use` to get the correct version (18.20.8)
-2. **Port conflicts**: Angular CLI will automatically suggest an alternative port
-3. **Dependencies**: Run `npm install` if you get missing dependency errors
-
-## Contributing
-
-We'd love your help! Here's how to contribute:
-
-1. Fork the repository
-2. Create a feature branch
-3. Follow the Angular style guide
-4. Write tests for new features
-5. Submit a pull request
-
-Thanks for contributing! 🙌
+- **Route Guard Activation**: Finalizing `canActivate` implementation for stricter URL-based protection.
+- **Session Persistence**: Implementing a token refresh flow once backend support is added.
+- **Cookie Migration**: Moving toward `httpOnly` cookies to implement CSRF protection.
+- **Testing**: Expanding unit test coverage for the `CanvasService` rendering logic.
