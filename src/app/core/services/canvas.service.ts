@@ -133,11 +133,17 @@ export class CanvasService {
       resizeTimeout = setTimeout(() => {
         for (const entry of entries) {
           const containerRect = entry.contentRect;
-          this.updateCanvasSize(
+
+          // Check if the component has flagged the canvas as manually zoomed
+          const isManualZoomApplied = canvasElement.getAttribute('canvas-is-zoomed') === 'true';
+
+          if (!isManualZoomApplied) {
+            this.updateCanvasSize(
             canvasElement,
             containerRect.width,
             containerRect.height
           );
+          }
         }
       }, 150);
     });

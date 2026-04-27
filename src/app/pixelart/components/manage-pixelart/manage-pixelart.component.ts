@@ -38,7 +38,7 @@ import { CanvasService } from 'src/app/core/services/canvas.service';
 })
 export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @ViewChild('myCanvas', { static: false }) canvas!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('myPickedColor', { static: false }) pickedColor!: ElementRef;
+  @ViewChild('myPickedColor', { static: false }) pickedColor!: ElementRef; //TODO: possibly no need for it!, nore in HTML!!!
   @ViewChild('canvasDiv', { static: false }) containerDivForCanvas!: ElementRef;
   @ViewChild('gridSizeSettingContainer', { static: true }) containerDivForGridSizeSetting!: ElementRef;
   @ViewChild('pixelDrawingBlockContainer', { static: false }) containerDivForDrawingBlock!: ElementRef;
@@ -74,6 +74,27 @@ export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit
   mousePosition = new Point(-100, -100);
   pixelsClicked: Pixel[] = [];
   private canvasCleanup?: () => void;
+  private undoStack: ImageData[] = [];
+  private redoStack: ImageData[] = [];
+  private zoomLevel: number = 1;
+  private readonly ZOOM_STEP = 0.25;
+  private readonly ZOOM_MIN = 1.0; // Never shrink below the initial display size.
+  private readonly ZOOM_MAX = 2;
+  private baseDisplaySize: number = 0;   // Set once in onValidateCanvasSize, used by applyZoom.
+  private lastDragPosition: { x: number; y: number } | null = null;
+
+  activeTool: 'paint' | 'move' = 'paint';
+  selectedColour: string = '#000000';
+
+  palette: string[] = [
+    '#ffffff', '#d4d4d4', '#a3a3a3', '#737373', '#404040', '#000000',
+    '#fca5a5', '#f87171', '#ef4444', '#b91c1c', '#7f1d1d', '#450a0a',
+    '#fdba74', '#fb923c', '#f97316', '#c2410c', '#7c2d12', '#431407',
+    '#fde047', '#facc15', '#eab308', '#a16207', '#713f12', '#422006',
+    '#86efac', '#4ade80', '#22c55e', '#15803d', '#14532d', '#052e16',
+    '#93c5fd', '#60a5fa', '#3b82f6', '#1d4ed8', '#1e3a8a', '#172554',
+    '#c4b5fd', '#a78bfa', '#8b5cf6', '#6d28d9', '#4c1d95', '#2e1065',
+  ];
 
   constructor(
     private renderer: Renderer2,
@@ -160,21 +181,34 @@ export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit
     // ========== MOUSE EVENTS ==========
     this.renderer.listen(this.canvas.nativeElement, 'mousedown', (e: MouseEvent) => {
       e.preventDefault();
-      this.paint = true;
-      const point = this.getCanvasCoordinates(e);
-      this.mousePosition = point;
-
-      if (point.x >= 0 && point.y >= 0) {
-        this.pixelsClicked.push(this.colorPixel(point));
-      }
-    });
+      if (this.activeTool === 'paint') {
+        this.paint = true;
+        this.saveSnapshot();
+        const point = this.getCanvasCoordinates(e);
+        this.mousePosition = point;
+        if (point.x >= 0 && point.y >= 0) {
+          this.pixelsClicked.push(this.colorPixel(point));
+        }
+    } else if (this.activeTool === 'move') {
+      this.paint = true;   // Reuse paint flag as "dragging".
+      this.lastDragPosition = { x: e.clientX, y: e.clientY };
+    }
+  });
 
     this.renderer.listen(this.canvas.nativeElement, 'mousemove', (e: MouseEvent) => {
-      const point = this.getCanvasCoordinates(e);
-      this.mousePosition = point; // Update display
+      if (this.activeTool === 'paint') {
+        const point = this.getCanvasCoordinates(e);
+        this.mousePosition = point; // Update display
 
-      if (this.paint && point.x >= 0 && point.y >= 0) {
-        this.pixelsClicked.push(this.colorPixel(point));
+        if (this.paint && point.x >= 0 && point.y >= 0) {
+          this.pixelsClicked.push(this.colorPixel(point));
+        }
+      } else if (this.activeTool === 'move' && this.paint && this.lastDragPosition) {
+        const dx = e.clientX - this.lastDragPosition.x;
+        const dy = e.clientY - this.lastDragPosition.y;
+        this.containerDivForCanvas.nativeElement.scrollLeft -= dx;
+        this.containerDivForCanvas.nativeElement.scrollTop  -= dy;
+        this.lastDragPosition = { x: e.clientX, y: e.clientY };
       }
     });
 
@@ -191,21 +225,36 @@ export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit
     this.renderer.listen(this.canvas.nativeElement, 'touchstart', (e: TouchEvent) => {
       e.preventDefault(); // Prevent page scroll
       this.paint = true;
-      const point = this.getCanvasCoordinates(e);
-      this.mousePosition = point;
+      if (this.activeTool === 'paint') {
+        this.saveSnapshot();
+        const point = this.getCanvasCoordinates(e);
+        this.mousePosition = point;
 
-      if (point.x >= 0 && point.y >= 0) {
-        this.pixelsClicked.push(this.colorPixel(point));
+        if (point.x >= 0 && point.y >= 0) {
+          this.pixelsClicked.push(this.colorPixel(point));
+        }
+      } else if (this.activeTool === 'move') {
+        const touch = e.touches[0];
+        this.lastDragPosition = { x: touch.clientX, y: touch.clientY };
       }
     });
 
     this.renderer.listen(this.canvas.nativeElement, 'touchmove', (e: TouchEvent) => {
       e.preventDefault(); // Prevent page scroll
-      const point = this.getCanvasCoordinates(e);
-      this.mousePosition = point;
+      if (this.activeTool === 'paint') {
+        const point = this.getCanvasCoordinates(e);
+        this.mousePosition = point;
 
-      if (this.paint && point.x >= 0 && point.y >= 0) {
-        this.pixelsClicked.push(this.colorPixel(point));
+        if (this.paint && point.x >= 0 && point.y >= 0) {
+          this.pixelsClicked.push(this.colorPixel(point));
+        }
+      } else if (this.activeTool === 'move' && this.paint && this.lastDragPosition) {
+        const touch = e.touches[0];
+        const dx = touch.clientX - this.lastDragPosition.x;
+        const dy = touch.clientY - this.lastDragPosition.y;
+        this.containerDivForCanvas.nativeElement.scrollLeft -= dx;
+        this.containerDivForCanvas.nativeElement.scrollTop  -= dy;
+        this.lastDragPosition = { x: touch.clientX, y: touch.clientY };
       }
     });
 
@@ -252,6 +301,7 @@ export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit
     // Get width and height from form
     let width: number;
     let height: number;
+    this.zoomLevel = 1;
 
     // Set canvas actual pixel dimensions
     if (this.editMode) {
@@ -306,6 +356,31 @@ export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit
         this.scaleToSize = result.scale;
         this.context = result.context;
 
+        // // Capture the initial display size of the canvas element for zoom calculations.
+        // // Must be read AFTER setupCanvas has sized the canvas to fit the container.
+        // this.baseDisplaySize = Math.min(
+        //   this.canvas.nativeElement.offsetWidth,
+        //   this.canvas.nativeElement.offsetHeight
+        // );
+
+        // Capture the frame size for zoom calculations.
+        // We read from the canvasDiv container (the fixed frame), not the canvas element,
+        // because the container has a guaranteed CSS size (400px / 90vw) while the
+        // canvas element's offsetWidth may still be 0 inside setTimeout on some browsers.
+        this.baseDisplaySize = Math.min(
+          this.containerDivForCanvas.nativeElement.clientWidth  || this.containerDivForCanvas.nativeElement.offsetWidth,
+          this.containerDivForCanvas.nativeElement.clientHeight || this.containerDivForCanvas.nativeElement.offsetHeight
+        );
+
+        // Safety fallback: if the container reports 0 (e.g. display:none parent),
+        // fall back to the canvas element's own reported size.
+        if (this.baseDisplaySize === 0) {
+          this.baseDisplaySize = Math.min(
+            this.canvas.nativeElement.offsetWidth,
+            this.canvas.nativeElement.offsetHeight
+          );
+        }
+
         // Store cleanup function for later
         if (result.cleanup) {
           this.canvasCleanup = result.cleanup;
@@ -327,9 +402,15 @@ export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit
     }, 0);
   }
 
+  selectColour(colour: string): void {
+    // The [(ngModel)] binding automatically updates the colour input to match
+    this.selectedColour = colour;
+  }
+
   colorPixel(point: Point): Pixel {
-    let pickedColorToSet = this.pickedColor.nativeElement.value;
-    let pixelToColor = new Pixel((point.x - 1), (point.y - 1), 1, 1);
+    // let pickedColorToSet = this.pickedColor.nativeElement.value;
+    const pickedColorToSet = this.selectedColour;
+    const pixelToColor = new Pixel((point.x - 1), (point.y - 1), 1, 1);
 
     if (this.context) {
       this.context.fillStyle = pickedColorToSet;
@@ -338,9 +419,105 @@ export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit
     return pixelToColor;
   }
 
-  /**
-   * Prevent non-numeric characters except backspace, delete, arrow keys
-   */
+  setTool(tool: 'paint' | 'move'): void {
+    this.activeTool = tool;
+  }
+
+  get canUndo(): boolean {
+    return this.undoStack.length > 0;
+  }
+
+  get canRedo(): boolean {
+    return this.redoStack.length > 0;
+  }
+
+  private saveSnapshot(): void {
+    if (!this.context || !this.canvas) return;
+    const snapshot = this.context.getImageData(
+      0, 0,
+      this.canvas.nativeElement.width,
+      this.canvas.nativeElement.height
+    );
+    this.undoStack.push(snapshot);
+    this.redoStack = [];           // a new action clears the redo stack
+    if (this.undoStack.length > 50) {
+      this.undoStack.shift();      // cap memory at 50 snapshots
+    }
+  }
+
+  undo(): void {
+    if (!this.context || this.undoStack.length === 0) return;
+    const current = this.context.getImageData(
+      0, 0,
+      this.canvas.nativeElement.width,
+      this.canvas.nativeElement.height
+    );
+    this.redoStack.push(current);
+    const previous = this.undoStack.pop()!;
+    this.context.putImageData(previous, 0, 0);
+  }
+
+  redo(): void {
+    if (!this.context || this.redoStack.length === 0) return;
+    const current = this.context.getImageData(
+      0, 0,
+      this.canvas.nativeElement.width,
+      this.canvas.nativeElement.height
+    );
+    this.undoStack.push(current);
+    const next = this.redoStack.pop()!;
+    this.context.putImageData(next, 0, 0);
+  }
+
+  zoomIn(): void {
+    this.zoomLevel = Math.min(this.ZOOM_MAX, this.zoomLevel + this.ZOOM_STEP);
+    this.applyZoom();
+  }
+
+  zoomOut(): void {
+    this.zoomLevel = Math.max(this.ZOOM_MIN, this.zoomLevel - this.ZOOM_STEP);
+    this.applyZoom();
+  }
+
+  // Add a getter for Zoom In state. When ZOOM_MAX is reached, it desables the Zoom In button.
+  get isAtMaxZoom(): boolean {
+    return this.zoomLevel >= this.ZOOM_MAX;
+  }
+
+  private applyZoom(): void {
+    if (!this.canvas || this.baseDisplaySize === 0) return;
+
+    if (this.zoomLevel <= 1) {
+      // At base zoom: remove inline width/height so the CSS fixed-frame sizing
+      // takes over cleanly. Prevents accumulated drift from repeated zoom cycles.
+      this.renderer.setStyle(this.canvas.nativeElement, 'width',`${this.baseDisplaySize}px`);
+      this.renderer.setStyle(this.canvas.nativeElement, 'height',`${this.baseDisplaySize}px`);
+      // Remove the zoom flag so Auto-Resize works again
+      this.renderer.removeAttribute(this.canvas.nativeElement, 'canvas-is-zoomed');
+
+      this.zoomLevel = 1;
+
+      // Move has no purpose at base zoom — revert to paint
+      if (this.activeTool === 'move') {
+        this.activeTool = 'paint';
+      }
+    } else {
+      const displaySize = this.baseDisplaySize * this.zoomLevel;
+      this.renderer.setStyle(this.canvas.nativeElement, 'width', `${displaySize}px`);
+      this.renderer.setStyle(this.canvas.nativeElement, 'height', `${displaySize}px`);
+
+       // Set the zoom flag to block Auto-Resize from "snapping back"
+      this.renderer.setAttribute(this.canvas.nativeElement, 'canvas-is-zoomed', 'true');
+    }
+
+   }
+
+  get isZoomedIn(): boolean {
+    return this.zoomLevel > 1;
+
+  }
+
+  // Prevent non-numeric characters except backspace, delete, arrow keys
   preventInvalidChars(event: KeyboardEvent): boolean {
     const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
     const key = event.key;
@@ -371,10 +548,8 @@ export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit
     return true;
   }
 
-  /**
-   * Validate and clean integer input
-   * Removes leading zeros and ensures valid range
-   */
+  // Validate and clean integer input
+  // Removes leading zeros and ensures valid range
   validateIntegerInput(event: any, fieldName: string): void {
     const input = event.target as HTMLInputElement;
     let value = input.value;
@@ -413,10 +588,8 @@ export class ManagePixelartComponent implements OnInit, OnChanges, AfterViewInit
     input.value = value;
   }
 
-  /**
- * Get accurate canvas coordinates accounting for CSS size vs pixel size
- * Returns 1-indexed coordinates (1,1 to width,height)
- */
+  // Get accurate canvas coordinates accounting for CSS size vs pixel size
+  // Returns 1-indexed coordinates (1,1 to width,height)
   private getCanvasCoordinates(event: MouseEvent | TouchEvent): Point {
     // Use Canvas Service to get coordinates (1-indexed)
     const coordinates = this.canvasService.getCanvasPixelCoordinates(

@@ -1,8 +1,22 @@
-.card-container {
-    border-radius: 10px;
-    width: fit-content;
-    margin: auto;
-}
+.manage-pixelart-container {
+    display: grid;
+    grid-template-columns: 1fr;           // mobile: single column
+    grid-template-rows: auto auto;
+    gap: 1rem;
+    padding: 1rem;
+    height: 100%;
+
+    @media (min-width: 768px) {           // tablet + desktop: two columns
+      grid-template-columns: 1fr 220px;   // canvas fills left, controls fixed right
+      grid-template-rows: 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr 260px;   // slightly wider sidebar on large screens
+    }
+  }
 
 
 .gridSizeSettingContainer {
@@ -55,79 +69,276 @@
 }
 
 .pixelDrawingBlockContainer {
-    display: block;
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
+    // New setting:
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;   // grid cell boundary enforcement — mirrors .pixelDrawingControlsBlockContainer controls container
+    // Old setting:
+    // display: block;
+    // width: 100%;
+    // height: 100%;
+    // margin: 0 auto;
 }
 
 .canvasDiv {
-    width: 400px;
-    height: 400px;
-    margin: 0 auto 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    // New setting:
+    // Fixed frame — the canvas grows inside it via zoom, scrollbars appear automatically
+    // width: 100%;
+    width: 90vw;
+    height: 90vw;
+    aspect-ratio: 1 / 1;                  // always square
+    // max-width: 90vw;
+    -webkit-overflow-scrolling: touch;
+    position: relative;                     // needed for correct scroll origin
+    box-sizing: border-box;
+    flex-shrink: 0;                         // prevent the frame from collapsing
 
-    @media (max-width: 768px) {
-        width: 90vw;
-        height: 90vw;
-        max-width: 400px;
-        max-height: 400px;
+
+    @media (min-width: 768px) {
+        // max-width: 100%;
+        // height: 100%;
+        width: 400px;
+        height: 400px;
     }
+
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // New setting:
+    overflow: auto;             // scrollbars when canvas exceeds frame
+    // Old setting:
+    // overflow: hidden;
+
+    // Old setting:
+    // width: 400px;
+    // height: 400px;
+    // margin: 0 auto 1.5rem;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // overflow: hidden;
+
+    // @media (max-width: 768px) {
+    //     width: 90vw;
+    //     height: 90vw;
+    //     max-width: 400px;
+    //     max-height: 400px;
+    // }
+
+    // On desktop the frame fills the left column; keep aspect-ratio square
+
 }
 
 #pixelCanvas {
-    max-width: 100%;
-    height: auto;
-    margin: auto;
+    // New setting
+    // max-height: 100%;
+    display: block;
+    max-width: none;
+    max-height: none;
+
+    // Old setting:
+    // max-width: 100%;
+    // height: auto;
+    // margin: auto;
     border: 1px solid darkgrey;
     image-rendering: pixelated; //Renders the colored pixels really net, not blurred.
     cursor: pointer;
     touch-action: none; // Prevent page scroll while drawing
-    transition: width 0.1s ease, height 0.1s ease; // Smooth resize transition
-}
+    // transition: width 0.1s ease, height 0.1s ease; // Smooth resize transition
 
-.color-picker-section {
-    margin-bottom: 1.5rem;
-    justify-items: center;
+    &.cursor-grab {
+        cursor: grab;
 
-    .labelForColorPicker {
-        display: block;
-        margin-bottom: 0.5rem;
-        color: #333;
-    }
-
-    #colorPicker {
-        // TODO: change the width eventually
-        width: 50px;
-        height: 50px;
-        border: 2px solid #ddd;
-        display: block;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: border-color 0.2s;
-
-        &:hover {
-          border-color: #22ee8f;
+        &:active {
+            cursor: grabbing;
         }
     }
 }
 
-.mat-form-field {
-    width: stretch;
+.pixelDrawingControlsBlockContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    // Grid cells in a 1fr column don't shrink below their content width by default.
+    // min-width:0 forces the cell to respect the column boundary so overflow-x:auto
+    // on the palette section actually creates a scroll container instead of overflowing
+    // the entire layout.
+    min-width: 0;
 }
 
-.mat-card-actions {
-    justify-content: space-evenly;
+.color-palette-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 
-    button {
-        border-radius: 5px;
-        border: 1px solid #929292;
+    // Mobile: allow the grid row to scroll horizontally within this container
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;      // smooth momentum scroll on iOS
 
-        &:hover {
-            background-color: #cccccc;
-        }
+    @media (min-width: 768px) {
+        overflow-x: visible;                // desktop: grid wraps, no scroll needed
     }
 }
+
+.color-palette-grid {
+    display: grid;
+    // Mobile: fixed-size swatches in a single scrollable row
+    // repeat(42, ...) lays all colours in one row; the parent scrolls horizontally
+    grid-template-columns: repeat(42, 32px);
+    grid-template-rows: 32px;               // single row, fixed height
+    gap: 4px;
+
+    @media (min-width: 768px) {
+        // Desktop sidebar: 6-column grid, swatches fill available width
+        grid-template-columns: repeat(6, 1fr); // 6 per row on desktop TODO: tablet?
+        grid-template-rows: unset;
+    }
+}
+
+.swatch {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: border-color 0.15s, transform 0.1s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &.active {
+      border-color: #333;
+      transform: scale(1.15);
+    }
+}
+
+// New setting:
+#colorPicker {
+    width: 36px;
+    height: 36px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 2px;
+    align-self: flex-start;
+}
+
+// Old setting:
+// .color-picker-section {
+//     margin-bottom: 1.5rem;
+//     justify-items: center;
+
+//     .labelForColorPicker {
+//         display: block;
+//         margin-bottom: 0.5rem;
+//         color: #333;
+//     }
+
+//     #colorPicker {
+//         // TODO: change the width eventually
+//         width: 50px;
+//         height: 50px;
+//         border: 2px solid #ddd;
+//         display: block;
+//         border-radius: 6px;
+//         cursor: pointer;
+//         transition: border-color 0.2s;
+
+//         &:hover {
+//           border-color: #22ee8f;
+//         }
+//     }
+// }
+
+.tool-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tool-btn {
+    flex: 1;
+    min-width: 60px;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #929292;
+    border-radius: 5px;
+    background: #f5f5f5;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.15s;
+
+    &:hover:not(:disabled) {
+      background-color: #e0e0e0;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    &.active {
+      background-color: #333;
+      color: #fff;
+      border-color: #333;
+    }
+}
+
+.initial-actions-row, .final-actions-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border-radius: 5px;
+    border: 1px solid #929292;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.15s;
+
+    &:hover:not(:disabled) {
+      background-color: #e0e0e0;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+}
+
+.save-btn {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+
+    &:hover:not(:disabled) {
+        background-color: #555;
+    }
+}
+
+.title-field {
+    // width: stretch;
+    width: 100%;
+}
+
+// Old setting:
+// .mat-card-actions {
+//     justify-content: space-evenly;
+
+//     button {
+//         border-radius: 5px;
+//         border: 1px solid #929292;
+
+//         &:hover {
+//             background-color: #cccccc;
+//         }
+//     }
+// }

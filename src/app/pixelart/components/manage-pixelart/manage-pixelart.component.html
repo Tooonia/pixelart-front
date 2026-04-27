@@ -1,84 +1,125 @@
-<mat-card class="card-container">
-    <mat-card-content>
-        <form [formGroup]="managePixelartForm" (ngSubmit)="saveAction()">
-            <div class="d-flex">
+<!-- TODO: adapt class names -->
+<div class="manage-pixelart-container" *ngIf="!gridValidationMode">
 
-                <!-- Grid size picker (create mode only, hidden after confirmation) -->
-                <div class="gridSizeSettingContainer" #gridSizeSettingContainer *ngIf="gridValidationMode">
-                    <h2>Choose Grid Size</h2>
-                    <div id="sizePicker">
-                        <p>Grid Width (max 128):</p>
-                        <input
-                            type="number"
-                            formControlName="width"
-                            id="inputWidth"
-                            name="width"
-                            min="1"
-                            max="128"
-                            value="1"
-                            pattern="[1-9][0-9]*"
-                            (input)="validateIntegerInput($event, 'width')"
-                            (keypress)="preventInvalidChars($event)">
-                        <p>Grid Height (max 128):</p>
-                        <input
-                            type="number"
-                            formControlName="height"
-                            id="inputHeight"
-                            name="height"
-                            min="1"
-                            max="128"
-                            value="1"
-                            pattern="[1-9][0-9]*"
-                            (input)="validateIntegerInput($event, 'height')"
-                            (keypress)="preventInvalidChars($event)">
-                        <button type="button" (click)="onValidateCanvasSize()">Create Canvas</button>
-                    </div>
-                </div>
+    <!-- Canvas drawing block (shown after canvas is set up) -->
+     <!-- TODO: change to pixelDrawingBlockContainer -->
+    <div class="pixelDrawingBlockContainer">
+        <div>X: {{mousePosition.x}} | y: {{mousePosition.y}}</div>
+        <div class="canvasDiv" #canvasDiv>
+            <canvas
+                id="pixelCanvas"
+                #myCanvas
+                [class.cursor-grab]="activeTool === 'move'"
+                aria-label="Canvas with the pixels to paint"
+                role="img">
+            </canvas>
+        </div>
+    </div>
 
+    <!-- Canvas controls sidebar block -->
+    <div class="pixelDrawingControlsBlockContainer">
 
-            <!-- Drawing block (shown after canvas is set up) -->
-                <div class="pixelDrawingBlockContainer" #pixelDrawingBlockContainer *ngIf="!gridValidationMode">
-                    <div>X: {{mousePosition.x}} | y: {{mousePosition.y}}</div>
-
-                    <div class="canvasDiv" #canvasDiv>
-                        <canvas
-                            id="pixelCanvas"
-                            #myCanvas
-                            aria-label="Canvas with the pixels to paint"
-                            role="img">
-                        </canvas>
-                    </div>
-
-                    <div class="color-picker-section">
-                        <label for="colorPicker" class="labelForColorPicker">Pick a Color:</label>
-                        <input type="color" format="'rgb'" id="colorPicker" #myPickedColor>
-                    </div>
-
-                    <div>
-                        <mat-form-field class="mat-form-field" appearance="outline">
-                            <mat-label>Title</mat-label>
-                            <input
-                                type="text"
-                                matInput
-                                placeholder="Title of pixelart"
-                                formControlName="name"
-                                autocomplete="off"
-                                required>
-                            <mat-error *ngIf="managePixelartForm.get('name')?.hasError('required')">
-                                    Title is required
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
-
+        <!-- Colour palette -->
+        <div class="color-palette-section">
+            <div class="color-palette-grid">
+                <button
+                    *ngFor="let colour of palette"
+                    class="swatch"
+                    [style.background-color]="colour"
+                    [class.active]="colour === selectedColour"
+                    (click)="selectColour(colour)">
+                </button>
             </div>
+            <!-- Custom colour picker for colours outside the palette -->
+            <input
+                type="color"
+                id="colorPicker"
+                #myPickedColor
+                [(ngModel)]="selectedColour"
+                [ngModelOptions]="{standalone: true}">
+        </div>
 
-            <!-- Actions (visible once the canvas is ready) -->
-            <mat-card-actions class="mat-card-actions d-flex" *ngIf="!gridValidationMode">
-                <button type="button" (click)="cancelAction()">Cancel</button>
-                <button type="submit" [disabled]="!managePixelartForm.valid">Save</button>
-            </mat-card-actions>
+        <!-- History and zoom controls -->
+        <div class="tool-row">
+            <button type="button" class="tool-btn" (click)="undo()" [disabled]="!canUndo">Undo</button>
+            <button type="button" class="tool-btn" (click)="redo()" [disabled]="!canRedo">Redo</button>
+            <button type="button" class="tool-btn" (click)="zoomIn()" [disabled]="isAtMaxZoom">Zoom In</button>
+            <button type="button" class="tool-btn" (click)="zoomOut()" [disabled]="!isZoomedIn">Zoom Out</button>
+        </div>
 
+        <!-- Drawing / moving switch controls -->
+        <div class="tool-row">
+            <button type="button" class="tool-btn" [class.active]="activeTool === 'paint'"
+                (click)="setTool('paint')">Paint</button>
+            <!-- Move is only enabled when zoomed in — at base zoom there is nothing to pan -->
+            <button type="button" class="tool-btn" [class.active]="activeTool === 'move'"
+                [disabled]="!isZoomedIn"
+                (click)="setTool('move')">Move</button>
+        </div>
+
+        <!-- Actions for initial Save confirmation -->
+        <div class="initial-actions-row">
+            <!-- TODO: If Cancel, pop-up to ask for confirmation of abandon >>> ADAPT click!-->
+            <button type="button" class="action-btn cancel-btn" (click)="cancelAction()">Cancel</button>
+            <!-- TODO: If Save, go to sign-in if not already done, or to Title setting if signed-in >>> ADAPT click!-->
+            <button type="submit" class="action-btn save-btn" [disabled]="!managePixelartForm.valid">Save</button>
+        </div>
+
+        <!-- TODO: Title field (shown only when signed-in, and before final Save action) -->
+        <form [formGroup]="managePixelartForm" (ngSubmit)="saveAction()">
+            <mat-form-field appearance="outline" class="title-field">
+                <mat-label>Title</mat-label>
+                <input
+                    type="text"
+                    matInput
+                    placeholder="Title of pixelart"
+                    formControlName="name"
+                    autocomplete="off"
+                    required>
+                <mat-error *ngIf="managePixelartForm.get('name')?.hasError('required')">
+                    Title is required
+                </mat-error>
+            </mat-form-field>
+
+            <!-- Actions for final Save confirmation -->
+            <div class="final-actions-row">
+                <!-- TODO: If Cancel, go back to current drawing -->
+                <button type="button" class="action-btn cancel-btn" (click)="cancelAction()">Cancel</button>
+                <!-- TODO: If Save, save current pixelArt and go to Galery with saved drawing as first element -->
+                <button type="submit" class="action-btn save-btn" [disabled]="!managePixelartForm.valid">Save</button>
+            </div>
         </form>
-    </mat-card-content>
-</mat-card>
+    </div>
+</div>
+
+<!-- Grid size picker (shown before canvas is initialised, create mode only) -->
+<div class="gridSizeSettingContainer" #gridSizeSettingContainer *ngIf="gridValidationMode">
+    <h2>Choose Grid Size</h2>
+    <div id="sizePicker">
+        <p>Grid Width (max 128):</p>
+        <input
+            type="number"
+            formControlName="width"
+            id="inputWidth"
+            name="width"
+            min="1"
+            max="128"
+            value="16"
+            pattern="[1-9][0-9]*"
+            (input)="validateIntegerInput($event, 'width')"
+            (keypress)="preventInvalidChars($event)">
+        <p>Grid Height (max 128):</p>
+        <input
+            type="number"
+            formControlName="height"
+            id="inputHeight"
+            name="height"
+            min="1"
+            max="128"
+            value="16"
+            pattern="[1-9][0-9]*"
+            (input)="validateIntegerInput($event, 'height')"
+            (keypress)="preventInvalidChars($event)">
+        <button type="button" (click)="onValidateCanvasSize()">Create Canvas</button>
+    </div>
+</div>
