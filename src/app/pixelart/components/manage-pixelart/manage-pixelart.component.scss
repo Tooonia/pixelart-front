@@ -20,10 +20,18 @@
 
 
 .gridSizeSettingContainer {
+    justify-self: center;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 6px;
+
     h2 {
         font-size: 1.2rem;
         margin-bottom: 0 0 1rem 0;
-        justify-self: center;
+    }
+
+    button {
+        padding: 5px;
     }
 }
 
